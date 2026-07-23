@@ -7,6 +7,16 @@ export function stripLocale(path: string, enabledLocales: string[]): string {
   return path.startsWith("/") ? path : `/${path}`;
 }
 
+/** Extract the leading locale segment from a pathname, if present. */
+export function extractLocale(
+  path: string,
+  enabledLocales: string[],
+): string | null {
+  const parts = path.split("/").filter(Boolean);
+  if (parts.length && enabledLocales.includes(parts[0]!)) return parts[0]!;
+  return null;
+}
+
 /** Build absolute URL for a given locale + trailing path (no locale prefix). */
 export function localizedUrl(
   origin: string,
