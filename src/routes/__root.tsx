@@ -101,6 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     await Promise.all([
       context.queryClient.ensureQueryData(siteSettingsQueryOptions),
       context.queryClient.ensureQueryData(featureFlagsQueryOptions),
+      context.queryClient.ensureQueryData(currentUserQueryOptions),
     ]);
   },
   shellComponent: RootShell,
