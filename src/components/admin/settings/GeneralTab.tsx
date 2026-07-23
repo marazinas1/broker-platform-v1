@@ -19,7 +19,6 @@ import {
 } from "@/lib/config/site-settings.functions";
 import {
   GeneralSchema,
-  type GeneralInput,
   CountrySchema,
   AreaUnitSchema,
 } from "@/lib/validation/site-settings";
@@ -29,38 +28,46 @@ import { SaveButton } from "./SaveButton";
 const COUNTRIES = CountrySchema.options;
 const AREA_UNITS = AreaUnitSchema.options;
 
+type Values = {
+  site_name: string;
+  legal_name: string;
+  country: (typeof COUNTRIES)[number];
+  default_locale: string;
+  enabled_locales: string[];
+  currency: string;
+  area_unit: (typeof AREA_UNITS)[number];
+};
+
 export function GeneralTab() {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const { data } = useSuspenseQuery(siteSettingsQueryOptions);
 
-  const form = useForm<GeneralInput>({
-    resolver: zodResolver(GeneralSchema),
-    defaultValues: {
-      site_name: data.site_name,
-      legal_name: data.legal_name ?? "",
-      country: data.country,
-      default_locale: data.default_locale,
-      enabled_locales: data.enabled_locales,
-      currency: data.currency,
-      area_unit: data.area_unit,
-    },
+  const defaults: Values = {
+    site_name: data.site_name,
+    legal_name: data.legal_name ?? "",
+    country: data.country,
+    default_locale: data.default_locale,
+    enabled_locales: data.enabled_locales,
+    currency: data.currency,
+    area_unit: data.area_unit,
+  };
+
+  const form = useForm<Values>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(GeneralSchema) as any,
+    defaultValues: defaults,
   });
 
   useEffect(() => {
-    form.reset({
-      site_name: data.site_name,
-      legal_name: data.legal_name ?? "",
-      country: data.country,
-      default_locale: data.default_locale,
-      enabled_locales: data.enabled_locales,
-      currency: data.currency,
-      area_unit: data.area_unit,
-    });
-  }, [data, form]);
+    form.reset(defaults);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   async function save() {
-    const values = await form.handleSubmitAsync();
+    const ok = await form.trigger();
+    if (!ok) throw new Error("validation");
+    const values = form.getValues();
     await updateSiteSettings({ data: { tab: "general", values } });
     await qc.invalidateQueries({ queryKey: siteSettingsQueryOptions.queryKey });
   }
@@ -70,13 +77,13 @@ export function GeneralTab() {
       <Field label={t("admin.settings.general.site_name")} error={form.formState.errors.site_name?.message}>
         <Input {...form.register("site_name")} />
       </Field>
-      <Field label={t("admin.settings.general.legal_name")} error={form.formState.errors.legal_name?.message}>
+      <Field label={t("admin.settings.general.legal_name")}>
         <Input {...form.register("legal_name")} />
       </Field>
       <Field label={t("admin.settings.general.country")}>
         <Select
           value={form.watch("country")}
-          onValueChange={(v) => form.setValue("country", v as GeneralInput["country"], { shouldDirty: true })}
+          onValueChange={(v) => form.setValue("country", v as Values["country"], { shouldDirty: true })}
         >
           <SelectTrigger><SelectValue /></SelectTrigger>
           <SelectContent>
@@ -108,7 +115,7 @@ export function GeneralTab() {
       <Field label={t("admin.settings.general.area_unit")}>
         <Select
           value={form.watch("area_unit")}
-          onValueChange={(v) => form.setValue("area_unit", v as GeneralInput["area_unit"], { shouldDirty: true })}
+          onValueChange={(v) => form.setValue("area_unit", v as Values["area_unit"], { shouldDirty: true })}
         >
           <SelectTrigger><SelectValue /></SelectTrigger>
           <SelectContent>
@@ -134,12 +141,4 @@ function Field({
       {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
   );
-}
-
-// Small helper: react-hook-form gives us handleSubmit, but we want a promise
-// of validated values. Extend the FormReturn shape locally.
-declare module "react-hook-form" {
-  interface UseFormReturn<TFieldValues extends import("react-hook-form").FieldValues> {
-    handleSubmitAsync(): Promise<TFieldValues>;
-  }
 }
