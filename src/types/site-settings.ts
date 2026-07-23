@@ -28,8 +28,8 @@ export interface SiteSettings {
   address_country: string | null;
   geo_lat: number | null;
   geo_lng: number | null;
-  opening_hours: Record<string, unknown>;
-  social: Record<string, unknown>;
+  opening_hours: Record<string, any>;
+  social: Record<string, any>;
   google_analytics_id: string | null;
   google_site_verification: string | null;
   plausible_domain: string | null;
