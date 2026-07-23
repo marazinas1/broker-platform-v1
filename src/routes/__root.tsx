@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { featureFlagsQueryOptions } from "@/lib/config/feature-flags.functions";
+import { currentUserQueryOptions } from "@/lib/auth/current-user.functions";
 import { ThemeStyleTag } from "@/components/shared/ThemeStyleTag";
 import { extractLocale } from "@/lib/seo/hreflang";
 import { translate, DEFAULT_LOCALE, isLocale, type Locale } from "@/i18n/config";
