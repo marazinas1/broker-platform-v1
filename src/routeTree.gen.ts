@@ -12,6 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LocaleRouteImport } from './routes/$locale'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LocaleIndexRouteImport } from './routes/$locale.index'
+import { Route as LocaleAuthRouteImport } from './routes/$locale.auth'
+import { Route as LocaleAdminRouteImport } from './routes/$locale.admin'
+import { Route as LocaleAdminIndexRouteImport } from './routes/$locale.admin.index'
+import { Route as LocaleAuthResetPasswordRouteImport } from './routes/$locale.auth.reset-password'
+import { Route as LocaleAuthLoginRouteImport } from './routes/$locale.auth.login'
+import { Route as LocaleAuthForgotPasswordRouteImport } from './routes/$locale.auth.forgot-password'
 
 const LocaleRoute = LocaleRouteImport.update({
   id: '/$locale',
@@ -28,28 +34,102 @@ const LocaleIndexRoute = LocaleIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LocaleRoute,
 } as any)
+const LocaleAuthRoute = LocaleAuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleAdminRoute = LocaleAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleAdminIndexRoute = LocaleAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LocaleAdminRoute,
+} as any)
+const LocaleAuthResetPasswordRoute = LocaleAuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => LocaleAuthRoute,
+} as any)
+const LocaleAuthLoginRoute = LocaleAuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => LocaleAuthRoute,
+} as any)
+const LocaleAuthForgotPasswordRoute =
+  LocaleAuthForgotPasswordRouteImport.update({
+    id: '/forgot-password',
+    path: '/forgot-password',
+    getParentRoute: () => LocaleAuthRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
+  '/$locale/admin': typeof LocaleAdminRouteWithChildren
+  '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/': typeof LocaleIndexRoute
+  '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
+  '/$locale/auth/login': typeof LocaleAuthLoginRoute
+  '/$locale/auth/reset-password': typeof LocaleAuthResetPasswordRoute
+  '/$locale/admin/': typeof LocaleAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale': typeof LocaleIndexRoute
+  '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
+  '/$locale/auth/login': typeof LocaleAuthLoginRoute
+  '/$locale/auth/reset-password': typeof LocaleAuthResetPasswordRoute
+  '/$locale/admin': typeof LocaleAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
+  '/$locale/admin': typeof LocaleAdminRouteWithChildren
+  '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/': typeof LocaleIndexRoute
+  '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
+  '/$locale/auth/login': typeof LocaleAuthLoginRoute
+  '/$locale/auth/reset-password': typeof LocaleAuthResetPasswordRoute
+  '/$locale/admin/': typeof LocaleAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$locale' | '/$locale/'
+  fullPaths:
+    | '/'
+    | '/$locale'
+    | '/$locale/admin'
+    | '/$locale/auth'
+    | '/$locale/'
+    | '/$locale/auth/forgot-password'
+    | '/$locale/auth/login'
+    | '/$locale/auth/reset-password'
+    | '/$locale/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$locale'
-  id: '__root__' | '/' | '/$locale' | '/$locale/'
+  to:
+    | '/'
+    | '/$locale/auth'
+    | '/$locale'
+    | '/$locale/auth/forgot-password'
+    | '/$locale/auth/login'
+    | '/$locale/auth/reset-password'
+    | '/$locale/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/$locale'
+    | '/$locale/admin'
+    | '/$locale/auth'
+    | '/$locale/'
+    | '/$locale/auth/forgot-password'
+    | '/$locale/auth/login'
+    | '/$locale/auth/reset-password'
+    | '/$locale/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -80,14 +160,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleIndexRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/auth': {
+      id: '/$locale/auth'
+      path: '/auth'
+      fullPath: '/$locale/auth'
+      preLoaderRoute: typeof LocaleAuthRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/admin': {
+      id: '/$locale/admin'
+      path: '/admin'
+      fullPath: '/$locale/admin'
+      preLoaderRoute: typeof LocaleAdminRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/admin/': {
+      id: '/$locale/admin/'
+      path: '/'
+      fullPath: '/$locale/admin/'
+      preLoaderRoute: typeof LocaleAdminIndexRouteImport
+      parentRoute: typeof LocaleAdminRoute
+    }
+    '/$locale/auth/reset-password': {
+      id: '/$locale/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/$locale/auth/reset-password'
+      preLoaderRoute: typeof LocaleAuthResetPasswordRouteImport
+      parentRoute: typeof LocaleAuthRoute
+    }
+    '/$locale/auth/login': {
+      id: '/$locale/auth/login'
+      path: '/login'
+      fullPath: '/$locale/auth/login'
+      preLoaderRoute: typeof LocaleAuthLoginRouteImport
+      parentRoute: typeof LocaleAuthRoute
+    }
+    '/$locale/auth/forgot-password': {
+      id: '/$locale/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/$locale/auth/forgot-password'
+      preLoaderRoute: typeof LocaleAuthForgotPasswordRouteImport
+      parentRoute: typeof LocaleAuthRoute
+    }
   }
 }
 
+interface LocaleAdminRouteChildren {
+  LocaleAdminIndexRoute: typeof LocaleAdminIndexRoute
+}
+
+const LocaleAdminRouteChildren: LocaleAdminRouteChildren = {
+  LocaleAdminIndexRoute: LocaleAdminIndexRoute,
+}
+
+const LocaleAdminRouteWithChildren = LocaleAdminRoute._addFileChildren(
+  LocaleAdminRouteChildren,
+)
+
+interface LocaleAuthRouteChildren {
+  LocaleAuthForgotPasswordRoute: typeof LocaleAuthForgotPasswordRoute
+  LocaleAuthLoginRoute: typeof LocaleAuthLoginRoute
+  LocaleAuthResetPasswordRoute: typeof LocaleAuthResetPasswordRoute
+}
+
+const LocaleAuthRouteChildren: LocaleAuthRouteChildren = {
+  LocaleAuthForgotPasswordRoute: LocaleAuthForgotPasswordRoute,
+  LocaleAuthLoginRoute: LocaleAuthLoginRoute,
+  LocaleAuthResetPasswordRoute: LocaleAuthResetPasswordRoute,
+}
+
+const LocaleAuthRouteWithChildren = LocaleAuthRoute._addFileChildren(
+  LocaleAuthRouteChildren,
+)
+
 interface LocaleRouteChildren {
+  LocaleAdminRoute: typeof LocaleAdminRouteWithChildren
+  LocaleAuthRoute: typeof LocaleAuthRouteWithChildren
   LocaleIndexRoute: typeof LocaleIndexRoute
 }
 
 const LocaleRouteChildren: LocaleRouteChildren = {
+  LocaleAdminRoute: LocaleAdminRouteWithChildren,
+  LocaleAuthRoute: LocaleAuthRouteWithChildren,
   LocaleIndexRoute: LocaleIndexRoute,
 }
 
