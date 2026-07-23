@@ -110,17 +110,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions) as {
-    data: SiteSettings;
-  };
-  const urlLocale = extractLocale(pathname, settings.enabled_locales);
-  const lang = urlLocale ?? settings.default_locale;
+  const { queryClient } = Route.useRouteContext();
+  // Preloaded by the root loader; read from cache to avoid needing a
+  // QueryClientProvider around the shell.
+  const settings = queryClient.getQueryData<SiteSettings>(
+    siteSettingsQueryOptions.queryKey,
+  );
+  const urlLocale = settings
+    ? extractLocale(pathname, settings.enabled_locales)
+    : null;
+  const lang = urlLocale ?? settings?.default_locale ?? DEFAULT_LOCALE;
 
   return (
     <html lang={lang}>
       <head>
         <HeadContent />
-        <ThemeStyleTag settings={settings} />
+        {settings ? <ThemeStyleTag settings={settings} /> : null}
       </head>
       <body>
         {children}
