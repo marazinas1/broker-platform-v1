@@ -38,6 +38,21 @@ export type Database = {
         }
         Relationships: []
       }
+      owner_only_permissions: {
+        Row: {
+          created_at: string
+          permission_key: string
+        }
+        Insert: {
+          created_at?: string
+          permission_key: string
+        }
+        Update: {
+          created_at?: string
+          permission_key?: string
+        }
+        Relationships: []
+      }
       permissions: {
         Row: {
           created_at: string
