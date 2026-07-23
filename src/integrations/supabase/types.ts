@@ -14,7 +14,144 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      feature_flags: {
+        Row: {
+          config: Json
+          description: string | null
+          enabled: boolean
+          key: string
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          description?: string | null
+          enabled?: boolean
+          key: string
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          description?: string | null
+          enabled?: boolean
+          key?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          accent_color: string | null
+          address_city: string | null
+          address_country: string | null
+          address_street: string | null
+          address_zip: string | null
+          area_unit: string
+          contact_email: string | null
+          contact_phone: string | null
+          country: string
+          currency: string
+          default_locale: string
+          enabled_locales: string[]
+          favicon_url: string | null
+          font_body: string | null
+          font_heading: string | null
+          geo_lat: number | null
+          geo_lng: number | null
+          google_analytics_id: string | null
+          google_site_verification: string | null
+          id: string
+          legal_impressum: Json
+          legal_name: string | null
+          legal_privacy: Json
+          legal_terms: Json
+          logo_dark_url: string | null
+          logo_url: string | null
+          og_default_image: string | null
+          opening_hours: Json
+          plausible_domain: string | null
+          primary_color: string | null
+          secondary_color: string | null
+          site_name: string
+          social: Json
+          updated_at: string
+          whatsapp: string | null
+        }
+        Insert: {
+          accent_color?: string | null
+          address_city?: string | null
+          address_country?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          area_unit?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          country: string
+          currency?: string
+          default_locale?: string
+          enabled_locales?: string[]
+          favicon_url?: string | null
+          font_body?: string | null
+          font_heading?: string | null
+          geo_lat?: number | null
+          geo_lng?: number | null
+          google_analytics_id?: string | null
+          google_site_verification?: string | null
+          id?: string
+          legal_impressum?: Json
+          legal_name?: string | null
+          legal_privacy?: Json
+          legal_terms?: Json
+          logo_dark_url?: string | null
+          logo_url?: string | null
+          og_default_image?: string | null
+          opening_hours?: Json
+          plausible_domain?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          site_name: string
+          social?: Json
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Update: {
+          accent_color?: string | null
+          address_city?: string | null
+          address_country?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          area_unit?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          country?: string
+          currency?: string
+          default_locale?: string
+          enabled_locales?: string[]
+          favicon_url?: string | null
+          font_body?: string | null
+          font_heading?: string | null
+          geo_lat?: number | null
+          geo_lng?: number | null
+          google_analytics_id?: string | null
+          google_site_verification?: string | null
+          id?: string
+          legal_impressum?: Json
+          legal_name?: string | null
+          legal_privacy?: Json
+          legal_terms?: Json
+          logo_dark_url?: string | null
+          logo_url?: string | null
+          og_default_image?: string | null
+          opening_hours?: Json
+          plausible_domain?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          site_name?: string
+          social?: Json
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
