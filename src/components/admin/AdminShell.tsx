@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useParams, useRouter } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { LogOut, PanelLeft } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -51,9 +51,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               <SidebarTrigger
                 aria-label={t("admin.topbar.toggleSidebar")}
                 className="text-foreground"
-              >
-                <PanelLeft className="h-5 w-5" />
-              </SidebarTrigger>
+              />
             </div>
             <div className="flex min-w-0 items-center gap-3">
               <div className="hidden min-w-0 text-right sm:block">
