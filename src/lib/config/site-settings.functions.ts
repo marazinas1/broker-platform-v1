@@ -1,7 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
 import { queryOptions } from "@tanstack/react-query";
 
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { SiteSettings } from "@/types/site-settings";
+import {
+  GeneralSchema,
+  BrandingSchema,
+  ContactSchema,
+  LegalSchema,
+  AnalyticsSchema,
+  type SettingsTabKey,
+} from "@/lib/validation/site-settings";
 
 export const getSiteSettings = createServerFn({ method: "GET" }).handler(
   async (): Promise<SiteSettings> => {
@@ -23,3 +32,68 @@ export const siteSettingsQueryOptions = queryOptions({
   queryFn: () => getSiteSettings(),
   staleTime: 60_000,
 });
+
+type UpdateInput =
+  | { tab: "general"; values: unknown }
+  | { tab: "branding"; values: unknown }
+  | { tab: "contact"; values: unknown }
+  | { tab: "legal"; values: unknown }
+  | { tab: "analytics"; values: unknown };
+
+function parseByTab(input: UpdateInput): Record<string, unknown> {
+  switch (input.tab) {
+    case "general":
+      return GeneralSchema.parse(input.values);
+    case "branding":
+      return BrandingSchema.parse(input.values);
+    case "contact":
+      return ContactSchema.parse(input.values);
+    case "legal":
+      return LegalSchema.parse(input.values);
+    case "analytics":
+      return AnalyticsSchema.parse(input.values);
+  }
+}
+
+export const updateSiteSettings = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: UpdateInput) => {
+    const allowed: SettingsTabKey[] = [
+      "general",
+      "branding",
+      "contact",
+      "legal",
+      "analytics",
+    ];
+    if (!allowed.includes(input.tab as SettingsTabKey)) {
+      throw new Response("Invalid tab", { status: 400 });
+    }
+    return input;
+  })
+  .handler(async ({ data, context }): Promise<SiteSettings> => {
+    const { supabase, userId } = context;
+    const { assertPermission } = await import("@/lib/auth/require-permission.server");
+    await assertPermission(supabase, userId, "settings.edit");
+
+    const patch = parseByTab(data);
+    const { data: current, error: readError } = await supabase
+      .from("site_settings")
+      .select("id")
+      .limit(1)
+      .maybeSingle();
+    if (readError || !current) {
+      throw new Response("site_settings row missing", { status: 500 });
+    }
+    const { data: updated, error } = await supabase
+      .from("site_settings")
+      .update(patch as never)
+      .eq("id", current.id)
+      .select("*")
+      .maybeSingle();
+    if (error || !updated) {
+      throw new Response(`Update failed: ${error?.message ?? "unknown"}`, {
+        status: 500,
+      });
+    }
+    return updated as SiteSettings;
+  });

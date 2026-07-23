@@ -17,6 +17,160 @@
     "home": "Startseite",
     "somethingWentWrong": "Etwas ist schiefgelaufen",
     "tryAgain": "Erneut versuchen",
-    "loadFailed": "Laden fehlgeschlagen: {{message}}"
+    "loadFailed": "Laden fehlgeschlagen: {{message}}",
+    "forbidden": "Keine Berechtigung",
+    "forbiddenBody": "Sie haben keine Berechtigung für diesen Bereich."
+  },
+  "admin": {
+    "topbar": {
+      "signOut": "Abmelden",
+      "toggleSidebar": "Navigation umschalten",
+      "unknownUser": "Unbekannter Nutzer"
+    },
+    "role": {
+      "owner": "Inhaber",
+      "admin": "Administrator",
+      "agent": "Makler",
+      "assistant": "Assistenz",
+      "viewer": "Betrachter"
+    },
+    "nav": {
+      "dashboard": "Übersicht",
+      "listings": "Angebote",
+      "inquiries": "Anfragen",
+      "team": "Team",
+      "content": "Inhalte",
+      "analytics": "Auswertung",
+      "settings": "Einstellungen"
+    },
+    "pages": {
+      "dashboard": "Übersicht",
+      "listings": "Angebote",
+      "inquiries": "Anfragen",
+      "team": "Team",
+      "content": "Inhalte",
+      "analytics": "Auswertung"
+    },
+    "auth": {
+      "login": {
+        "title": "Anmelden",
+        "subtitle": "Melden Sie sich mit Ihrer E-Mail-Adresse an.",
+        "email": "E-Mail",
+        "password": "Passwort",
+        "submit": "Anmelden",
+        "submitting": "Anmeldung läuft…",
+        "forgot": "Passwort vergessen?",
+        "invalid": "Anmeldedaten sind ungültig.",
+        "generic": "Anmeldung fehlgeschlagen."
+      },
+      "forgot": {
+        "title": "Passwort zurücksetzen",
+        "subtitle": "Wir senden Ihnen einen Link per E-Mail.",
+        "email": "E-Mail",
+        "submit": "Link anfordern",
+        "submitting": "Wird gesendet…",
+        "success": "Wenn ein Konto existiert, wurde ein Link versendet.",
+        "back": "Zurück zur Anmeldung"
+      },
+      "reset": {
+        "title": "Neues Passwort setzen",
+        "subtitle": "Wählen Sie ein neues Passwort.",
+        "password": "Neues Passwort",
+        "confirm": "Passwort bestätigen",
+        "submit": "Passwort speichern",
+        "submitting": "Wird gespeichert…",
+        "success": "Passwort aktualisiert. Sie werden weitergeleitet…",
+        "mismatch": "Die Passwörter stimmen nicht überein.",
+        "tooShort": "Mindestens 8 Zeichen.",
+        "invalidLink": "Der Link ist ungültig oder abgelaufen."
+      }
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert",
+      "saveError": "Speichern fehlgeschlagen",
+      "save": "Speichern",
+      "denied": "Sie haben keine Berechtigung für die Einstellungen.",
+      "tabs": {
+        "general": "Allgemein",
+        "branding": "Branding",
+        "contact": "Kontakt",
+        "legal": "Rechtliches",
+        "modules": "Module",
+        "analytics": "Analyse"
+      },
+      "general": {
+        "site_name": "Firmenname",
+        "legal_name": "Rechtlicher Name",
+        "country": "Land",
+        "default_locale": "Standardsprache",
+        "enabled_locales": "Aktive Sprachen",
+        "enabled_locales_help": "Komma-getrennte Sprachcodes, z. B. de, en",
+        "currency": "Währung",
+        "area_unit": "Flächeneinheit",
+        "sqm": "Quadratmeter",
+        "sqft": "Quadratfuß"
+      },
+      "branding": {
+        "logo_url": "Logo (URL)",
+        "logo_dark_url": "Logo dunkel (URL)",
+        "favicon_url": "Favicon (URL)",
+        "og_default_image": "Standard-OG-Bild (URL)",
+        "primary_color": "Primärfarbe",
+        "secondary_color": "Sekundärfarbe",
+        "accent_color": "Akzentfarbe",
+        "font_heading": "Überschriftschrift",
+        "font_body": "Fließtextschrift",
+        "preview": "Vorschau",
+        "preview_heading": "Musterüberschrift",
+        "preview_button": "Beispielaktion",
+        "preview_body": "So sehen Ihre Farben und Schriften auf der Seite aus."
+      },
+      "contact": {
+        "contact_email": "E-Mail",
+        "contact_phone": "Telefon",
+        "whatsapp": "WhatsApp",
+        "address_street": "Straße",
+        "address_zip": "PLZ",
+        "address_city": "Stadt",
+        "address_country": "Land",
+        "geo_lat": "Breitengrad",
+        "geo_lng": "Längengrad",
+        "opening_hours": "Öffnungszeiten (JSON)",
+        "social": "Soziale Netzwerke (JSON)",
+        "json_help": "Wird als JSON gespeichert.",
+        "json_invalid": "Ungültiges JSON."
+      },
+      "legal": {
+        "impressum": "Impressum",
+        "privacy": "Datenschutz",
+        "terms": "AGB",
+        "locale_placeholder": "Inhalt für {{locale}}"
+      },
+      "modules": {
+        "title": "Module",
+        "denied": "Nur Inhaber können Module ändern.",
+        "flags": {
+          "sales": { "title": "Verkauf", "description": "Verkaufsobjekte veröffentlichen." },
+          "rentals": { "title": "Vermietung", "description": "Mietobjekte veröffentlichen." },
+          "valuation": { "title": "Bewertung", "description": "Kostenlose Immobilienbewertung anbieten." },
+          "sold_archive": { "title": "Verkauft-Archiv", "description": "Referenzobjekte öffentlich sichtbar." },
+          "team": { "title": "Team", "description": "Team-Seite anzeigen." },
+          "blog": { "title": "Blog", "description": "Blog aktivieren." },
+          "area_pages": { "title": "Standortseiten", "description": "SEO-Seiten pro Stadt oder Bezirk." },
+          "testimonials": { "title": "Referenzen", "description": "Kundenstimmen anzeigen." },
+          "saved_search": { "title": "Suchagent", "description": "Nutzer können Suchen speichern." },
+          "mortgage_calc": { "title": "Finanzierungsrechner", "description": "Zinsrechner einblenden." },
+          "virtual_tours": { "title": "Virtuelle Touren", "description": "3D-/Video-Touren einbetten." },
+          "crm_sync": { "title": "CRM-Sync", "description": "Anfragen an das CRM übermitteln." }
+        }
+      },
+      "analytics": {
+        "google_analytics_id": "Google Analytics ID",
+        "google_site_verification": "Google Site Verification",
+        "plausible_domain": "Plausible Domain"
+      }
+    }
   }
 }

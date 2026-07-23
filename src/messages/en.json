@@ -17,6 +17,160 @@
     "home": "Home",
     "somethingWentWrong": "Something went wrong",
     "tryAgain": "Try again",
-    "loadFailed": "Failed to load: {{message}}"
+    "loadFailed": "Failed to load: {{message}}",
+    "forbidden": "Not allowed",
+    "forbiddenBody": "You do not have permission to access this area."
+  },
+  "admin": {
+    "topbar": {
+      "signOut": "Sign out",
+      "toggleSidebar": "Toggle navigation",
+      "unknownUser": "Unknown user"
+    },
+    "role": {
+      "owner": "Owner",
+      "admin": "Administrator",
+      "agent": "Agent",
+      "assistant": "Assistant",
+      "viewer": "Viewer"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "listings": "Listings",
+      "inquiries": "Inquiries",
+      "team": "Team",
+      "content": "Content",
+      "analytics": "Analytics",
+      "settings": "Settings"
+    },
+    "pages": {
+      "dashboard": "Dashboard",
+      "listings": "Listings",
+      "inquiries": "Inquiries",
+      "team": "Team",
+      "content": "Content",
+      "analytics": "Analytics"
+    },
+    "auth": {
+      "login": {
+        "title": "Sign in",
+        "subtitle": "Sign in with your email address.",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Sign in",
+        "submitting": "Signing in…",
+        "forgot": "Forgot password?",
+        "invalid": "Invalid credentials.",
+        "generic": "Sign-in failed."
+      },
+      "forgot": {
+        "title": "Reset password",
+        "subtitle": "We will email you a link.",
+        "email": "Email",
+        "submit": "Send link",
+        "submitting": "Sending…",
+        "success": "If an account exists, a link has been sent.",
+        "back": "Back to sign-in"
+      },
+      "reset": {
+        "title": "Set new password",
+        "subtitle": "Choose a new password.",
+        "password": "New password",
+        "confirm": "Confirm password",
+        "submit": "Save password",
+        "submitting": "Saving…",
+        "success": "Password updated. Redirecting…",
+        "mismatch": "Passwords do not match.",
+        "tooShort": "At least 8 characters.",
+        "invalidLink": "The link is invalid or has expired."
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "saveError": "Save failed",
+      "save": "Save",
+      "denied": "You do not have permission to edit settings.",
+      "tabs": {
+        "general": "General",
+        "branding": "Branding",
+        "contact": "Contact",
+        "legal": "Legal",
+        "modules": "Modules",
+        "analytics": "Analytics"
+      },
+      "general": {
+        "site_name": "Company name",
+        "legal_name": "Legal name",
+        "country": "Country",
+        "default_locale": "Default locale",
+        "enabled_locales": "Enabled locales",
+        "enabled_locales_help": "Comma-separated locale codes, e.g. de, en",
+        "currency": "Currency",
+        "area_unit": "Area unit",
+        "sqm": "Square metres",
+        "sqft": "Square feet"
+      },
+      "branding": {
+        "logo_url": "Logo URL",
+        "logo_dark_url": "Dark logo URL",
+        "favicon_url": "Favicon URL",
+        "og_default_image": "Default OG image URL",
+        "primary_color": "Primary color",
+        "secondary_color": "Secondary color",
+        "accent_color": "Accent color",
+        "font_heading": "Heading font",
+        "font_body": "Body font",
+        "preview": "Preview",
+        "preview_heading": "Sample heading",
+        "preview_button": "Sample action",
+        "preview_body": "This is how your colors and fonts look on the site."
+      },
+      "contact": {
+        "contact_email": "Email",
+        "contact_phone": "Phone",
+        "whatsapp": "WhatsApp",
+        "address_street": "Street",
+        "address_zip": "ZIP",
+        "address_city": "City",
+        "address_country": "Country",
+        "geo_lat": "Latitude",
+        "geo_lng": "Longitude",
+        "opening_hours": "Opening hours (JSON)",
+        "social": "Social links (JSON)",
+        "json_help": "Stored as JSON.",
+        "json_invalid": "Invalid JSON."
+      },
+      "legal": {
+        "impressum": "Imprint",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "locale_placeholder": "Content for {{locale}}"
+      },
+      "modules": {
+        "title": "Modules",
+        "denied": "Only owners can change modules.",
+        "flags": {
+          "sales": { "title": "Sales", "description": "Publish for-sale listings." },
+          "rentals": { "title": "Rentals", "description": "Publish rental listings." },
+          "valuation": { "title": "Valuation", "description": "Offer free property valuation." },
+          "sold_archive": { "title": "Sold archive", "description": "Show reference deals publicly." },
+          "team": { "title": "Team", "description": "Show the team page." },
+          "blog": { "title": "Blog", "description": "Enable the blog." },
+          "area_pages": { "title": "Area pages", "description": "SEO pages per city or district." },
+          "testimonials": { "title": "Testimonials", "description": "Show customer testimonials." },
+          "saved_search": { "title": "Saved search", "description": "Let users save searches." },
+          "mortgage_calc": { "title": "Mortgage calculator", "description": "Show a mortgage calculator." },
+          "virtual_tours": { "title": "Virtual tours", "description": "Embed 3D/video tours." },
+          "crm_sync": { "title": "CRM sync", "description": "Forward inquiries to the CRM." }
+        }
+      },
+      "analytics": {
+        "google_analytics_id": "Google Analytics ID",
+        "google_site_verification": "Google site verification",
+        "plausible_domain": "Plausible domain"
+      }
+    }
   }
 }

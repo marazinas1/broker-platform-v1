@@ -12,6 +12,20 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LocaleRouteImport } from './routes/$locale'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LocaleIndexRouteImport } from './routes/$locale.index'
+import { Route as LocaleAuthRouteImport } from './routes/$locale.auth'
+import { Route as LocaleAdminRouteImport } from './routes/$locale.admin'
+import { Route as LocaleAdminIndexRouteImport } from './routes/$locale.admin.index'
+import { Route as LocaleAuthResetPasswordRouteImport } from './routes/$locale.auth.reset-password'
+import { Route as LocaleAuthLoginRouteImport } from './routes/$locale.auth.login'
+import { Route as LocaleAuthForgotPasswordRouteImport } from './routes/$locale.auth.forgot-password'
+import { Route as LocaleAdminTeamRouteImport } from './routes/$locale.admin.team'
+import { Route as LocaleAdminSettingsRouteImport } from './routes/$locale.admin.settings'
+import { Route as LocaleAdminListingsRouteImport } from './routes/$locale.admin.listings'
+import { Route as LocaleAdminInquiriesRouteImport } from './routes/$locale.admin.inquiries'
+import { Route as LocaleAdminContentRouteImport } from './routes/$locale.admin.content'
+import { Route as LocaleAdminAnalyticsRouteImport } from './routes/$locale.admin.analytics'
+import { Route as LocaleAdminSettingsIndexRouteImport } from './routes/$locale.admin.settings.index'
+import { Route as LocaleAdminSettingsTabRouteImport } from './routes/$locale.admin.settings.$tab'
 
 const LocaleRoute = LocaleRouteImport.update({
   id: '/$locale',
@@ -28,28 +42,189 @@ const LocaleIndexRoute = LocaleIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LocaleRoute,
 } as any)
+const LocaleAuthRoute = LocaleAuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleAdminRoute = LocaleAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => LocaleRoute,
+} as any)
+const LocaleAdminIndexRoute = LocaleAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LocaleAdminRoute,
+} as any)
+const LocaleAuthResetPasswordRoute = LocaleAuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => LocaleAuthRoute,
+} as any)
+const LocaleAuthLoginRoute = LocaleAuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => LocaleAuthRoute,
+} as any)
+const LocaleAuthForgotPasswordRoute =
+  LocaleAuthForgotPasswordRouteImport.update({
+    id: '/forgot-password',
+    path: '/forgot-password',
+    getParentRoute: () => LocaleAuthRoute,
+  } as any)
+const LocaleAdminTeamRoute = LocaleAdminTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => LocaleAdminRoute,
+} as any)
+const LocaleAdminSettingsRoute = LocaleAdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => LocaleAdminRoute,
+} as any)
+const LocaleAdminListingsRoute = LocaleAdminListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => LocaleAdminRoute,
+} as any)
+const LocaleAdminInquiriesRoute = LocaleAdminInquiriesRouteImport.update({
+  id: '/inquiries',
+  path: '/inquiries',
+  getParentRoute: () => LocaleAdminRoute,
+} as any)
+const LocaleAdminContentRoute = LocaleAdminContentRouteImport.update({
+  id: '/content',
+  path: '/content',
+  getParentRoute: () => LocaleAdminRoute,
+} as any)
+const LocaleAdminAnalyticsRoute = LocaleAdminAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => LocaleAdminRoute,
+} as any)
+const LocaleAdminSettingsIndexRoute =
+  LocaleAdminSettingsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => LocaleAdminSettingsRoute,
+  } as any)
+const LocaleAdminSettingsTabRoute = LocaleAdminSettingsTabRouteImport.update({
+  id: '/$tab',
+  path: '/$tab',
+  getParentRoute: () => LocaleAdminSettingsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
+  '/$locale/admin': typeof LocaleAdminRouteWithChildren
+  '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/': typeof LocaleIndexRoute
+  '/$locale/admin/analytics': typeof LocaleAdminAnalyticsRoute
+  '/$locale/admin/content': typeof LocaleAdminContentRoute
+  '/$locale/admin/inquiries': typeof LocaleAdminInquiriesRoute
+  '/$locale/admin/listings': typeof LocaleAdminListingsRoute
+  '/$locale/admin/settings': typeof LocaleAdminSettingsRouteWithChildren
+  '/$locale/admin/team': typeof LocaleAdminTeamRoute
+  '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
+  '/$locale/auth/login': typeof LocaleAuthLoginRoute
+  '/$locale/auth/reset-password': typeof LocaleAuthResetPasswordRoute
+  '/$locale/admin/': typeof LocaleAdminIndexRoute
+  '/$locale/admin/settings/$tab': typeof LocaleAdminSettingsTabRoute
+  '/$locale/admin/settings/': typeof LocaleAdminSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale': typeof LocaleIndexRoute
+  '/$locale/admin/analytics': typeof LocaleAdminAnalyticsRoute
+  '/$locale/admin/content': typeof LocaleAdminContentRoute
+  '/$locale/admin/inquiries': typeof LocaleAdminInquiriesRoute
+  '/$locale/admin/listings': typeof LocaleAdminListingsRoute
+  '/$locale/admin/team': typeof LocaleAdminTeamRoute
+  '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
+  '/$locale/auth/login': typeof LocaleAuthLoginRoute
+  '/$locale/auth/reset-password': typeof LocaleAuthResetPasswordRoute
+  '/$locale/admin': typeof LocaleAdminIndexRoute
+  '/$locale/admin/settings/$tab': typeof LocaleAdminSettingsTabRoute
+  '/$locale/admin/settings': typeof LocaleAdminSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$locale': typeof LocaleRouteWithChildren
+  '/$locale/admin': typeof LocaleAdminRouteWithChildren
+  '/$locale/auth': typeof LocaleAuthRouteWithChildren
   '/$locale/': typeof LocaleIndexRoute
+  '/$locale/admin/analytics': typeof LocaleAdminAnalyticsRoute
+  '/$locale/admin/content': typeof LocaleAdminContentRoute
+  '/$locale/admin/inquiries': typeof LocaleAdminInquiriesRoute
+  '/$locale/admin/listings': typeof LocaleAdminListingsRoute
+  '/$locale/admin/settings': typeof LocaleAdminSettingsRouteWithChildren
+  '/$locale/admin/team': typeof LocaleAdminTeamRoute
+  '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
+  '/$locale/auth/login': typeof LocaleAuthLoginRoute
+  '/$locale/auth/reset-password': typeof LocaleAuthResetPasswordRoute
+  '/$locale/admin/': typeof LocaleAdminIndexRoute
+  '/$locale/admin/settings/$tab': typeof LocaleAdminSettingsTabRoute
+  '/$locale/admin/settings/': typeof LocaleAdminSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$locale' | '/$locale/'
+  fullPaths:
+    | '/'
+    | '/$locale'
+    | '/$locale/admin'
+    | '/$locale/auth'
+    | '/$locale/'
+    | '/$locale/admin/analytics'
+    | '/$locale/admin/content'
+    | '/$locale/admin/inquiries'
+    | '/$locale/admin/listings'
+    | '/$locale/admin/settings'
+    | '/$locale/admin/team'
+    | '/$locale/auth/forgot-password'
+    | '/$locale/auth/login'
+    | '/$locale/auth/reset-password'
+    | '/$locale/admin/'
+    | '/$locale/admin/settings/$tab'
+    | '/$locale/admin/settings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$locale'
-  id: '__root__' | '/' | '/$locale' | '/$locale/'
+  to:
+    | '/'
+    | '/$locale/auth'
+    | '/$locale'
+    | '/$locale/admin/analytics'
+    | '/$locale/admin/content'
+    | '/$locale/admin/inquiries'
+    | '/$locale/admin/listings'
+    | '/$locale/admin/team'
+    | '/$locale/auth/forgot-password'
+    | '/$locale/auth/login'
+    | '/$locale/auth/reset-password'
+    | '/$locale/admin'
+    | '/$locale/admin/settings/$tab'
+    | '/$locale/admin/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/$locale'
+    | '/$locale/admin'
+    | '/$locale/auth'
+    | '/$locale/'
+    | '/$locale/admin/analytics'
+    | '/$locale/admin/content'
+    | '/$locale/admin/inquiries'
+    | '/$locale/admin/listings'
+    | '/$locale/admin/settings'
+    | '/$locale/admin/team'
+    | '/$locale/auth/forgot-password'
+    | '/$locale/auth/login'
+    | '/$locale/auth/reset-password'
+    | '/$locale/admin/'
+    | '/$locale/admin/settings/$tab'
+    | '/$locale/admin/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -80,14 +255,169 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleIndexRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/auth': {
+      id: '/$locale/auth'
+      path: '/auth'
+      fullPath: '/$locale/auth'
+      preLoaderRoute: typeof LocaleAuthRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/admin': {
+      id: '/$locale/admin'
+      path: '/admin'
+      fullPath: '/$locale/admin'
+      preLoaderRoute: typeof LocaleAdminRouteImport
+      parentRoute: typeof LocaleRoute
+    }
+    '/$locale/admin/': {
+      id: '/$locale/admin/'
+      path: '/'
+      fullPath: '/$locale/admin/'
+      preLoaderRoute: typeof LocaleAdminIndexRouteImport
+      parentRoute: typeof LocaleAdminRoute
+    }
+    '/$locale/auth/reset-password': {
+      id: '/$locale/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/$locale/auth/reset-password'
+      preLoaderRoute: typeof LocaleAuthResetPasswordRouteImport
+      parentRoute: typeof LocaleAuthRoute
+    }
+    '/$locale/auth/login': {
+      id: '/$locale/auth/login'
+      path: '/login'
+      fullPath: '/$locale/auth/login'
+      preLoaderRoute: typeof LocaleAuthLoginRouteImport
+      parentRoute: typeof LocaleAuthRoute
+    }
+    '/$locale/auth/forgot-password': {
+      id: '/$locale/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/$locale/auth/forgot-password'
+      preLoaderRoute: typeof LocaleAuthForgotPasswordRouteImport
+      parentRoute: typeof LocaleAuthRoute
+    }
+    '/$locale/admin/team': {
+      id: '/$locale/admin/team'
+      path: '/team'
+      fullPath: '/$locale/admin/team'
+      preLoaderRoute: typeof LocaleAdminTeamRouteImport
+      parentRoute: typeof LocaleAdminRoute
+    }
+    '/$locale/admin/settings': {
+      id: '/$locale/admin/settings'
+      path: '/settings'
+      fullPath: '/$locale/admin/settings'
+      preLoaderRoute: typeof LocaleAdminSettingsRouteImport
+      parentRoute: typeof LocaleAdminRoute
+    }
+    '/$locale/admin/listings': {
+      id: '/$locale/admin/listings'
+      path: '/listings'
+      fullPath: '/$locale/admin/listings'
+      preLoaderRoute: typeof LocaleAdminListingsRouteImport
+      parentRoute: typeof LocaleAdminRoute
+    }
+    '/$locale/admin/inquiries': {
+      id: '/$locale/admin/inquiries'
+      path: '/inquiries'
+      fullPath: '/$locale/admin/inquiries'
+      preLoaderRoute: typeof LocaleAdminInquiriesRouteImport
+      parentRoute: typeof LocaleAdminRoute
+    }
+    '/$locale/admin/content': {
+      id: '/$locale/admin/content'
+      path: '/content'
+      fullPath: '/$locale/admin/content'
+      preLoaderRoute: typeof LocaleAdminContentRouteImport
+      parentRoute: typeof LocaleAdminRoute
+    }
+    '/$locale/admin/analytics': {
+      id: '/$locale/admin/analytics'
+      path: '/analytics'
+      fullPath: '/$locale/admin/analytics'
+      preLoaderRoute: typeof LocaleAdminAnalyticsRouteImport
+      parentRoute: typeof LocaleAdminRoute
+    }
+    '/$locale/admin/settings/': {
+      id: '/$locale/admin/settings/'
+      path: '/'
+      fullPath: '/$locale/admin/settings/'
+      preLoaderRoute: typeof LocaleAdminSettingsIndexRouteImport
+      parentRoute: typeof LocaleAdminSettingsRoute
+    }
+    '/$locale/admin/settings/$tab': {
+      id: '/$locale/admin/settings/$tab'
+      path: '/$tab'
+      fullPath: '/$locale/admin/settings/$tab'
+      preLoaderRoute: typeof LocaleAdminSettingsTabRouteImport
+      parentRoute: typeof LocaleAdminSettingsRoute
+    }
   }
 }
 
+interface LocaleAdminSettingsRouteChildren {
+  LocaleAdminSettingsTabRoute: typeof LocaleAdminSettingsTabRoute
+  LocaleAdminSettingsIndexRoute: typeof LocaleAdminSettingsIndexRoute
+}
+
+const LocaleAdminSettingsRouteChildren: LocaleAdminSettingsRouteChildren = {
+  LocaleAdminSettingsTabRoute: LocaleAdminSettingsTabRoute,
+  LocaleAdminSettingsIndexRoute: LocaleAdminSettingsIndexRoute,
+}
+
+const LocaleAdminSettingsRouteWithChildren =
+  LocaleAdminSettingsRoute._addFileChildren(LocaleAdminSettingsRouteChildren)
+
+interface LocaleAdminRouteChildren {
+  LocaleAdminAnalyticsRoute: typeof LocaleAdminAnalyticsRoute
+  LocaleAdminContentRoute: typeof LocaleAdminContentRoute
+  LocaleAdminInquiriesRoute: typeof LocaleAdminInquiriesRoute
+  LocaleAdminListingsRoute: typeof LocaleAdminListingsRoute
+  LocaleAdminSettingsRoute: typeof LocaleAdminSettingsRouteWithChildren
+  LocaleAdminTeamRoute: typeof LocaleAdminTeamRoute
+  LocaleAdminIndexRoute: typeof LocaleAdminIndexRoute
+}
+
+const LocaleAdminRouteChildren: LocaleAdminRouteChildren = {
+  LocaleAdminAnalyticsRoute: LocaleAdminAnalyticsRoute,
+  LocaleAdminContentRoute: LocaleAdminContentRoute,
+  LocaleAdminInquiriesRoute: LocaleAdminInquiriesRoute,
+  LocaleAdminListingsRoute: LocaleAdminListingsRoute,
+  LocaleAdminSettingsRoute: LocaleAdminSettingsRouteWithChildren,
+  LocaleAdminTeamRoute: LocaleAdminTeamRoute,
+  LocaleAdminIndexRoute: LocaleAdminIndexRoute,
+}
+
+const LocaleAdminRouteWithChildren = LocaleAdminRoute._addFileChildren(
+  LocaleAdminRouteChildren,
+)
+
+interface LocaleAuthRouteChildren {
+  LocaleAuthForgotPasswordRoute: typeof LocaleAuthForgotPasswordRoute
+  LocaleAuthLoginRoute: typeof LocaleAuthLoginRoute
+  LocaleAuthResetPasswordRoute: typeof LocaleAuthResetPasswordRoute
+}
+
+const LocaleAuthRouteChildren: LocaleAuthRouteChildren = {
+  LocaleAuthForgotPasswordRoute: LocaleAuthForgotPasswordRoute,
+  LocaleAuthLoginRoute: LocaleAuthLoginRoute,
+  LocaleAuthResetPasswordRoute: LocaleAuthResetPasswordRoute,
+}
+
+const LocaleAuthRouteWithChildren = LocaleAuthRoute._addFileChildren(
+  LocaleAuthRouteChildren,
+)
+
 interface LocaleRouteChildren {
+  LocaleAdminRoute: typeof LocaleAdminRouteWithChildren
+  LocaleAuthRoute: typeof LocaleAuthRouteWithChildren
   LocaleIndexRoute: typeof LocaleIndexRoute
 }
 
 const LocaleRouteChildren: LocaleRouteChildren = {
+  LocaleAdminRoute: LocaleAdminRouteWithChildren,
+  LocaleAuthRoute: LocaleAuthRouteWithChildren,
   LocaleIndexRoute: LocaleIndexRoute,
 }
 
