@@ -86,7 +86,7 @@ export const updateSiteSettings = createServerFn({ method: "POST" })
     }
     const { data: updated, error } = await supabase
       .from("site_settings")
-      .update(patch)
+      .update(patch as never)
       .eq("id", current.id)
       .select("*")
       .maybeSingle();
