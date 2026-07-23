@@ -1,0 +1,14 @@
+{
+  "setup": {
+    "complete": "Einrichtung abgeschlossen"
+  },
+  "home": {
+    "title": "Startseite",
+    "description": "Immobilienplattform-Vorlage"
+  },
+  "locale": {
+    "switch": "Sprache wechseln",
+    "de": "Deutsch",
+    "en": "Englisch"
+  }
+}
