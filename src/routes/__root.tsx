@@ -113,9 +113,9 @@ function RootShell({ children }: { children: ReactNode }) {
   const { queryClient } = Route.useRouteContext();
   // Preloaded by the root loader; read from cache to avoid needing a
   // QueryClientProvider around the shell.
-  const settings = queryClient.getQueryData<SiteSettings>(
+  const settings = queryClient.getQueryData(
     siteSettingsQueryOptions.queryKey,
-  );
+  ) as SiteSettings | undefined;
   const urlLocale = settings
     ? extractLocale(pathname, settings.enabled_locales)
     : null;
