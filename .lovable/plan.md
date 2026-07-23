@@ -1,245 +1,165 @@
 
-## Goal
+# User Management & Permission System (revised)
 
-Scaffold a multi-tenant real estate broker template on **TanStack Start** (SSR). Folder names mirror the Next.js `/app/[locale]/(public|admin)` mental model. No client-specific data, no hardcoded strings, all theme values driven by the DB. Establish the SEO/OG mechanism, typed `site_settings` schema, and the full feature-flag set in this first step.
+Foundation-only step: database schema, RLS, signup trigger, permission matrix, server loader, and client hook. No admin pages, no invitation UI.
 
-Stack note: Next.js is not supported on this platform. TanStack Start + Vite + React 19 + TS strict + Tailwind v4 + shadcn + Lovable Cloud (Supabase) + `i18next`/`react-i18next` (TanStack-native equivalent of `next-intl`; message-file authoring is identical).
+## 1. Database migration
 
-## What gets built in this step
+Single migration; three tables, helpers, triggers, RLS. Explicit GRANTs on every `public` table.
 
-Foundation only — no listings, no admin UI, no auth flows.
+### 1.1 `public.profiles`
 
-1. Folder scaffold mirroring the requested Next-style tree
-2. Locale-prefixed routing (`/de`, `/en`) — German default, English secondary
-3. Supabase client helpers (browser, server-fn, admin) via Lovable Cloud
-4. **DB-driven theme** — CSS variables written server-side from `site_settings`
-5. **SEO/OG mechanism** — shared `buildHead()` helper used by every route
-6. `site_settings` + `feature_flags` tables (typed columns, RLS, GRANTs, seed)
-7. Homepage rendering translated `"setup.complete"` + locale switcher
-8. Zero hardcoded client data anywhere
+Columns per spec. `id uuid primary key references auth.users(id) on delete cascade`. `role` CHECK constrained to the five roles. `updated_at` via existing `public.tg_set_updated_at()` trigger.
 
-## Folder structure
+Grants: `SELECT, INSERT, UPDATE, DELETE` → `authenticated`; `SELECT` → `anon` (public team via `show_on_website = true`); `ALL` → `service_role`.
 
-```text
-src/
-  routes/
-    __root.tsx                       # shell, providers; sitewide default meta only
-    index.tsx                        # redirect "/" -> "/{default_locale}"
-    $locale.tsx                      # locale layout: validate, set i18n, <Outlet/>
-    $locale.index.tsx                # public home: uses buildHead() + i18n
-    _authenticated/route.tsx         # Cloud-managed admin gate (not authored here)
-    api/                             # server routes (empty)
-  components/
-    ui/                              # shadcn (untouched)
-    shared/                          # LocaleSwitcher, ThemeStyleTag, etc.
-    brand/                           # per-client overrides (README only)
-  lib/
-    supabase/
-      client.ts                      # browser (Cloud-generated)
-      auth-middleware.ts             # Cloud-generated
-      client.server.ts               # admin (Cloud-generated)
-    config/
-      site-settings.functions.ts     # getSiteSettings() server fn (public read)
-      feature-flags.functions.ts     # getFeatureFlags() server fn
-      site-config.ts                 # typed SiteSettings + FeatureFlags interfaces
-    seo/
-      build-head.ts                  # THE shared head/meta helper (see below)
-      origin.functions.ts            # getRequestOrigin() server fn for absolute URLs
-      hreflang.ts                    # builds hreflang alternates from enabled_locales
-    validation/
-      site-settings.ts               # zod
-      energy-cert.ts                 # per-country zod stubs (AT/DE/CH/IS/US)
-    utils/cn.ts
-  i18n/
-    config.ts                        # i18next: locales=["de","en"], default "de"
-    provider.tsx
-  messages/
-    de.json
-    en.json
-  types/
-    site-settings.ts
-    feature-flags.ts
-  styles.css                         # neutral defaults for every semantic token
-supabase/
-  migrations/
-    <ts>_init_site_settings.sql
-```
+### 1.2 `public.permissions`
 
-`[locale]` → `$locale` (TanStack dynamic segment). `(public)`/`(admin)` route groups → top-level public routes + `_authenticated/` pathless layout (Cloud-managed).
+Per-user overrides. `unique (profile_id, permission_key)`. Auth-only: `authenticated` + `service_role`; no `anon`.
 
-## SEO / Open Graph mechanism (foundation-level, hard requirement)
+### 1.3 `public.user_invitations`
 
-Shared helper in `src/lib/seo/build-head.ts`:
+Per spec. Auth-only: `authenticated` + `service_role`; no `anon`.
+
+### 1.4 Security-definer helpers (avoid RLS recursion)
+
+All `security definer`, `set search_path = public`, `stable`, `EXECUTE` to `authenticated`:
+
+- `current_user_role() returns text` — reads `profiles.role` for `auth.uid()`.
+- `current_user_is_active() returns boolean`.
+- `has_role(_roles text[]) returns boolean` — role in `_roles` AND active.
+- `count_active_owners() returns int` — used by last-owner guard trigger.
+
+`security definer` bypasses RLS on inner reads → no recursion when used in `profiles` policies.
+
+### 1.5 Signup trigger
+
+`public.handle_new_user()` (`security definer`, `search_path = public`) `AFTER INSERT ON auth.users`:
+
+1. Find unaccepted, unexpired `user_invitations` for `NEW.email`.
+2. If found → use its `role`, set `accepted_at = now()`.
+3. Else → `'viewer'`.
+4. `INSERT INTO public.profiles (id, email, role) ...`.
+
+### 1.6 Role / is_active integrity trigger — revised
+
+`public.profiles_enforce_role_integrity()` `BEFORE UPDATE ON public.profiles`. Ordered rules; only trigger meaningfully when `NEW.role IS DISTINCT FROM OLD.role` or `NEW.is_active IS DISTINCT FROM OLD.is_active`.
+
+Rules:
+
+1. **Only owner may set role='owner'** — evaluated regardless of whose row is being updated. If `NEW.role = 'owner' AND OLD.role <> 'owner'` and `current_user_role() <> 'owner'` → raise.
+2. **Only owner may clear role='owner'** — symmetric: if `OLD.role = 'owner' AND NEW.role <> 'owner'` and `current_user_role() <> 'owner'` → raise. (Prevents admin from demoting owners.)
+3. **Non-owner self-modification blocked** — if `auth.uid() = OLD.id` AND `current_user_role() <> 'owner'` AND (role or is_active changed) → raise.
+4. **Owner self-modification allowed with last-owner guard** — if `auth.uid() = OLD.id` AND `current_user_role() = 'owner'`: allow the change; last-owner guard (§1.7) enforces at least one active owner remains.
+
+RLS policies still gate whether the UPDATE reaches the row at all; this trigger enforces the invariants that policies can't express cleanly.
+
+### 1.7 Last-owner guard trigger
+
+`public.profiles_protect_last_owner()`:
+
+- `BEFORE UPDATE ON public.profiles`: if `OLD.role = 'owner' AND OLD.is_active = true` AND (`NEW.role <> 'owner'` OR `NEW.is_active = false`) AND `count_active_owners() <= 1` → raise `'Cannot demote or deactivate the last active owner'`.
+- `BEFORE DELETE ON public.profiles`: if `OLD.role = 'owner' AND OLD.is_active = true AND count_active_owners() <= 1` → raise `'Cannot delete the last active owner'`.
+
+Runs after the integrity trigger.
+
+### 1.8 RLS policies
+
+**profiles** (RLS on):
+- `SELECT` to `anon, authenticated` USING `show_on_website = true`.
+- `SELECT` to `authenticated` USING `true`.
+- `UPDATE` to `authenticated` USING `id = auth.uid()` WITH CHECK `id = auth.uid()` — own row; triggers enforce role/is_active invariants.
+- `UPDATE` to `authenticated` USING `has_role(ARRAY['owner','admin'])` WITH CHECK `has_role(ARRAY['owner','admin'])` — manage others; triggers restrict owner-role changes to owners only.
+- `DELETE` to `authenticated` USING `has_role(ARRAY['owner','admin'])`; last-owner guard blocks the destructive case.
+- No `INSERT` policy — profiles come from the signup trigger only.
+
+**permissions**:
+- `SELECT` USING `profile_id = auth.uid() OR has_role(ARRAY['owner','admin'])`.
+- `INSERT/UPDATE/DELETE` USING/CHECK `has_role(ARRAY['owner','admin'])`.
+
+**user_invitations**:
+- `SELECT/INSERT/DELETE` USING/CHECK `has_role(ARRAY['owner','admin'])`. No `anon`.
+
+## 2. Permission matrix — `src/lib/auth/permissions.ts`
+
+Typed `Role` and `PermissionKey` unions. `PERMISSION_MATRIX: Record<PermissionKey, Record<Role, boolean>>` transcribed exactly from the spec.
 
 ```ts
-type SeoInput = {
-  origin: string;                    // absolute origin, from getRequestOrigin()
-  path: string;                      // e.g. "/de" or "/de/objekte/xyz"
-  locale: "de" | "en";
-  enabledLocales: ("de" | "en")[];
-  defaultLocale: "de" | "en";
-  title: string;                     // already localized
-  description: string;               // already localized
-  ogImage?: string | null;           // absolute; falls back to settings.og_default_image
-  ogType?: "website" | "article" | "product";
-  siteName: string;                  // from site_settings.site_name
-  noindex?: boolean;
-};
+export function hasPermission(
+  profile: { role: Role; is_active: boolean } | null | undefined,
+  overrides: Array<{ permission_key: string; granted: boolean }>,
+  key: PermissionKey,
+): boolean {
+  if (!profile || !profile.is_active) return false;
+  const o = overrides.find(x => x.permission_key === key);
+  if (o) return o.granted;
+  return PERMISSION_MATRIX[key][profile.role] ?? false;
+}
 ```
 
-`buildHead(input)` returns a `{ meta, links }` object containing, on every call:
+Pure, no I/O.
 
-- `<title>`, `<meta name="description">`
-- `og:title`, `og:description`, `og:type`, `og:url` (absolute), `og:image` (absolute; falls back to `site_settings.og_default_image`), `og:site_name`, `og:locale`
-- `twitter:card` = `summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image`
-- `<link rel="canonical">` (leaf routes only — `__root.tsx` does NOT emit canonical)
-- `<link rel="alternate" hreflang="…">` for every enabled locale plus `x-default` pointing at `default_locale`
-- Optional `robots: noindex` when requested
+## 3. Server loader — `src/lib/auth/current-user.functions.ts`
 
-Rules the helper enforces:
-- `og:image` is set ONLY when `buildHead()` is called (i.e. leaf routes). `__root.tsx` never emits `og:image`.
-- All URLs (`og:url`, `og:image`, canonical, hreflang) are absolute, built from `origin`.
-- Per `head-meta` guidance, `title` is a `meta` entry (not a top-level field).
+`getCurrentUserWithPermissions` — `createServerFn({ method: 'GET' }).middleware([requireSupabaseAuth]).handler(...)`:
+- Uses `context.supabase` (RLS as user).
+- Loads `profiles` row for `context.userId` + all `permissions` rows for that profile.
+- Returns `{ profile, overrides } | null`.
 
-Wiring:
-- `__root.tsx` `head()` holds sitewide defaults only: `charSet`, `viewport`, `og:type: website`, favicon, stylesheet. No canonical, no page-specific title/description, no `og:image`.
-- Each leaf route (starting with `$locale.index.tsx`) has a `loader` that calls `getSiteSettings()` + `getRequestOrigin()` and returns them; its `head({ loaderData, params })` calls `buildHead(...)`.
-- Homepage demo: title = t("home.title"), description = t("home.description"), ogImage = `settings.og_default_image` (absolute), hreflang for `de` and `en`.
+Exports `currentUserQueryOptions` (`queryKey: ['current-user']`, `staleTime: 60_000`).
 
-Verification (added to checklist): `curl -s http://localhost:8080/de | grep -E 'og:|twitter:|canonical|hreflang'` — every OG/Twitter/canonical/hreflang tag must appear in the raw HTML response, not injected after hydration.
+## 4. Root loader — session-gated preload
 
-## Database — `site_settings` (typed columns)
+Public routes must not issue an authenticated RPC for anonymous visitors.
 
-Single-row config table. Explicit columns for scalars; jsonb reserved for per-locale content and open-ended sets.
+- New `.server.ts` helper `hasSupabaseSessionCookie()` inspects the incoming request via `getRequest()` and returns true iff a Supabase auth cookie is present (matches `sb-*-auth-token` — the same pattern the auth cookies use). Server-only, no DB call.
+- New `getCurrentUserIfSignedIn` server function (no auth middleware): calls the helper; if no cookie → returns `null` immediately; if cookie → dynamically imports and delegates to `getCurrentUserWithPermissions` (which runs the auth middleware). This keeps `requireSupabaseAuth` off the anonymous fast path entirely.
+- `currentUserQueryOptions.queryFn` calls `getCurrentUserIfSignedIn`; on any thrown auth error → return `null` (defensive).
+- `src/routes/__root.tsx` loader adds `ensureQueryData(currentUserQueryOptions)` in the existing `Promise.all`.
 
-```sql
-create table public.site_settings (
-  id uuid primary key default gen_random_uuid(),
-  site_name text not null,
-  legal_name text,
-  country text not null check (country in ('AT','DE','CH','IS','US')),
-  default_locale text not null default 'de',
-  enabled_locales text[] not null default '{de,en}',
-  currency text not null default 'EUR',
-  area_unit text not null default 'sqm' check (area_unit in ('sqm','sqft')),
+Note: the bearer token attached client-side by `attachSupabaseAuth` covers the authenticated case; the cookie check is strictly a server-side "is there any session at all" gate for SSR.
 
-  logo_url text,
-  logo_dark_url text,
-  favicon_url text,
-  og_default_image text,
+## 5. Client hook — `src/lib/auth/use-permission.ts`
 
-  primary_color text,
-  secondary_color text,
-  accent_color text,
-  font_heading text,
-  font_body text,
-
-  contact_email text,
-  contact_phone text,
-  whatsapp text,
-  address_street text,
-  address_zip text,
-  address_city text,
-  address_country text,
-  geo_lat numeric,
-  geo_lng numeric,
-
-  opening_hours jsonb not null default '{}'::jsonb,
-  social jsonb not null default '{}'::jsonb,
-
-  google_analytics_id text,
-  google_site_verification text,
-  plausible_domain text,
-
-  legal_impressum jsonb not null default '{}'::jsonb,  -- {"de": "...", "en": "..."}
-  legal_privacy   jsonb not null default '{}'::jsonb,
-  legal_terms     jsonb not null default '{}'::jsonb,
-
-  updated_at timestamptz not null default now()
-);
+```ts
+export function usePermission(key: PermissionKey): boolean {
+  const { data } = useSuspenseQuery(currentUserQueryOptions);
+  return hasPermission(data?.profile, data?.overrides ?? [], key);
+}
+export function useCurrentUser() { /* returns { profile, overrides } | null */ }
 ```
 
-RLS + GRANTs:
-- `GRANT SELECT ON public.site_settings TO anon, authenticated;`
-- `GRANT ALL ON public.site_settings TO service_role;`
-- RLS enabled; single policy: `for select using (true)`. No public write policies.
-- Migration inserts one neutral default row (site_name = 'Template', country = 'AT', default_locale = 'de', enabled_locales = `{de,en}`) so a fresh clone renders.
+File header comment: client checks hide UI only; server functions must independently verify.
 
-## Database — `feature_flags` (full set seeded, sales-only enabled)
+## 6. Server-side check helper — `src/lib/auth/require-permission.server.ts`
 
-```sql
-create table public.feature_flags (
-  key text primary key,
-  enabled boolean not null default false,
-  description text,
-  config jsonb not null default '{}'::jsonb,
-  updated_at timestamptz not null default now()
-);
+`assertPermission(supabase, userId, key)` — loads profile + overrides via the RLS-scoped client, throws `Response('Forbidden', { status: 403 })` when `hasPermission` is false. Pattern for future protected mutations.
+
+## 7. File layout
+
+```
+src/lib/auth/
+  permissions.ts                # matrix + hasPermission (pure)
+  current-user.functions.ts     # protected + session-gated server fns + queryOptions
+  session-cookie.server.ts      # cookie presence check
+  use-permission.ts             # client hooks
+  require-permission.server.ts  # server-side assert
 ```
 
-Seeded rows (in the same migration):
+All ≤200 lines. No UI strings introduced.
 
-| key | enabled | description |
-|---|---|---|
-| sales | true | Sales listings |
-| rentals | false | Rental listings |
-| valuation | false | Property valuation tool |
-| sold_archive | false | Archive of sold properties |
-| team | false | Team / agent profiles |
-| blog | false | Blog / news |
-| area_pages | false | Neighborhood/area landing pages |
-| testimonials | false | Customer testimonials |
-| saved_search | false | User saved searches |
-| mortgage_calc | false | Mortgage calculator |
-| virtual_tours | false | Virtual tour embeds |
-| crm_sync | false | External CRM sync |
+## 8. Verification checklist
 
-RLS + GRANTs: `SELECT` to `anon, authenticated`; `ALL` to `service_role`; RLS on; `for select using (true)`.
+1. `hasPermission({role:'assistant',is_active:true}, [], 'listing.publish') === false`.
+2. Non-owner signed-in user issuing `UPDATE profiles SET role='admin' WHERE id = auth.uid()` → integrity trigger raises.
+3. `hasPermission({role:'owner',is_active:false}, [], 'settings.edit') === false`.
+4. Insert `user_invitations(email='x@y.z', role='agent', …)`, sign that user up → `profiles.role='agent'`, invitation `accepted_at` set. Signup with no invitation → role `viewer`.
+5. Regular signed-in user `SELECT * FROM profiles` succeeds (no recursion).
+6. Non-admin `SELECT` on `permissions` returns only own rows; on `user_invitations` returns none.
+7. **Last-owner guard**: with exactly one active owner, `UPDATE profiles SET role='admin' WHERE id = <that owner>` and `UPDATE ... SET is_active=false` and `DELETE FROM profiles WHERE id = <that owner>` all raise. With ≥2 active owners, the same owner may demote or deactivate self.
+8. Admin attempting `UPDATE profiles SET role='owner' WHERE id = <other>` or `UPDATE ... SET role='admin' WHERE OLD.role='owner'` → integrity trigger raises.
+9. Anonymous request to `/de` issues zero authenticated Supabase requests server-side (verify by inspecting the server-fn call chain: `getCurrentUserIfSignedIn` short-circuits when no `sb-*-auth-token` cookie is present).
 
-## Theme system
+## Out of scope
 
-- `styles.css` declares neutral defaults for every semantic token via existing `@theme inline` + `:root { … }`.
-- `__root.tsx` server-side loader fetches `site_settings`, and renders a `<style>:root{ --primary: …; --secondary: …; --accent: …; --font-heading: …; --font-body: …; }</style>` inside `<head>` via the `head().scripts`/`links` API (using a raw style link or an inline style meta entry). Values come from typed columns (`primary_color`, `secondary_color`, `accent_color`, `font_heading`, `font_body`). No FOUC, no client roundtrip.
-- Tailwind utilities (`bg-primary`, `text-foreground`, `font-heading`) resolve to those variables. Nothing in components references literal colors.
-
-## i18n
-
-- `i18next` + `react-i18next`, resources from `src/messages/{de,en}.json`.
-- Locale = `$locale` URL segment; validated against `site_settings.enabled_locales`; invalid → redirect to `default_locale`.
-- `<LocaleSwitcher />` renders one `<Link>` per enabled locale, preserving the current path.
-- All UI text — including "Setup complete" — resolves through `t("setup.complete")`.
-
-## Feature flag helper
-
-`getFeatureFlags()` server fn returns `Record<string, { enabled: boolean; config: Record<string, unknown> }>`. Preloaded in `__root.tsx` loader; components consume via `useFeatureFlag(key)` hook backed by TanStack Query.
-
-## File-size rule
-
-Every new file ≤ 200 lines. Route files delegate to `/components/shared/`; business logic in `/lib/`.
-
-## Not built now
-
-- Listings schema/pages/search
-- Admin panel content (gate exists, pages don't)
-- Auth UI beyond Cloud-provided `/auth`
-- Real per-country energy validators (stubs only)
-- Client brand components (folder + README only)
-
-## Verification checklist
-
-- `build:dev` passes.
-- `/` → `/de`.
-- `/de` renders "Einrichtung abgeschlossen"; `/en` renders "Setup complete".
-- Locale switcher works, updates `<html lang>`.
-- **`curl -s $ORIGIN/de` raw HTML contains**: `<title>`, `meta[name=description]`, all `og:*` (including absolute `og:image` from `og_default_image`), `twitter:card`+`twitter:title`+`twitter:description`+`twitter:image`, `link[rel=canonical]` (absolute), and `link[rel=alternate][hreflang]` for `de`, `en`, `x-default`.
-- View source shows `:root { --primary: …; … }` inlined before hydration.
-- No literal company name, phone, hex color, or English/German string in any component file.
-- `select * from feature_flags` returns 12 rows; only `sales` is enabled.
-
-## Technical details
-
-- **Cloud enablement**: first build-mode action calls `supabase--enable` so Supabase provisions before the migration runs.
-- **`getSiteSettings()`** uses a server-side publishable Supabase client (not `supabaseAdmin`) with the `sb_`-key fetch shim from the server-functions knowledge, since the row is publicly readable.
-- **`getRequestOrigin()`** reads `x-forwarded-proto` + `host` inside `createServerFn` so `og:image`/canonical/hreflang URLs are absolute at SSR time.
-- **`buildHead()`** is pure and unit-testable; it never reads env or `window`.
-- **Admin `_authenticated/route.tsx`** is Cloud-managed and appears when Cloud is enabled; this plan does not author it.
+Invitation acceptance flow, admin management UI, and applying `assertPermission` to feature server functions (done per-feature later).

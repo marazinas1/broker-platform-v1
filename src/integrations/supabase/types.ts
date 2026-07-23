@@ -38,6 +38,101 @@ export type Database = {
         }
         Relationships: []
       }
+      permissions: {
+        Row: {
+          created_at: string
+          granted: boolean
+          id: string
+          permission_key: string
+          profile_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          granted: boolean
+          id?: string
+          permission_key: string
+          profile_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          granted?: boolean
+          id?: string
+          permission_key?: string
+          profile_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "permissions_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          is_active: boolean
+          languages_spoken: string[] | null
+          last_login_at: string | null
+          phone: string | null
+          public_bio: Json
+          public_photo_url: string | null
+          public_title: string | null
+          role: string
+          show_on_website: boolean
+          sort_order: number
+          specializations: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          is_active?: boolean
+          languages_spoken?: string[] | null
+          last_login_at?: string | null
+          phone?: string | null
+          public_bio?: Json
+          public_photo_url?: string | null
+          public_title?: string | null
+          role?: string
+          show_on_website?: boolean
+          sort_order?: number
+          specializations?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          is_active?: boolean
+          languages_spoken?: string[] | null
+          last_login_at?: string | null
+          phone?: string | null
+          public_bio?: Json
+          public_photo_url?: string | null
+          public_title?: string | null
+          role?: string
+          show_on_website?: boolean
+          sort_order?: number
+          specializations?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           accent_color: string | null
@@ -152,12 +247,56 @@ export type Database = {
         }
         Relationships: []
       }
+      user_invitations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string | null
+          role: string
+          token: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          invited_by?: string | null
+          role: string
+          token: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          role?: string
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_invitations_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      count_active_owners: { Args: never; Returns: number }
+      current_user_is_active: { Args: never; Returns: boolean }
+      current_user_role: { Args: never; Returns: string }
+      has_role: { Args: { _roles: string[] }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
