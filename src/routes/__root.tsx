@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -14,19 +15,35 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { featureFlagsQueryOptions } from "@/lib/config/feature-flags.functions";
 import { ThemeStyleTag } from "@/components/shared/ThemeStyleTag";
+import { extractLocale } from "@/lib/seo/hreflang";
+import { translate, DEFAULT_LOCALE, isLocale, type Locale } from "@/i18n/config";
+import type { SiteSettings } from "@/types/site-settings";
+
+/** Resolve the active locale from URL, falling back to site default. */
+function useActiveLocale(): Locale {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // site_settings is preloaded in the root loader, so this cache read is safe.
+  const { data } = useSuspenseQuery(siteSettingsQueryOptions);
+  const fromUrl = extractLocale(pathname, data.enabled_locales);
+  if (fromUrl && isLocale(fromUrl)) return fromUrl;
+  return isLocale(data.default_locale) ? (data.default_locale as Locale) : DEFAULT_LOCALE;
+}
 
 function NotFoundComponent() {
+  const locale = useActiveLocale();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Not found.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {translate(locale, "errors.notFound")}
+        </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Home
+            {translate(locale, "errors.home")}
           </Link>
         </div>
       </div>
@@ -37,6 +54,7 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const locale = useActiveLocale();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
@@ -45,7 +63,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Something went wrong
+          {translate(locale, "errors.somethingWentWrong")}
         </h1>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -55,7 +73,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            {translate(locale, "errors.tryAgain")}
           </button>
         </div>
       </div>
@@ -91,10 +109,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions) as {
+    data: SiteSettings;
+  };
+  const urlLocale = extractLocale(pathname, settings.enabled_locales);
+  const lang = urlLocale ?? settings.default_locale;
+
   return (
-    <html lang="en">
+    <html lang={lang}>
       <head>
         <HeadContent />
+        <ThemeStyleTag settings={settings} />
       </head>
       <body>
         {children}
@@ -109,13 +135,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeInjector />
       <Outlet />
     </QueryClientProvider>
   );
-}
-
-function ThemeInjector() {
-  const { data } = useSuspenseQuery(siteSettingsQueryOptions);
-  return <ThemeStyleTag settings={data} />;
 }
