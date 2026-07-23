@@ -10,5 +10,13 @@
     "switch": "Switch language",
     "de": "German",
     "en": "English"
+  },
+  "errors": {
+    "notFoundTitle": "Not found",
+    "notFound": "Page not found.",
+    "home": "Home",
+    "somethingWentWrong": "Something went wrong",
+    "tryAgain": "Try again",
+    "loadFailed": "Failed to load: {{message}}"
   }
 }

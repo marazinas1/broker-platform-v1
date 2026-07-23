@@ -10,5 +10,13 @@
     "switch": "Sprache wechseln",
     "de": "Deutsch",
     "en": "Englisch"
+  },
+  "errors": {
+    "notFoundTitle": "Nicht gefunden",
+    "notFound": "Seite nicht gefunden.",
+    "home": "Startseite",
+    "somethingWentWrong": "Etwas ist schiefgelaufen",
+    "tryAgain": "Erneut versuchen",
+    "loadFailed": "Laden fehlgeschlagen: {{message}}"
   }
 }
