@@ -15,7 +15,7 @@ export const getFeatureFlags = createServerFn({ method: "GET" }).handler(
     for (const row of (data ?? []) as Array<{
       key: string;
       enabled: boolean;
-      config: Record<string, unknown>;
+      config: Record<string, any>;
     }>) {
       flags[row.key] = { enabled: row.enabled, config: row.config ?? {} };
     }
