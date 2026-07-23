@@ -35,10 +35,25 @@ export const Route = createFileRoute("/$locale/")({
     });
   },
   component: HomePage,
-  errorComponent: ({ error }) => (
-    <div className="p-8 text-sm text-destructive">Error: {error.message}</div>
-  ),
-  notFoundComponent: () => <div className="p-8 text-sm">Not found</div>,
+  errorComponent: ({ error }) => {
+    const { locale } = Route.useParams();
+    return (
+      <div className="p-8 text-sm text-destructive">
+        {translate(locale as Locale, "errors.loadFailed").replace(
+          "{{message}}",
+          error.message,
+        )}
+      </div>
+    );
+  },
+  notFoundComponent: () => {
+    const { locale } = Route.useParams();
+    return (
+      <div className="p-8 text-sm">
+        {translate(locale as Locale, "errors.notFound")}
+      </div>
+    );
+  },
 });
 
 function HomePage() {
@@ -48,7 +63,7 @@ function HomePage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background text-foreground">
-      <h1 className="text-3xl font-semibold" style={{ fontFamily: "var(--font-heading)" }}>
+      <h1 className="font-heading text-3xl font-semibold">
         {t("setup.complete")}
       </h1>
       <LocaleSwitcher
