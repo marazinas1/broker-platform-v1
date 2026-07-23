@@ -1,0 +1,39 @@
+export type Country = "AT" | "DE" | "CH" | "IS" | "US";
+export type AreaUnit = "sqm" | "sqft";
+
+export interface SiteSettings {
+  id: string;
+  site_name: string;
+  legal_name: string | null;
+  country: Country;
+  default_locale: string;
+  enabled_locales: string[];
+  currency: string;
+  area_unit: AreaUnit;
+  logo_url: string | null;
+  logo_dark_url: string | null;
+  favicon_url: string | null;
+  og_default_image: string | null;
+  primary_color: string | null;
+  secondary_color: string | null;
+  accent_color: string | null;
+  font_heading: string | null;
+  font_body: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  whatsapp: string | null;
+  address_street: string | null;
+  address_zip: string | null;
+  address_city: string | null;
+  address_country: string | null;
+  geo_lat: number | null;
+  geo_lng: number | null;
+  opening_hours: Record<string, any>;
+  social: Record<string, any>;
+  google_analytics_id: string | null;
+  google_site_verification: string | null;
+  plausible_domain: string | null;
+  legal_impressum: Record<string, string>;
+  legal_privacy: Record<string, string>;
+  legal_terms: Record<string, string>;
+}

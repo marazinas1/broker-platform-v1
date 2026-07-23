@@ -1,0 +1,14 @@
+{
+  "setup": {
+    "complete": "Setup complete"
+  },
+  "home": {
+    "title": "Home",
+    "description": "Real estate platform template"
+  },
+  "locale": {
+    "switch": "Switch language",
+    "de": "German",
+    "en": "English"
+  }
+}
