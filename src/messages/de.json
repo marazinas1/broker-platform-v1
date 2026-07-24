@@ -1,16 +1,129 @@
 {
-  "setup": {
-    "complete": "Einrichtung abgeschlossen"
-  },
+  "setup": { "complete": "Einrichtung abgeschlossen" },
   "home": {
-    "title": "Startseite",
-    "description": "Immobilienplattform-Vorlage"
+    "title": "Immobilien im Aichfeld",
+    "description": "Ausgewählte Häuser, Wohnungen und Grundstücke in Fohnsdorf, Judenburg, Knittelfeld und Zeltweg.",
+    "hero_line": "Immobilien mit Anspruch. Im Herzen der Obersteiermark.",
+    "featured": "Ausgewählte Objekte",
+    "recent_sales": "Kürzlich vermittelt",
+    "recent_sales_intro": "Ein Auszug aus den zuletzt vermittelten Objekten.",
+    "areas": "Unsere Standorte",
+    "about": "Über uns",
+    "about_body": "Wir begleiten Eigentümer und Käufer diskret durch den gesamten Verkaufsprozess. Von der ersten Bewertung bis zur Übergabe. Persönlich, sorgfältig, gut vernetzt in der Region.",
+    "contact": "Kontakt",
+    "view_all": "Alle Objekte ansehen",
+    "view_all_sold": "Zum Verkauft-Archiv"
   },
-  "locale": {
-    "switch": "Sprache wechseln",
-    "de": "Deutsch",
-    "en": "Englisch"
+  "nav": {
+    "listings": "Angebote",
+    "sold": "Verkauft",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "admin": "Verwaltung",
+    "menu": "Menü"
   },
+  "listings": {
+    "title": "Immobilien",
+    "description": "Aktuelle Angebote im Aichfeld.",
+    "sold_title": "Verkauft & vermittelt",
+    "sold_description": "Referenzen aus den letzten Monaten.",
+    "empty": "Keine Objekte mit diesen Kriterien gefunden.",
+    "on_request": "Preis auf Anfrage",
+    "coming_soon": "Demnächst",
+    "sold": "Verkauft",
+    "rented": "Vermietet",
+    "for_sale": "Zum Verkauf",
+    "for_rent": "Zur Miete",
+    "sold_on": "Vermittelt {{date}}",
+    "sort": {
+      "label": "Sortierung",
+      "newest": "Neueste",
+      "price_asc": "Preis aufsteigend",
+      "price_desc": "Preis absteigend"
+    },
+    "view": { "grid": "Raster", "map": "Karte" },
+    "filters": {
+      "deal": "Angebotsart",
+      "any": "Alle",
+      "sale": "Kauf",
+      "rent": "Miete",
+      "type": "Objektart",
+      "house": "Haus",
+      "apartment": "Wohnung",
+      "land": "Grundstück",
+      "commercial": "Gewerbe",
+      "city": "Ort",
+      "city_placeholder": "z. B. Judenburg",
+      "rooms_min": "Zimmer ab",
+      "price_min": "Preis ab (EUR)",
+      "price_max": "Preis bis (EUR)",
+      "area_min": "Fläche ab (m²)",
+      "reset": "Zurücksetzen",
+      "apply": "Anwenden"
+    },
+    "detail": {
+      "reference": "Referenz",
+      "key_facts": "Eckdaten",
+      "description": "Beschreibung",
+      "features": "Ausstattung",
+      "location": "Lage",
+      "location_hidden": "Genaue Adresse auf Anfrage.",
+      "energy": "Energieausweis",
+      "energy_hwb": "HWB",
+      "energy_eeb": "fGEE",
+      "energy_class": "Klasse",
+      "energy_missing": "Energieausweis wird nachgereicht.",
+      "living_area": "Wohnfläche",
+      "plot_area": "Grundstück",
+      "rooms": "Zimmer",
+      "bedrooms": "Schlafzimmer",
+      "bathrooms": "Badezimmer",
+      "year_built": "Baujahr",
+      "year_renovated": "Saniert",
+      "condition": "Zustand",
+      "heating": "Heizung",
+      "agent": "Ansprechpartner",
+      "share": "Teilen",
+      "map_soon": "Kartenansicht wird in Kürze aktiviert.",
+      "unavailable_title": "Objekt nicht verfügbar",
+      "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an."
+    },
+    "pager": { "prev": "Zurück", "next": "Weiter", "page": "Seite {{n}} von {{total}}" },
+    "results_count": "{{count}} Objekte"
+  },
+  "areas": {
+    "fohnsdorf": "Fohnsdorf",
+    "judenburg": "Judenburg",
+    "knittelfeld": "Knittelfeld",
+    "zeltweg": "Zeltweg"
+  },
+  "inquiry": {
+    "title": "Anfrage senden",
+    "subtitle": "Wir melden uns innerhalb eines Werktages.",
+    "name": "Name",
+    "email": "E-Mail",
+    "phone": "Telefon (optional)",
+    "message": "Nachricht",
+    "message_default": "Bitte kontaktieren Sie mich zu diesem Objekt.",
+    "submit": "Anfrage senden",
+    "submitting": "Wird gesendet…",
+    "success": "Vielen Dank. Ihre Anfrage ist bei uns eingegangen.",
+    "error": "Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+  },
+  "share": {
+    "copy": "Link kopieren",
+    "copied": "Kopiert",
+    "email": "Per E-Mail",
+    "whatsapp": "WhatsApp",
+    "facebook": "Facebook"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz",
+    "contact": "Kontakt"
+  },
+  "locale": { "switch": "Sprache wechseln", "de": "Deutsch", "en": "Englisch" },
   "errors": {
     "notFoundTitle": "Nicht gefunden",
     "notFound": "Seite nicht gefunden.",
@@ -22,135 +135,23 @@
     "forbiddenBody": "Sie haben keine Berechtigung für diesen Bereich."
   },
   "admin": {
-    "topbar": {
-      "signOut": "Abmelden",
-      "toggleSidebar": "Navigation umschalten",
-      "unknownUser": "Unbekannter Nutzer"
-    },
-    "role": {
-      "owner": "Inhaber",
-      "admin": "Administrator",
-      "agent": "Makler",
-      "assistant": "Assistenz",
-      "viewer": "Betrachter"
-    },
-    "nav": {
-      "dashboard": "Übersicht",
-      "listings": "Angebote",
-      "inquiries": "Anfragen",
-      "team": "Team",
-      "content": "Inhalte",
-      "analytics": "Auswertung",
-      "settings": "Einstellungen"
-    },
-    "pages": {
-      "dashboard": "Übersicht",
-      "listings": "Angebote",
-      "inquiries": "Anfragen",
-      "team": "Team",
-      "content": "Inhalte",
-      "analytics": "Auswertung"
-    },
+    "topbar": { "signOut": "Abmelden", "toggleSidebar": "Navigation umschalten", "unknownUser": "Unbekannter Nutzer" },
+    "role": { "owner": "Inhaber", "admin": "Administrator", "agent": "Makler", "assistant": "Assistenz", "viewer": "Betrachter" },
+    "nav": { "dashboard": "Übersicht", "listings": "Angebote", "inquiries": "Anfragen", "team": "Team", "content": "Inhalte", "analytics": "Auswertung", "settings": "Einstellungen" },
+    "pages": { "dashboard": "Übersicht", "listings": "Angebote", "inquiries": "Anfragen", "team": "Team", "content": "Inhalte", "analytics": "Auswertung" },
     "auth": {
-      "login": {
-        "title": "Anmelden",
-        "subtitle": "Melden Sie sich mit Ihrer E-Mail-Adresse an.",
-        "email": "E-Mail",
-        "password": "Passwort",
-        "submit": "Anmelden",
-        "submitting": "Anmeldung läuft…",
-        "forgot": "Passwort vergessen?",
-        "invalid": "Anmeldedaten sind ungültig.",
-        "generic": "Anmeldung fehlgeschlagen."
-      },
-      "forgot": {
-        "title": "Passwort zurücksetzen",
-        "subtitle": "Wir senden Ihnen einen Link per E-Mail.",
-        "email": "E-Mail",
-        "submit": "Link anfordern",
-        "submitting": "Wird gesendet…",
-        "success": "Wenn ein Konto existiert, wurde ein Link versendet.",
-        "back": "Zurück zur Anmeldung"
-      },
-      "reset": {
-        "title": "Neues Passwort setzen",
-        "subtitle": "Wählen Sie ein neues Passwort.",
-        "password": "Neues Passwort",
-        "confirm": "Passwort bestätigen",
-        "submit": "Passwort speichern",
-        "submitting": "Wird gespeichert…",
-        "success": "Passwort aktualisiert. Sie werden weitergeleitet…",
-        "mismatch": "Die Passwörter stimmen nicht überein.",
-        "tooShort": "Mindestens 8 Zeichen.",
-        "invalidLink": "Der Link ist ungültig oder abgelaufen."
-      }
+      "login": { "title": "Anmelden", "subtitle": "Melden Sie sich mit Ihrer E-Mail-Adresse an.", "email": "E-Mail", "password": "Passwort", "submit": "Anmelden", "submitting": "Anmeldung läuft…", "forgot": "Passwort vergessen?", "invalid": "Anmeldedaten sind ungültig.", "generic": "Anmeldung fehlgeschlagen." },
+      "forgot": { "title": "Passwort zurücksetzen", "subtitle": "Wir senden Ihnen einen Link per E-Mail.", "email": "E-Mail", "submit": "Link anfordern", "submitting": "Wird gesendet…", "success": "Wenn ein Konto existiert, wurde ein Link versendet.", "back": "Zurück zur Anmeldung" },
+      "reset": { "title": "Neues Passwort setzen", "subtitle": "Wählen Sie ein neues Passwort.", "password": "Neues Passwort", "confirm": "Passwort bestätigen", "submit": "Passwort speichern", "submitting": "Wird gespeichert…", "success": "Passwort aktualisiert. Sie werden weitergeleitet…", "mismatch": "Die Passwörter stimmen nicht überein.", "tooShort": "Mindestens 8 Zeichen.", "invalidLink": "Der Link ist ungültig oder abgelaufen." }
     },
     "settings": {
-      "title": "Einstellungen",
-      "saving": "Wird gespeichert…",
-      "saved": "Gespeichert",
-      "saveError": "Speichern fehlgeschlagen",
-      "save": "Speichern",
-      "denied": "Sie haben keine Berechtigung für die Einstellungen.",
-      "tabs": {
-        "general": "Allgemein",
-        "branding": "Branding",
-        "contact": "Kontakt",
-        "legal": "Rechtliches",
-        "modules": "Module",
-        "analytics": "Analyse"
-      },
-      "general": {
-        "site_name": "Firmenname",
-        "legal_name": "Rechtlicher Name",
-        "country": "Land",
-        "default_locale": "Standardsprache",
-        "enabled_locales": "Aktive Sprachen",
-        "enabled_locales_help": "Komma-getrennte Sprachcodes, z. B. de, en",
-        "currency": "Währung",
-        "area_unit": "Flächeneinheit",
-        "sqm": "Quadratmeter",
-        "sqft": "Quadratfuß"
-      },
-      "branding": {
-        "logo_url": "Logo (URL)",
-        "logo_dark_url": "Logo dunkel (URL)",
-        "favicon_url": "Favicon (URL)",
-        "og_default_image": "Standard-OG-Bild (URL)",
-        "primary_color": "Primärfarbe",
-        "secondary_color": "Sekundärfarbe",
-        "accent_color": "Akzentfarbe",
-        "font_heading": "Überschriftschrift",
-        "font_body": "Fließtextschrift",
-        "preview": "Vorschau",
-        "preview_heading": "Musterüberschrift",
-        "preview_button": "Beispielaktion",
-        "preview_body": "So sehen Ihre Farben und Schriften auf der Seite aus."
-      },
-      "contact": {
-        "contact_email": "E-Mail",
-        "contact_phone": "Telefon",
-        "whatsapp": "WhatsApp",
-        "address_street": "Straße",
-        "address_zip": "PLZ",
-        "address_city": "Stadt",
-        "address_country": "Land",
-        "geo_lat": "Breitengrad",
-        "geo_lng": "Längengrad",
-        "opening_hours": "Öffnungszeiten (JSON)",
-        "social": "Soziale Netzwerke (JSON)",
-        "json_help": "Wird als JSON gespeichert.",
-        "json_invalid": "Ungültiges JSON."
-      },
-      "legal": {
-        "impressum": "Impressum",
-        "privacy": "Datenschutz",
-        "terms": "AGB",
-        "locale_placeholder": "Inhalt für {{locale}}"
-      },
-      "modules": {
-        "title": "Module",
-        "denied": "Nur Inhaber können Module ändern.",
+      "title": "Einstellungen", "saving": "Wird gespeichert…", "saved": "Gespeichert", "saveError": "Speichern fehlgeschlagen", "save": "Speichern", "denied": "Sie haben keine Berechtigung für die Einstellungen.",
+      "tabs": { "general": "Allgemein", "branding": "Branding", "contact": "Kontakt", "legal": "Rechtliches", "modules": "Module", "analytics": "Analyse" },
+      "general": { "site_name": "Firmenname", "legal_name": "Rechtlicher Name", "country": "Land", "default_locale": "Standardsprache", "enabled_locales": "Aktive Sprachen", "enabled_locales_help": "Komma-getrennte Sprachcodes, z. B. de, en", "currency": "Währung", "area_unit": "Flächeneinheit", "sqm": "Quadratmeter", "sqft": "Quadratfuß" },
+      "branding": { "logo_url": "Logo (URL)", "logo_dark_url": "Logo dunkel (URL)", "favicon_url": "Favicon (URL)", "og_default_image": "Standard-OG-Bild (URL)", "primary_color": "Primärfarbe", "secondary_color": "Sekundärfarbe", "accent_color": "Akzentfarbe", "font_heading": "Überschriftschrift", "font_body": "Fließtextschrift", "preview": "Vorschau", "preview_heading": "Musterüberschrift", "preview_button": "Beispielaktion", "preview_body": "So sehen Ihre Farben und Schriften auf der Seite aus." },
+      "contact": { "contact_email": "E-Mail", "contact_phone": "Telefon", "whatsapp": "WhatsApp", "address_street": "Straße", "address_zip": "PLZ", "address_city": "Stadt", "address_country": "Land", "geo_lat": "Breitengrad", "geo_lng": "Längengrad", "opening_hours": "Öffnungszeiten (JSON)", "social": "Soziale Netzwerke (JSON)", "json_help": "Wird als JSON gespeichert.", "json_invalid": "Ungültiges JSON." },
+      "legal": { "impressum": "Impressum", "privacy": "Datenschutz", "terms": "AGB", "locale_placeholder": "Inhalt für {{locale}}" },
+      "modules": { "title": "Module", "denied": "Nur Inhaber können Module ändern.",
         "flags": {
           "sales": { "title": "Verkauf", "description": "Verkaufsobjekte veröffentlichen." },
           "rentals": { "title": "Vermietung", "description": "Mietobjekte veröffentlichen." },
@@ -166,11 +167,7 @@
           "crm_sync": { "title": "CRM-Sync", "description": "Anfragen an das CRM übermitteln." }
         }
       },
-      "analytics": {
-        "google_analytics_id": "Google Analytics ID",
-        "google_site_verification": "Google Site Verification",
-        "plausible_domain": "Plausible Domain"
-      }
+      "analytics": { "google_analytics_id": "Google Analytics ID", "google_site_verification": "Google Site Verification", "plausible_domain": "Plausible Domain" }
     }
   }
 }

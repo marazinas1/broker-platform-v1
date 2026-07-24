@@ -1,16 +1,129 @@
 {
-  "setup": {
-    "complete": "Setup complete"
-  },
+  "setup": { "complete": "Setup complete" },
   "home": {
-    "title": "Home",
-    "description": "Real estate platform template"
+    "title": "Real estate in the Aichfeld",
+    "description": "Carefully selected houses, apartments and building plots across Fohnsdorf, Judenburg, Knittelfeld and Zeltweg.",
+    "hero_line": "Considered real estate. At the heart of Upper Styria.",
+    "featured": "Selected properties",
+    "recent_sales": "Recently sold",
+    "recent_sales_intro": "A short selection of properties recently handed over.",
+    "areas": "Where we work",
+    "about": "About us",
+    "about_body": "We accompany owners and buyers through the whole process discreetly. From first valuation to handover. Personal, careful, well connected in the region.",
+    "contact": "Contact",
+    "view_all": "View all properties",
+    "view_all_sold": "Browse sold archive"
   },
-  "locale": {
-    "switch": "Switch language",
-    "de": "German",
-    "en": "English"
+  "nav": {
+    "listings": "Properties",
+    "sold": "Sold",
+    "about": "About",
+    "contact": "Contact",
+    "admin": "Admin",
+    "menu": "Menu"
   },
+  "listings": {
+    "title": "Properties",
+    "description": "Current offerings across the Aichfeld region.",
+    "sold_title": "Sold & completed",
+    "sold_description": "A record of recently completed transactions.",
+    "empty": "No properties match these criteria.",
+    "on_request": "Price on request",
+    "coming_soon": "Coming soon",
+    "sold": "Sold",
+    "rented": "Rented",
+    "for_sale": "For sale",
+    "for_rent": "For rent",
+    "sold_on": "Completed {{date}}",
+    "sort": {
+      "label": "Sort",
+      "newest": "Newest first",
+      "price_asc": "Price low to high",
+      "price_desc": "Price high to low"
+    },
+    "view": { "grid": "Grid", "map": "Map" },
+    "filters": {
+      "deal": "Deal type",
+      "any": "Any",
+      "sale": "Buy",
+      "rent": "Rent",
+      "type": "Property type",
+      "house": "House",
+      "apartment": "Apartment",
+      "land": "Land",
+      "commercial": "Commercial",
+      "city": "Town",
+      "city_placeholder": "e.g. Judenburg",
+      "rooms_min": "Rooms from",
+      "price_min": "Price from (EUR)",
+      "price_max": "Price up to (EUR)",
+      "area_min": "Area from (m²)",
+      "reset": "Reset",
+      "apply": "Apply"
+    },
+    "detail": {
+      "reference": "Reference",
+      "key_facts": "Key facts",
+      "description": "Description",
+      "features": "Features",
+      "location": "Location",
+      "location_hidden": "Exact address on request.",
+      "energy": "Energy certificate",
+      "energy_hwb": "HWB",
+      "energy_eeb": "fGEE",
+      "energy_class": "Class",
+      "energy_missing": "Energy certificate to follow.",
+      "living_area": "Living area",
+      "plot_area": "Plot",
+      "rooms": "Rooms",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "year_built": "Built",
+      "year_renovated": "Renovated",
+      "condition": "Condition",
+      "heating": "Heating",
+      "agent": "Contact",
+      "share": "Share",
+      "map_soon": "Map view coming soon.",
+      "unavailable_title": "Property unavailable",
+      "unavailable_body": "This listing is no longer online. Browse our current offerings instead."
+    },
+    "pager": { "prev": "Previous", "next": "Next", "page": "Page {{n}} of {{total}}" },
+    "results_count": "{{count}} properties"
+  },
+  "areas": {
+    "fohnsdorf": "Fohnsdorf",
+    "judenburg": "Judenburg",
+    "knittelfeld": "Knittelfeld",
+    "zeltweg": "Zeltweg"
+  },
+  "inquiry": {
+    "title": "Send enquiry",
+    "subtitle": "We reply within one working day.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone (optional)",
+    "message": "Message",
+    "message_default": "Please contact me regarding this property.",
+    "submit": "Send enquiry",
+    "submitting": "Sending…",
+    "success": "Thank you. Your enquiry has been received.",
+    "error": "Could not send the enquiry. Please try again."
+  },
+  "share": {
+    "copy": "Copy link",
+    "copied": "Copied",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "facebook": "Facebook"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "imprint": "Imprint",
+    "privacy": "Privacy",
+    "contact": "Contact"
+  },
+  "locale": { "switch": "Switch language", "de": "German", "en": "English" },
   "errors": {
     "notFoundTitle": "Not found",
     "notFound": "Page not found.",
@@ -22,135 +135,23 @@
     "forbiddenBody": "You do not have permission to access this area."
   },
   "admin": {
-    "topbar": {
-      "signOut": "Sign out",
-      "toggleSidebar": "Toggle navigation",
-      "unknownUser": "Unknown user"
-    },
-    "role": {
-      "owner": "Owner",
-      "admin": "Administrator",
-      "agent": "Agent",
-      "assistant": "Assistant",
-      "viewer": "Viewer"
-    },
-    "nav": {
-      "dashboard": "Dashboard",
-      "listings": "Listings",
-      "inquiries": "Inquiries",
-      "team": "Team",
-      "content": "Content",
-      "analytics": "Analytics",
-      "settings": "Settings"
-    },
-    "pages": {
-      "dashboard": "Dashboard",
-      "listings": "Listings",
-      "inquiries": "Inquiries",
-      "team": "Team",
-      "content": "Content",
-      "analytics": "Analytics"
-    },
+    "topbar": { "signOut": "Sign out", "toggleSidebar": "Toggle navigation", "unknownUser": "Unknown user" },
+    "role": { "owner": "Owner", "admin": "Administrator", "agent": "Agent", "assistant": "Assistant", "viewer": "Viewer" },
+    "nav": { "dashboard": "Dashboard", "listings": "Listings", "inquiries": "Inquiries", "team": "Team", "content": "Content", "analytics": "Analytics", "settings": "Settings" },
+    "pages": { "dashboard": "Dashboard", "listings": "Listings", "inquiries": "Inquiries", "team": "Team", "content": "Content", "analytics": "Analytics" },
     "auth": {
-      "login": {
-        "title": "Sign in",
-        "subtitle": "Sign in with your email address.",
-        "email": "Email",
-        "password": "Password",
-        "submit": "Sign in",
-        "submitting": "Signing in…",
-        "forgot": "Forgot password?",
-        "invalid": "Invalid credentials.",
-        "generic": "Sign-in failed."
-      },
-      "forgot": {
-        "title": "Reset password",
-        "subtitle": "We will email you a link.",
-        "email": "Email",
-        "submit": "Send link",
-        "submitting": "Sending…",
-        "success": "If an account exists, a link has been sent.",
-        "back": "Back to sign-in"
-      },
-      "reset": {
-        "title": "Set new password",
-        "subtitle": "Choose a new password.",
-        "password": "New password",
-        "confirm": "Confirm password",
-        "submit": "Save password",
-        "submitting": "Saving…",
-        "success": "Password updated. Redirecting…",
-        "mismatch": "Passwords do not match.",
-        "tooShort": "At least 8 characters.",
-        "invalidLink": "The link is invalid or has expired."
-      }
+      "login": { "title": "Sign in", "subtitle": "Sign in with your email address.", "email": "Email", "password": "Password", "submit": "Sign in", "submitting": "Signing in…", "forgot": "Forgot password?", "invalid": "Invalid credentials.", "generic": "Sign-in failed." },
+      "forgot": { "title": "Reset password", "subtitle": "We will email you a link.", "email": "Email", "submit": "Send link", "submitting": "Sending…", "success": "If an account exists, a link has been sent.", "back": "Back to sign-in" },
+      "reset": { "title": "Set new password", "subtitle": "Choose a new password.", "password": "New password", "confirm": "Confirm password", "submit": "Save password", "submitting": "Saving…", "success": "Password updated. Redirecting…", "mismatch": "Passwords do not match.", "tooShort": "At least 8 characters.", "invalidLink": "The link is invalid or has expired." }
     },
     "settings": {
-      "title": "Settings",
-      "saving": "Saving…",
-      "saved": "Saved",
-      "saveError": "Save failed",
-      "save": "Save",
-      "denied": "You do not have permission to edit settings.",
-      "tabs": {
-        "general": "General",
-        "branding": "Branding",
-        "contact": "Contact",
-        "legal": "Legal",
-        "modules": "Modules",
-        "analytics": "Analytics"
-      },
-      "general": {
-        "site_name": "Company name",
-        "legal_name": "Legal name",
-        "country": "Country",
-        "default_locale": "Default locale",
-        "enabled_locales": "Enabled locales",
-        "enabled_locales_help": "Comma-separated locale codes, e.g. de, en",
-        "currency": "Currency",
-        "area_unit": "Area unit",
-        "sqm": "Square metres",
-        "sqft": "Square feet"
-      },
-      "branding": {
-        "logo_url": "Logo URL",
-        "logo_dark_url": "Dark logo URL",
-        "favicon_url": "Favicon URL",
-        "og_default_image": "Default OG image URL",
-        "primary_color": "Primary color",
-        "secondary_color": "Secondary color",
-        "accent_color": "Accent color",
-        "font_heading": "Heading font",
-        "font_body": "Body font",
-        "preview": "Preview",
-        "preview_heading": "Sample heading",
-        "preview_button": "Sample action",
-        "preview_body": "This is how your colors and fonts look on the site."
-      },
-      "contact": {
-        "contact_email": "Email",
-        "contact_phone": "Phone",
-        "whatsapp": "WhatsApp",
-        "address_street": "Street",
-        "address_zip": "ZIP",
-        "address_city": "City",
-        "address_country": "Country",
-        "geo_lat": "Latitude",
-        "geo_lng": "Longitude",
-        "opening_hours": "Opening hours (JSON)",
-        "social": "Social links (JSON)",
-        "json_help": "Stored as JSON.",
-        "json_invalid": "Invalid JSON."
-      },
-      "legal": {
-        "impressum": "Imprint",
-        "privacy": "Privacy",
-        "terms": "Terms",
-        "locale_placeholder": "Content for {{locale}}"
-      },
-      "modules": {
-        "title": "Modules",
-        "denied": "Only owners can change modules.",
+      "title": "Settings", "saving": "Saving…", "saved": "Saved", "saveError": "Save failed", "save": "Save", "denied": "You do not have permission to edit settings.",
+      "tabs": { "general": "General", "branding": "Branding", "contact": "Contact", "legal": "Legal", "modules": "Modules", "analytics": "Analytics" },
+      "general": { "site_name": "Company name", "legal_name": "Legal name", "country": "Country", "default_locale": "Default locale", "enabled_locales": "Enabled locales", "enabled_locales_help": "Comma-separated locale codes, e.g. de, en", "currency": "Currency", "area_unit": "Area unit", "sqm": "Square metres", "sqft": "Square feet" },
+      "branding": { "logo_url": "Logo URL", "logo_dark_url": "Dark logo URL", "favicon_url": "Favicon URL", "og_default_image": "Default OG image URL", "primary_color": "Primary color", "secondary_color": "Secondary color", "accent_color": "Accent color", "font_heading": "Heading font", "font_body": "Body font", "preview": "Preview", "preview_heading": "Sample heading", "preview_button": "Sample action", "preview_body": "This is how your colors and fonts look on the site." },
+      "contact": { "contact_email": "Email", "contact_phone": "Phone", "whatsapp": "WhatsApp", "address_street": "Street", "address_zip": "ZIP", "address_city": "City", "address_country": "Country", "geo_lat": "Latitude", "geo_lng": "Longitude", "opening_hours": "Opening hours (JSON)", "social": "Social links (JSON)", "json_help": "Stored as JSON.", "json_invalid": "Invalid JSON." },
+      "legal": { "impressum": "Imprint", "privacy": "Privacy", "terms": "Terms", "locale_placeholder": "Content for {{locale}}" },
+      "modules": { "title": "Modules", "denied": "Only owners can change modules.",
         "flags": {
           "sales": { "title": "Sales", "description": "Publish for-sale listings." },
           "rentals": { "title": "Rentals", "description": "Publish rental listings." },
@@ -166,11 +167,7 @@
           "crm_sync": { "title": "CRM sync", "description": "Forward inquiries to the CRM." }
         }
       },
-      "analytics": {
-        "google_analytics_id": "Google Analytics ID",
-        "google_site_verification": "Google site verification",
-        "plausible_domain": "Plausible domain"
-      }
+      "analytics": { "google_analytics_id": "Google Analytics ID", "google_site_verification": "Google site verification", "plausible_domain": "Plausible domain" }
     }
   }
 }
