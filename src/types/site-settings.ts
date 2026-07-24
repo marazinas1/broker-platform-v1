@@ -41,6 +41,8 @@ export interface SiteSettings {
   primary_agent_photo_url: string | null;
   homepage_sections: HomepageSection[];
   credibility_stats: CredibilityStat[];
+  credibility_heading: Record<string, string>;
+  about_body: Record<string, string>;
 }
 
 export type HomepageSectionKey =
