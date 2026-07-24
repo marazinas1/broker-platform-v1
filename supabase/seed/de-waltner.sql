@@ -107,7 +107,7 @@ INSERT INTO public.listings (
 (
   '33333333-0000-0000-0000-000000000002', 'eigentumswohnung-voelklingen-3-zimmer', 'DW-2024-002',
   'active','sale','apartment', now() - interval '9 days', NULL,
-  false, false, 20,
+  true, false, 20,
   158000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig","hausgeld":"175 EUR / Monat"}'::jsonb,
   74, NULL, 3, 2, 1, 2, 4,
   1976, 2013,
@@ -151,7 +151,7 @@ INSERT INTO public.listings (
 (
   '33333333-0000-0000-0000-000000000004', 'einfamilienhaus-riegelsberg-6-zimmer', 'DW-2024-004',
   'active','sale','house', now() - interval '20 days', NULL,
-  false, false, 25,
+  true, false, 25,
   379000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig"}'::jsonb,
   158, 520, 6, 4, 2, NULL, 2,
   1992, 2019,
