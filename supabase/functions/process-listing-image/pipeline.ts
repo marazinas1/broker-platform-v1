@@ -5,12 +5,12 @@
 //
 // Every variant is an EXIF-free re-encode of the rotated pixel buffer, so
 // GPS coordinates from phone cameras cannot leak into any output.
-import decodeJpeg, { init as initJpegDecode } from "npm:@jsquash/jpeg@1.5.0/decode";
-import decodePng, { init as initPngDecode } from "npm:@jsquash/png@3.0.1/decode";
-import decodeWebpJs, { init as initWebpDecode } from "npm:@jsquash/webp@1.4.0/decode";
-import encodeAvif, { init as initAvifEncode } from "npm:@jsquash/avif@1.5.0/encode";
-import encodeWebp, { init as initWebpEncode } from "npm:@jsquash/webp@1.4.0/encode";
-import resize, { initResize } from "npm:@jsquash/resize@2.1.0";
+import decodeJpeg, { init as initJpegDecode } from "npm:@jsquash/jpeg@1.6.0/decode";
+import decodePng, { init as initPngDecode } from "npm:@jsquash/png@3.1.1/decode";
+import decodeWebpJs, { init as initWebpDecode } from "npm:@jsquash/webp@1.5.0/decode";
+import encodeAvif, { init as initAvifEncode } from "npm:@jsquash/avif@2.1.1/encode";
+import encodeWebp, { init as initWebpEncode } from "npm:@jsquash/webp@1.5.0/encode";
+import resize, { initResize } from "npm:@jsquash/resize@2.1.1";
 import { encode as encodeBlurhash } from "npm:blurhash@2.0.5";
 import exifr from "npm:exifr@7.1.3";
 
