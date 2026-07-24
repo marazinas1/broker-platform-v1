@@ -10,10 +10,12 @@
     "recent_sales": "Recently sold",
     "recent_sales_intro": "A short selection of properties recently handed over.",
     "areas": "Where we work",
+    "areas_solo": "Where I work",
     "about": "About",
     "about_body": "We accompany owners and buyers through the whole process discreetly. From the first valuation to the handover — personal, careful, well connected across the region.",
     "contact": "Get in touch",
     "contact_headline": "Buying or selling — tell us where to start.",
+    "contact_headline_solo": "Buying or selling — tell me where to start.",
     "view_all": "View all properties",
     "view_all_sold": "Browse sold archive"
   },
