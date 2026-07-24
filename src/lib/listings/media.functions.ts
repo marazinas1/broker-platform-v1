@@ -13,6 +13,7 @@ import { assertPermission } from "@/lib/auth/require-permission.server";
 import {
   DOCUMENTS_BUCKET,
   IMAGES_BUCKET,
+  ORIGINALS_BUCKET,
   imageFolderPrefix,
   VARIANT_FORMATS,
   VARIANT_SPECS,
