@@ -205,7 +205,7 @@
           "virtual_tours": { "title": "Virtuelle Touren", "description": "3D-/Video-Touren einbetten." },
           "crm_sync": { "title": "CRM-Sync", "description": "Anfragen an das CRM übermitteln." }
         }
-      },
+      }
     }
   },
   "pages": {
