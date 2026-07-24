@@ -205,7 +205,7 @@
           "virtual_tours": { "title": "Virtual tours", "description": "Embed 3D/video tours." },
           "crm_sync": { "title": "CRM sync", "description": "Forward inquiries to the CRM." }
         }
-      },
+      }
     }
   },
   "pages": {
