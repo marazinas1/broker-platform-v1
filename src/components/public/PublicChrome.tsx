@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useState, type ReactNode } from "react";
 
 import { LocaleSwitcher } from "@/components/shared/LocaleSwitcher";
+import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
 
@@ -23,13 +24,26 @@ export function PublicChrome({ locale, settings, children }: Props) {
   );
 }
 
+function useNavItems() {
+  const { t } = useTranslation();
+  const teamEnabled = useFeatureFlag("team");
+  return [
+    { to: "/$locale/immobilien" as const, label: t("nav.listings") },
+    { to: "/$locale/verkauft" as const, label: t("nav.sold") },
+    { to: "/$locale/immobilienbewertung" as const, label: t("nav.valuation") },
+    { to: "/$locale/verkaufen" as const, label: t("nav.selling") },
+    {
+      to: "/$locale/ueber-mich" as const,
+      label: t(teamEnabled ? "nav.about_team" : "nav.about_solo"),
+    },
+    { to: "/$locale/kontakt" as const, label: t("nav.contact") },
+  ];
+}
+
 function Header({ locale, settings }: { locale: Locale; settings: SiteSettings }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const nav = [
-    { to: "/$locale/immobilien" as const, label: t("nav.listings") },
-    { to: "/$locale/verkauft" as const, label: t("nav.sold") },
-  ];
+  const nav = useNavItems();
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
@@ -42,7 +56,7 @@ function Header({ locale, settings }: { locale: Locale; settings: SiteSettings }
           {settings.site_name}
         </Link>
 
-        <nav className="hidden items-center gap-10 md:flex">
+        <nav className="hidden items-center gap-8 lg:flex">
           {nav.map((n) => (
             <Link
               key={n.to}
@@ -60,7 +74,7 @@ function Header({ locale, settings }: { locale: Locale; settings: SiteSettings }
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-9 items-center rounded-sm border border-border px-3 text-sm md:hidden"
+          className="inline-flex h-9 items-center rounded-sm border border-border px-3 text-sm lg:hidden"
           aria-label={t("nav.menu")}
         >
           {t("nav.menu")}
@@ -68,7 +82,7 @@ function Header({ locale, settings }: { locale: Locale; settings: SiteSettings }
       </div>
 
       {open ? (
-        <div className="border-t border-border md:hidden">
+        <div className="border-t border-border lg:hidden">
           <div className="mx-auto flex max-w-[1400px] flex-col gap-4 px-6 py-6">
             {nav.map((n) => (
               <Link
