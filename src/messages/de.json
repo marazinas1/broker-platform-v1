@@ -111,7 +111,31 @@
     "submit": "Anfrage senden",
     "submitting": "Wird gesendet…",
     "success": "Vielen Dank. Ihre Anfrage ist bei uns eingegangen.",
-    "error": "Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+    "error": "Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "buyer": {
+      "tab": "Ich suche",
+      "property_type": "Objektart",
+      "city": "Wunschort",
+      "rooms_min": "Zimmer ab",
+      "area_min": "Fläche ab (m²)",
+      "price_max": "Budget bis (EUR)",
+      "submit": "Suchanfrage senden"
+    },
+    "seller": {
+      "tab": "Ich verkaufe",
+      "property_type": "Objektart",
+      "address_street": "Straße & Nr.",
+      "address_zip": "PLZ",
+      "address_city": "Ort",
+      "living_area": "Wohnfläche (m²)",
+      "rooms": "Zimmer",
+      "year_built": "Baujahr",
+      "condition": "Zustand",
+      "photos": "Fotos (optional, bis zu 4)",
+      "photos_selected": "{{n}} Foto(s) angehängt",
+      "photo_too_large": "Jedes Foto muss unter 3 MB liegen.",
+      "submit": "Bewertung anfordern"
+    }
   },
   "share": {
     "copy": "Link kopieren",
