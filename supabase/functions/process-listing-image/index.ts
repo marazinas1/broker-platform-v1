@@ -122,7 +122,7 @@ async function processImage(p: Payload) {
 
   // 1. Download original from the private documents bucket.
   const { data: blob, error: dlError } = await admin.storage
-    .from(DOCUMENTS_BUCKET)
+    .from(ORIGINALS_BUCKET)
     .download(p.originalStoragePath);
   if (dlError || !blob) throw new Error(`download failed: ${dlError?.message}`);
   const bytes = new Uint8Array(await blob.arrayBuffer());
