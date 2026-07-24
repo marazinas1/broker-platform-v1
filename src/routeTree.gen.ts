@@ -12,9 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LocaleRouteImport } from './routes/$locale'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LocaleIndexRouteImport } from './routes/$locale.index'
+import { Route as LocaleVerkauftRouteImport } from './routes/$locale.verkauft'
 import { Route as LocaleAuthRouteImport } from './routes/$locale.auth'
 import { Route as LocaleAdminRouteImport } from './routes/$locale.admin'
+import { Route as LocaleImmobilienIndexRouteImport } from './routes/$locale.immobilien.index'
 import { Route as LocaleAdminIndexRouteImport } from './routes/$locale.admin.index'
+import { Route as LocaleImmobilienSlugRouteImport } from './routes/$locale.immobilien.$slug'
 import { Route as LocaleAuthResetPasswordRouteImport } from './routes/$locale.auth.reset-password'
 import { Route as LocaleAuthLoginRouteImport } from './routes/$locale.auth.login'
 import { Route as LocaleAuthForgotPasswordRouteImport } from './routes/$locale.auth.forgot-password'
@@ -42,6 +45,11 @@ const LocaleIndexRoute = LocaleIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LocaleRoute,
 } as any)
+const LocaleVerkauftRoute = LocaleVerkauftRouteImport.update({
+  id: '/verkauft',
+  path: '/verkauft',
+  getParentRoute: () => LocaleRoute,
+} as any)
 const LocaleAuthRoute = LocaleAuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -52,10 +60,20 @@ const LocaleAdminRoute = LocaleAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => LocaleRoute,
 } as any)
+const LocaleImmobilienIndexRoute = LocaleImmobilienIndexRouteImport.update({
+  id: '/immobilien/',
+  path: '/immobilien/',
+  getParentRoute: () => LocaleRoute,
+} as any)
 const LocaleAdminIndexRoute = LocaleAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => LocaleAdminRoute,
+} as any)
+const LocaleImmobilienSlugRoute = LocaleImmobilienSlugRouteImport.update({
+  id: '/immobilien/$slug',
+  path: '/immobilien/$slug',
+  getParentRoute: () => LocaleRoute,
 } as any)
 const LocaleAuthResetPasswordRoute = LocaleAuthResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -120,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/$locale': typeof LocaleRouteWithChildren
   '/$locale/admin': typeof LocaleAdminRouteWithChildren
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
+  '/$locale/verkauft': typeof LocaleVerkauftRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/admin/analytics': typeof LocaleAdminAnalyticsRoute
   '/$locale/admin/content': typeof LocaleAdminContentRoute
@@ -130,13 +149,16 @@ export interface FileRoutesByFullPath {
   '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
   '/$locale/auth/login': typeof LocaleAuthLoginRoute
   '/$locale/auth/reset-password': typeof LocaleAuthResetPasswordRoute
+  '/$locale/immobilien/$slug': typeof LocaleImmobilienSlugRoute
   '/$locale/admin/': typeof LocaleAdminIndexRoute
+  '/$locale/immobilien/': typeof LocaleImmobilienIndexRoute
   '/$locale/admin/settings/$tab': typeof LocaleAdminSettingsTabRoute
   '/$locale/admin/settings/': typeof LocaleAdminSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
+  '/$locale/verkauft': typeof LocaleVerkauftRoute
   '/$locale': typeof LocaleIndexRoute
   '/$locale/admin/analytics': typeof LocaleAdminAnalyticsRoute
   '/$locale/admin/content': typeof LocaleAdminContentRoute
@@ -146,7 +168,9 @@ export interface FileRoutesByTo {
   '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
   '/$locale/auth/login': typeof LocaleAuthLoginRoute
   '/$locale/auth/reset-password': typeof LocaleAuthResetPasswordRoute
+  '/$locale/immobilien/$slug': typeof LocaleImmobilienSlugRoute
   '/$locale/admin': typeof LocaleAdminIndexRoute
+  '/$locale/immobilien': typeof LocaleImmobilienIndexRoute
   '/$locale/admin/settings/$tab': typeof LocaleAdminSettingsTabRoute
   '/$locale/admin/settings': typeof LocaleAdminSettingsIndexRoute
 }
@@ -156,6 +180,7 @@ export interface FileRoutesById {
   '/$locale': typeof LocaleRouteWithChildren
   '/$locale/admin': typeof LocaleAdminRouteWithChildren
   '/$locale/auth': typeof LocaleAuthRouteWithChildren
+  '/$locale/verkauft': typeof LocaleVerkauftRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/admin/analytics': typeof LocaleAdminAnalyticsRoute
   '/$locale/admin/content': typeof LocaleAdminContentRoute
@@ -166,7 +191,9 @@ export interface FileRoutesById {
   '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
   '/$locale/auth/login': typeof LocaleAuthLoginRoute
   '/$locale/auth/reset-password': typeof LocaleAuthResetPasswordRoute
+  '/$locale/immobilien/$slug': typeof LocaleImmobilienSlugRoute
   '/$locale/admin/': typeof LocaleAdminIndexRoute
+  '/$locale/immobilien/': typeof LocaleImmobilienIndexRoute
   '/$locale/admin/settings/$tab': typeof LocaleAdminSettingsTabRoute
   '/$locale/admin/settings/': typeof LocaleAdminSettingsIndexRoute
 }
@@ -177,6 +204,7 @@ export interface FileRouteTypes {
     | '/$locale'
     | '/$locale/admin'
     | '/$locale/auth'
+    | '/$locale/verkauft'
     | '/$locale/'
     | '/$locale/admin/analytics'
     | '/$locale/admin/content'
@@ -187,13 +215,16 @@ export interface FileRouteTypes {
     | '/$locale/auth/forgot-password'
     | '/$locale/auth/login'
     | '/$locale/auth/reset-password'
+    | '/$locale/immobilien/$slug'
     | '/$locale/admin/'
+    | '/$locale/immobilien/'
     | '/$locale/admin/settings/$tab'
     | '/$locale/admin/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/$locale/auth'
+    | '/$locale/verkauft'
     | '/$locale'
     | '/$locale/admin/analytics'
     | '/$locale/admin/content'
@@ -203,7 +234,9 @@ export interface FileRouteTypes {
     | '/$locale/auth/forgot-password'
     | '/$locale/auth/login'
     | '/$locale/auth/reset-password'
+    | '/$locale/immobilien/$slug'
     | '/$locale/admin'
+    | '/$locale/immobilien'
     | '/$locale/admin/settings/$tab'
     | '/$locale/admin/settings'
   id:
@@ -212,6 +245,7 @@ export interface FileRouteTypes {
     | '/$locale'
     | '/$locale/admin'
     | '/$locale/auth'
+    | '/$locale/verkauft'
     | '/$locale/'
     | '/$locale/admin/analytics'
     | '/$locale/admin/content'
@@ -222,7 +256,9 @@ export interface FileRouteTypes {
     | '/$locale/auth/forgot-password'
     | '/$locale/auth/login'
     | '/$locale/auth/reset-password'
+    | '/$locale/immobilien/$slug'
     | '/$locale/admin/'
+    | '/$locale/immobilien/'
     | '/$locale/admin/settings/$tab'
     | '/$locale/admin/settings/'
   fileRoutesById: FileRoutesById
@@ -255,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleIndexRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/verkauft': {
+      id: '/$locale/verkauft'
+      path: '/verkauft'
+      fullPath: '/$locale/verkauft'
+      preLoaderRoute: typeof LocaleVerkauftRouteImport
+      parentRoute: typeof LocaleRoute
+    }
     '/$locale/auth': {
       id: '/$locale/auth'
       path: '/auth'
@@ -269,12 +312,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleAdminRouteImport
       parentRoute: typeof LocaleRoute
     }
+    '/$locale/immobilien/': {
+      id: '/$locale/immobilien/'
+      path: '/immobilien'
+      fullPath: '/$locale/immobilien/'
+      preLoaderRoute: typeof LocaleImmobilienIndexRouteImport
+      parentRoute: typeof LocaleRoute
+    }
     '/$locale/admin/': {
       id: '/$locale/admin/'
       path: '/'
       fullPath: '/$locale/admin/'
       preLoaderRoute: typeof LocaleAdminIndexRouteImport
       parentRoute: typeof LocaleAdminRoute
+    }
+    '/$locale/immobilien/$slug': {
+      id: '/$locale/immobilien/$slug'
+      path: '/immobilien/$slug'
+      fullPath: '/$locale/immobilien/$slug'
+      preLoaderRoute: typeof LocaleImmobilienSlugRouteImport
+      parentRoute: typeof LocaleRoute
     }
     '/$locale/auth/reset-password': {
       id: '/$locale/auth/reset-password'
@@ -412,13 +469,19 @@ const LocaleAuthRouteWithChildren = LocaleAuthRoute._addFileChildren(
 interface LocaleRouteChildren {
   LocaleAdminRoute: typeof LocaleAdminRouteWithChildren
   LocaleAuthRoute: typeof LocaleAuthRouteWithChildren
+  LocaleVerkauftRoute: typeof LocaleVerkauftRoute
   LocaleIndexRoute: typeof LocaleIndexRoute
+  LocaleImmobilienSlugRoute: typeof LocaleImmobilienSlugRoute
+  LocaleImmobilienIndexRoute: typeof LocaleImmobilienIndexRoute
 }
 
 const LocaleRouteChildren: LocaleRouteChildren = {
   LocaleAdminRoute: LocaleAdminRouteWithChildren,
   LocaleAuthRoute: LocaleAuthRouteWithChildren,
+  LocaleVerkauftRoute: LocaleVerkauftRoute,
   LocaleIndexRoute: LocaleIndexRoute,
+  LocaleImmobilienSlugRoute: LocaleImmobilienSlugRoute,
+  LocaleImmobilienIndexRoute: LocaleImmobilienIndexRoute,
 }
 
 const LocaleRouteWithChildren =
