@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
 
+import brokerPlaceholder from "@/assets/broker-placeholder.jpg";
 import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import { pickImageUrl } from "@/lib/listings/image";
@@ -133,7 +134,9 @@ function PropertyHero({
 
 function BrokerHero({ settings }: { settings: SiteSettings }) {
   const { t } = useTranslation();
-  const photo = settings.primary_agent_photo_url;
+  const photo = settings.primary_agent_photo_url && settings.primary_agent_photo_url.trim().length > 0
+    ? settings.primary_agent_photo_url
+    : brokerPlaceholder;
   return (
     <section className="mx-auto max-w-[1400px] px-6 pt-32 pb-24 lg:px-10 lg:pt-40 lg:pb-32">
       <div className="grid items-end gap-12 md:grid-cols-12 md:gap-16">
@@ -152,16 +155,12 @@ function BrokerHero({ settings }: { settings: SiteSettings }) {
           ) : null}
         </div>
         <div className="md:col-span-5">
-          {photo ? (
-            <img
-              src={photo}
-              alt={settings.primary_agent_name ?? ""}
-              className="h-[70vh] w-full object-cover"
-              fetchPriority="high"
-            />
-          ) : (
-            <div className="h-[70vh] w-full bg-muted" />
-          )}
+          <img
+            src={photo}
+            alt={settings.primary_agent_name ?? ""}
+            className="h-[70vh] w-full object-cover"
+            fetchPriority="high"
+          />
         </div>
       </div>
     </section>

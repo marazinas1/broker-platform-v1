@@ -58,7 +58,9 @@ UPDATE public.site_settings SET
     {"value":"480+","label":{"de":"Vermittelte Objekte","en":"Properties sold"}},
     {"value":"IVD","label":{"de":"Mitglied im Verband","en":"IVD member"}},
     {"value":"4,9 / 5","label":{"de":"Google-Bewertungen","en":"Google reviews"}}
-  ]'::jsonb;
+  ]'::jsonb,
+  credibility_heading = '{"de":"Warum Rheinberger","en":"Why Rheinberger"}'::jsonb,
+  about_body = '{"de":"Wir begleiten Eigentümer und Käufer diskret durch den gesamten Prozess. Von der ersten Bewertung bis zur Übergabe — persönlich, sorgfältig, gut vernetzt in der Region.","en":"We guide owners and buyers discreetly through the entire process. From the first valuation to handover — personal, careful, well-connected in the region."}'::jsonb;
 
 -- ---------------------------------------------------------------------------
 -- 2. Listings.

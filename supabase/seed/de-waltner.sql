@@ -20,8 +20,9 @@ DELETE FROM public.listings;
 -- ---------------------------------------------------------------------------
 -- 1. Site settings — one row per install, updated in place.
 -- ---------------------------------------------------------------------------
--- Neutral silhouette placeholder (data URI SVG) — no stranger's face in the
--- hero of a demo that goes to a real named person.
+-- primary_agent_photo_url stays NULL: the app falls back to a neutral
+-- silhouette placeholder shipped in src/assets so the hero never renders a
+-- stranger's face on a demo that goes to a real named person.
 UPDATE public.site_settings SET
   site_name        = 'Immobilienberatung Dorothe Waltner',
   legal_name       = 'Dorothe Waltner — Immobilienberatung',
@@ -44,7 +45,7 @@ UPDATE public.site_settings SET
   geo_lng          = 6.8862,
   primary_agent_name      = 'Dorothe Waltner',
   primary_agent_role      = 'Inhaberin & Immobilienmaklerin',
-  primary_agent_photo_url = 'data:image/svg+xml;utf8,<svg xmlns=''http://www.w3.org/2000/svg'' viewBox=''0 0 400 500''><rect fill=''%23ece5da'' width=''400'' height=''500''/><g fill=''%23c4b6a2''><circle cx=''200'' cy=''190'' r=''72''/><path d=''M70 500 C70 340 330 340 330 500 Z''/></g></svg>',
+  primary_agent_photo_url = NULL,
   homepage_sections = '[
     {"key":"hero","enabled":true,"variant":"broker"},
     {"key":"categories","enabled":true},
@@ -60,7 +61,9 @@ UPDATE public.site_settings SET
     {"value":"12","label":{"de":"Jahre persönliche Beratung","en":"Years of personal advice"}},
     {"value":"150+","label":{"de":"Erfolgreich vermittelte Objekte","en":"Properties successfully sold"}},
     {"value":"IHK","label":{"de":"Zertifizierte Immobilienmaklerin","en":"IHK-certified estate agent"}}
-  ]'::jsonb;
+  ]'::jsonb,
+  credibility_heading = '{"de":"Warum Dorothe Waltner","en":"Why Dorothe Waltner"}'::jsonb,
+  about_body = '{"de":"Ich begleite Eigentümer und Käufer im Saarland persönlich — von der ersten Wertermittlung bis zum Notartermin. Als Einzelmaklerin arbeite ich bewusst mit wenigen Objekten gleichzeitig, damit jedes die Aufmerksamkeit bekommt, die es verdient. Kein Callcenter, keine Übergabe an Kollegen: Sie sprechen mit mir.","en":"I personally guide owners and buyers across the Saarland — from the first valuation to signing at the notary. As a solo broker I deliberately handle only a handful of properties at a time, so each one gets the attention it deserves. No call centre, no handovers: you speak with me."}'::jsonb;
 
 -- ---------------------------------------------------------------------------
 -- 2. Listings — eight sale-only properties in the Saarbrücken area.
@@ -104,7 +107,7 @@ INSERT INTO public.listings (
 (
   '33333333-0000-0000-0000-000000000002', 'eigentumswohnung-voelklingen-3-zimmer', 'DW-2024-002',
   'active','sale','apartment', now() - interval '9 days', NULL,
-  false, false, 20,
+  true, false, 20,
   158000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig","hausgeld":"175 EUR / Monat"}'::jsonb,
   74, NULL, 3, 2, 1, 2, 4,
   1976, 2013,
@@ -148,7 +151,7 @@ INSERT INTO public.listings (
 (
   '33333333-0000-0000-0000-000000000004', 'einfamilienhaus-riegelsberg-6-zimmer', 'DW-2024-004',
   'active','sale','house', now() - interval '20 days', NULL,
-  false, false, 25,
+  true, false, 25,
   379000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig"}'::jsonb,
   158, 520, 6, 4, 2, NULL, 2,
   1992, 2019,

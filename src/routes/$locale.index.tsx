@@ -90,10 +90,10 @@ function HomePage() {
       <FeaturedListings locale={l} items={featured.items} settings={settings} />
     ),
     credibility: () => (
-      <CredibilityBar locale={l} stats={settings.credibility_stats ?? []} />
+      <CredibilityBar locale={l} stats={settings.credibility_stats ?? []} settings={settings} />
     ),
     sold: () => <SoldStrip locale={l} items={sold.items} settings={settings} />,
-    about: () => <AboutBroker />,
+    about: () => <AboutBroker locale={l} settings={settings} />,
     team: () => (teamEnabled && team.length > 0 ? <TeamSection members={team} /> : null),
     areas: () => <AreaLinks locale={l} cities={cities} />,
     contact: () => <ContactSection settings={settings} />,
