@@ -1,5 +1,5 @@
 -- =============================================================================
--- Demo seed: Immobilien Rheinberger — Saarbrücken, Germany
+-- Demo seed: Immobilien Rheinberger — Saarbrücken, Germany (agency demo)
 -- =============================================================================
 -- This file replaces all listing / inquiry data with a realistic German
 -- broker demo. Swap this file wholesale to spin up a different region or a
