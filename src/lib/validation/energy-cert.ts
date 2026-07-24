@@ -1,19 +1,12 @@
-import { z } from "zod";
-
-/**
- * Per-country energy certificate validators.
- * TODO: Fill in real legal requirements per market before enabling listings for that country.
- */
-const BaseEnergyCert = z.object({
-  issued_at: z.string().datetime().optional(),
-});
-
-export const EnergyCertSchemas = {
-  AT: BaseEnergyCert,
-  DE: BaseEnergyCert,
-  CH: BaseEnergyCert,
-  IS: BaseEnergyCert,
-  US: BaseEnergyCert.extend({}),
-} as const;
-
-export type Country = keyof typeof EnergyCertSchemas;
+// Backwards-compatible re-export. Real logic lives in ./energy.ts, which
+// mirrors the Postgres validate_listing_energy function.
+export {
+  COUNTRIES,
+  EFFICIENCY_CLASS_AT,
+  EFFICIENCY_CLASS_DE,
+  EXEMPT_PROPERTY_TYPES,
+  energySchemas as EnergyCertSchemas,
+  validateEnergy,
+  type Country,
+  type EnergyValidationResult,
+} from "./energy";

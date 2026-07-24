@@ -5,6 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { currentUserQueryOptions } from "./current-user.functions";
 import type { CurrentUser } from "./current-user.functions";
+import { permissionMatrixQueryOptions } from "./permission-matrix.functions";
 import { hasPermission, type PermissionKey } from "./permissions";
 
 export function useCurrentUser(): CurrentUser | null {
@@ -14,5 +15,6 @@ export function useCurrentUser(): CurrentUser | null {
 
 export function usePermission(key: PermissionKey): boolean {
   const user = useCurrentUser();
-  return hasPermission(user?.profile, user?.overrides ?? [], key);
+  const { data: matrix } = useSuspenseQuery(permissionMatrixQueryOptions);
+  return hasPermission(user?.profile, user?.overrides ?? [], key, matrix);
 }
