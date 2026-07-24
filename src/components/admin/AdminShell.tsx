@@ -6,28 +6,33 @@ import { LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { useCurrentUser } from "@/lib/auth/use-permission";
 import { supabase } from "@/integrations/supabase/client";
 import type { Locale } from "@/i18n/config";
 import { getI18n } from "@/i18n/config";
+import type { VerifiedAdminProfile } from "@/lib/auth/admin-gate.server";
 
 import { AdminSidebar } from "./AdminSidebar";
 
-export function AdminShell({ children }: { children: React.ReactNode }) {
+export function AdminShell({
+  children,
+  profile,
+}: {
+  children: React.ReactNode;
+  profile: VerifiedAdminProfile;
+}) {
   const { locale } = useParams({ strict: false }) as { locale: Locale };
   const { t } = useTranslation();
   const navigate = useNavigate();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const user = useCurrentUser();
 
   useEffect(() => {
     if (locale) getI18n(locale);
   }, [locale]);
 
   const displayName =
-    user?.profile.full_name || user?.profile.email || t("admin.topbar.unknownUser");
-  const roleLabel = user ? t(`admin.role.${user.profile.role}`) : "";
+    profile.full_name || profile.email || t("admin.topbar.unknownUser");
+  const roleLabel = t(`admin.role.${profile.role}`);
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
