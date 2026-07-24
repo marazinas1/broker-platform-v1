@@ -1,1 +1,4 @@
 project_id = "pyuhysyizzmfvzdvbdnw"
+
+[functions.process-listing-image]
+verify_jwt = false
