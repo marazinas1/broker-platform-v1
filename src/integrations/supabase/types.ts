@@ -604,6 +604,7 @@ export type Database = {
       }
       site_settings: {
         Row: {
+          about_body: Json
           accent_color: string | null
           address_city: string | null
           address_country: string | null
@@ -613,6 +614,7 @@ export type Database = {
           contact_email: string | null
           contact_phone: string | null
           country: string
+          credibility_heading: Json
           credibility_stats: Json
           currency: string
           default_locale: string
@@ -646,6 +648,7 @@ export type Database = {
           whatsapp: string | null
         }
         Insert: {
+          about_body?: Json
           accent_color?: string | null
           address_city?: string | null
           address_country?: string | null
@@ -655,6 +658,7 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           country: string
+          credibility_heading?: Json
           credibility_stats?: Json
           currency?: string
           default_locale?: string
@@ -688,6 +692,7 @@ export type Database = {
           whatsapp?: string | null
         }
         Update: {
+          about_body?: Json
           accent_color?: string | null
           address_city?: string | null
           address_country?: string | null
@@ -697,6 +702,7 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           country?: string
+          credibility_heading?: Json
           credibility_stats?: Json
           currency?: string
           default_locale?: string
