@@ -113,7 +113,7 @@ INSERT INTO public.listings (
   '{"certificate_type":"Bedarfsausweis","final_energy":78,"energy_source":"Gas","efficiency_class":"C","year_built":1974}'::jsonb,
   ARRAY['garage','terrace','garden','fireplace','cellar'],
   'renovated','Gas-Brennwert',
-  '{"de":"Charakterhaus in St. Arnual mit Blick über das Saartal.","en":"A distinctive family home in St. Arnual with sweeping views over the Saar valley."}'::jsonb,
+  '{"de":"Charakterhaus in St. Arnual mit Blick über das Saartal","en":"A distinctive family home in St. Arnual with sweeping views over the Saar valley"}'::jsonb,
   '{"de":"Wenige Minuten oberhalb der Saarbrücker Innenstadt gelegen, verbindet dieses freistehende Einfamilienhaus die ruhige Wohnlage von St. Arnual mit einer bemerkenswerten Fernsicht bis in die Weinberge auf französischer Seite. Das Objekt wurde 2019 grundlegend energetisch saniert und präsentiert sich heute mit einer klaren, zurückhaltenden Formensprache.\n\nÜber zwei Wohnebenen verteilen sich sechs Zimmer, ein offener Wohn-Essbereich mit Kaminofen und eine Küche mit Zugang auf die Süd-West-Terrasse. Vier Schlafzimmer, zwei Bäder und ein separater Hauswirtschaftsraum bieten Raum für eine Familie oder für hybrides Arbeiten. Der 612 m² große Garten ist gewachsen, gepflegt und uneinsehbar.\n\nSt. Arnual gilt seit Jahren als eine der begehrtesten Wohnlagen der Landeshauptstadt: Wochenmarkt, Stiftskirche, Grundschule und ein feines Café-Angebot sind fußläufig erreichbar, die A620 in wenigen Minuten. Wir empfehlen dieses Haus Familien und Doppelverdienern, die eine gehobene, ruhige Wohnadresse suchen, ohne auf urbane Nähe zu verzichten.","en":"Perched a few minutes above Saarbrücken city centre, this detached family home combines the quiet residential feel of St. Arnual with a remarkable outlook towards the vineyards on the French side of the border. The property was comprehensively refurbished in 2019 and today reads as a restrained, contemporary home.\n\nSix rooms are arranged across two levels, together with an open living-and-dining area with a wood-burning stove and a kitchen opening on to the south-west terrace. Four bedrooms, two bathrooms and a separate utility room support family life or dual home offices. The mature 612 m² garden is landscaped and private.\n\nSt. Arnual has been one of the capital''s most sought-after neighbourhoods for years: weekly market, Stiftskirche church, primary school and a well-curated café scene are within walking distance, and the A620 motorway is minutes away. We recommend this house to families and dual-income households looking for an established, quiet address without losing city proximity."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["Grundlegend saniert 2019","Süd-West-Terrasse mit Fernblick","Kaminofen im Wohnbereich","Doppelgarage","Uneinsehbarer Garten 612 m²"],"en":["Fully refurbished 2019","South-west terrace with panoramic view","Wood-burning stove in living room","Double garage","Private 612 m² garden"]}},
@@ -135,7 +135,7 @@ INSERT INTO public.listings (
   '{"certificate_type":"Verbrauchsausweis","final_energy":112,"energy_source":"Öl","efficiency_class":"D","year_built":1998}'::jsonb,
   ARRAY['garage','terrace','garden','cellar','fitted_kitchen'],
   'good','Öl-Zentralheizung',
-  '{"de":"Freistehendes Einfamilienhaus in ruhiger Wohnlage von Riegelsberg.","en":"Detached family home in a quiet residential street in Riegelsberg."}'::jsonb,
+  '{"de":"Freistehendes Einfamilienhaus in ruhiger Wohnlage von Riegelsberg","en":"Detached family home in a quiet residential street in Riegelsberg"}'::jsonb,
   '{"de":"Das Haus wurde 1998 in solider Massivbauweise errichtet und 2016 im Innenbereich modernisiert. Fünf Zimmer, ein großzügiges Wohnzimmer mit offenem Übergang zur Küche und ein Wintergarten mit Blick in den Garten prägen das Erdgeschoss.\n\nIm Obergeschoss liegen drei Schlafzimmer und das Familienbad mit bodengleicher Dusche. Der ausgebaute Spitzboden dient heute als Arbeitszimmer. Der 480 m² große Garten grenzt an eine Streuobstwiese, die nicht bebaut werden darf.\n\nRiegelsberg bietet komplette Nahversorgung, zwei Grundschulen und die Saarbahnhaltestelle Rathaus mit 20-Minuten-Takt in die Landeshauptstadt. Ein Objekt für Familien, die außerhalb wohnen möchten, ohne den Anschluss zu verlieren.","en":"Solidly built in 1998 and modernised internally in 2016. Five rooms; the ground floor offers a generous living room opening on to the kitchen, and a conservatory looking on to the garden.\n\nThe first floor holds three bedrooms and the family bathroom with a walk-in shower. The finished attic currently serves as a study. The 480 m² garden borders on protected orchard land that cannot be built on.\n\nRiegelsberg has full local amenities, two primary schools and the Saarbahn light-rail stop Rathaus with a 20-minute service into the capital. A house for families who want to live outside the city without losing connection."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["Freistehend, Massivbauweise","Wintergarten mit Gartenblick","Ausgebauter Spitzboden","Garten grenzt an Streuobstwiese","Saarbahn-Anschluss in 8 Minuten"],"en":["Detached, solid construction","Conservatory overlooking garden","Finished attic","Garden bordering orchard land","Saarbahn light rail 8 min away"]}},
@@ -157,7 +157,7 @@ INSERT INTO public.listings (
   '{"certificate_type":"Verbrauchsausweis","final_energy":148,"energy_source":"Gas","efficiency_class":"E","year_built":1962}'::jsonb,
   ARRAY['garden','cellar','garage'],
   'good','Gas-Zentralheizung',
-  '{"de":"Solides Einfamilienhaus mit gepflegtem Garten in Sulzbach.","en":"Well-kept detached home with mature garden in Sulzbach."}'::jsonb,
+  '{"de":"Solides Einfamilienhaus mit gepflegtem Garten in Sulzbach","en":"Well-kept detached home with mature garden in Sulzbach"}'::jsonb,
   '{"de":"Ein bezugsfertiges Haus aus den frühen sechziger Jahren in einer ruhigen, gewachsenen Wohnstraße. Der Vorbesitzer hat kontinuierlich instand gehalten; die Küche wurde 2019 erneuert.\n\nVier Zimmer, ein Bad mit Wanne und Dusche sowie ein Vollkeller mit Werkstatt und Waschküche. Das Grundstück umfasst 320 m² mit reifem Baumbestand.\n\nSulzbach bietet ÖPNV-Anschluss über die Saarbahn und komplette Infrastruktur. Für Ersterwerber und junge Familien eine realistische Alternative zu höheren Preislagen in Saarbrücken.","en":"A ready-to-move-in house from the early 1960s on a quiet, established residential street. The previous owner maintained it continuously; the kitchen was renewed in 2019.\n\nFour rooms, one bathroom with tub and shower, and a full cellar with workshop and laundry. The 320 m² plot features mature trees.\n\nSulzbach offers Saarbahn public transport and full local infrastructure. A realistic alternative to higher price brackets in Saarbrücken for first-time buyers and young families."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["Bezugsfertig, gepflegt","Küche 2019 neu","Reifer Garten mit Baumbestand","Ruhige Wohnstraße"],"en":["Move-in ready, well-kept","Kitchen renewed 2019","Mature garden with trees","Quiet residential street"]}},
@@ -179,7 +179,7 @@ INSERT INTO public.listings (
   '{"certificate_type":"Verbrauchsausweis","final_energy":95,"energy_source":"Fernwärme","efficiency_class":"C","year_built":1958}'::jsonb,
   ARRAY['balcony','elevator','cellar','fitted_kitchen'],
   'renovated','Fernwärme',
-  '{"de":"Sanierte 4-Zimmer-Wohnung mit Balkon am Rotenbühl.","en":"Renovated four-room apartment with balcony in Rotenbühl."}'::jsonb,
+  '{"de":"Sanierte 4-Zimmer-Wohnung mit Balkon am Rotenbühl","en":"Renovated four-room apartment with balcony in Rotenbühl"}'::jsonb,
   '{"de":"Diese Eigentumswohnung liegt im zweiten Obergeschoss eines gepflegten Sechs-Parteien-Hauses am Rotenbühl, einer der ruhigsten und grünsten Adressen der Innenstadt. Die Wohnung wurde 2020 komplett saniert: neue Elektrik, neue Sanitärstränge, geölter Eichenparkett und eine hochwertige Einbauküche.\n\n96 m² Wohnfläche verteilen sich auf einen großen Wohn-Ess-Bereich mit Zugang zum Süd-Balkon, zwei Schlafzimmer, ein Arbeitszimmer und ein modernes Tageslichtbad. Ein Aufzug und ein separater Kellerraum gehören zur Einheit.\n\nDer Rotenbühl ist in wenigen Gehminuten mit der Uni, der Uniklinik und dem Deutsch-Französischen Garten verbunden. Wir empfehlen die Wohnung Paaren, kleinen Familien und Kapitalanlegern mit langfristigem Horizont.","en":"This condominium is on the second floor of a well-maintained six-unit building in Rotenbühl, one of the greenest and quietest addresses within the city. The apartment was fully refurbished in 2020: new electrics, new plumbing risers, oiled oak parquet and a premium fitted kitchen.\n\n96 m² of living area is arranged as a large living-and-dining space opening on to the south-facing balcony, two bedrooms, a study and a modern day-lit bathroom. A lift and a private cellar storage unit belong to the flat.\n\nRotenbühl is minutes on foot from the university, the university hospital and the Deutsch-Französischer Garten park. Suited to couples, small families and long-horizon investors."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["Komplettsanierung 2020","Süd-Balkon","Geölter Eichenparkett","Aufzug im Haus","Ruhige Innenstadtlage"],"en":["Fully refurbished 2020","South-facing balcony","Oiled oak parquet","Lift in building","Quiet inner-city location"]}},
@@ -201,7 +201,7 @@ INSERT INTO public.listings (
   '{"certificate_type":"Verbrauchsausweis","final_energy":118,"energy_source":"Gas","efficiency_class":"D","year_built":1985}'::jsonb,
   ARRAY['balcony','cellar','parking'],
   'good','Gas-Zentralheizung',
-  '{"de":"Helle 3-Zimmer-Wohnung mit Balkon und Stellplatz in St. Ingbert.","en":"Bright three-room apartment with balcony and parking space in St. Ingbert."}'::jsonb,
+  '{"de":"Helle 3-Zimmer-Wohnung mit Balkon und Stellplatz in St. Ingbert","en":"Bright three-room apartment with balcony and parking space in St. Ingbert"}'::jsonb,
   '{"de":"Die Wohnung im ersten Obergeschoss eines Sechsparteienhauses wurde 2014 modernisiert. Neuer Wohnungseingangsbereich, neues Bad und laminierter Boden im Wohnbereich.\n\nDrei Zimmer, ein Wannenbad mit Fenster und eine separate Küche mit Balkonzugang. Der Balkon ist nach Westen ausgerichtet. Ein Kellerraum und ein Außenstellplatz gehören zur Einheit.\n\nSt. Ingbert bietet gute Anbindung an die A6, das Fußgängerkerngebiet ist in wenigen Gehminuten erreichbar. Geeignet für Kapitalanleger — Wohnungen in dieser Größe werden hier zuverlässig vermietet.","en":"This first-floor flat in a six-unit building was modernised in 2014. New entrance area, new bathroom and laminate flooring in the living area.\n\nThree rooms, a windowed bathroom with tub and a separate kitchen with balcony access. The balcony faces west. A cellar unit and an outdoor parking space are included.\n\nSt. Ingbert has good access to the A6 motorway and the pedestrian core is a short walk away. A dependable investment property — flats of this size rent reliably here."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["Modernisiert 2014","West-Balkon","Außenstellplatz inklusive","Solide Vermietbarkeit"],"en":["Modernised 2014","West-facing balcony","Outdoor parking included","Reliable rental demand"]}},
@@ -223,7 +223,7 @@ INSERT INTO public.listings (
   '{"certificate_type":"Verbrauchsausweis","final_energy":135,"energy_source":"Gas","efficiency_class":"D","year_built":1972}'::jsonb,
   ARRAY['balcony','cellar','elevator'],
   'good','Gas-Zentralheizung',
-  '{"de":"Bezugsfertige 3-Zimmer-Wohnung mit Loggia in zentraler Lage.","en":"Move-in ready three-room apartment with loggia in a central location."}'::jsonb,
+  '{"de":"Bezugsfertige 3-Zimmer-Wohnung mit Loggia in zentraler Lage","en":"Move-in ready three-room apartment with loggia in a central location"}'::jsonb,
   '{"de":"Die Wohnung liegt im dritten Obergeschoss mit Aufzug und wurde 2010 modernisiert. Ein großer Wohnraum mit Loggia, zwei Schlafzimmer und ein modernes Wannenbad.\n\nDas Objekt eignet sich als Kapitalanlage — die Wohnung wurde in den vergangenen Jahren durchgehend vermietet und wird aktuell unvermietet übergeben. Kellerraum und Fahrradkeller gehören zur Einheit.\n\nVölklingen ist mit S-Bahn in 12 Minuten in Saarbrücken. Preislich weiterhin einer der attraktivsten Standorte im Regionalverband.","en":"The apartment is on the third floor with lift access and was modernised in 2010. A large living room with loggia, two bedrooms and a modern bathroom with tub.\n\nThe property is well suited as an investment — it has been continuously rented in recent years and is handed over vacant. A cellar unit and bicycle storage are included.\n\nVölklingen is 12 minutes from Saarbrücken by S-Bahn train and remains one of the most affordable submarkets in the regional area."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["3. OG mit Aufzug","Loggia zum Innenhof","Modernisiert 2010","Attraktives Preisniveau"],"en":["3rd floor with lift","Loggia facing courtyard","Modernised 2010","Attractive price level"]}},
@@ -245,7 +245,7 @@ INSERT INTO public.listings (
   '{}'::jsonb,
   ARRAY['sunny_plot'],
   NULL, NULL,
-  '{"de":"Sonniges Baugrundstück in ruhiger Wohnlage von Püttlingen.","en":"Sunny building plot in a quiet residential setting in Püttlingen."}'::jsonb,
+  '{"de":"Sonniges Baugrundstück in ruhiger Wohnlage von Püttlingen","en":"Sunny building plot in a quiet residential setting in Püttlingen"}'::jsonb,
   '{"de":"Ein 680 m² großes, leicht nach Süden geneigtes Grundstück in einer bestehenden Ein- und Zweifamilienhausbebauung. Baurecht besteht nach § 34 BauGB — vergleichbare Bauvorhaben in der Nachbarschaft wurden zuletzt genehmigt.\n\nDas Grundstück ist voll erschlossen. Ein aktuelles Bodengutachten liegt vor und kann Interessenten nach Unterzeichnung einer Vertraulichkeitsvereinbarung übergeben werden.\n\nPüttlingen bietet vollständige Infrastruktur und mit der Saarbahn eine 25-Minuten-Verbindung nach Saarbrücken.","en":"A 680 m² plot with a gentle southern slope, situated in an established neighbourhood of single- and two-family homes. Building rights follow § 34 of the German Building Code — comparable projects nearby have recently been approved.\n\nThe plot is fully connected to services. A current soil report is available on request following signature of a confidentiality agreement.\n\nPüttlingen offers full infrastructure and, via the Saarbahn light rail, a 25-minute connection to Saarbrücken."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["Süd-geneigte Lage","Voll erschlossen","Baurecht nach § 34 BauGB","Bodengutachten vorhanden"],"en":["Southern slope","Fully serviced","Building rights per § 34","Soil report available"]}},
@@ -267,7 +267,7 @@ INSERT INTO public.listings (
   '{"certificate_type":"Verbrauchsausweis","final_energy":102,"energy_source":"Gas","efficiency_class":"C","year_built":1902}'::jsonb,
   ARRAY['fitted_kitchen','high_ceilings','wooden_floors'],
   'renovated','Gas-Etagenheizung',
-  '{"de":"Charmante 2-Zimmer-Altbauwohnung im Nauwieser Viertel.","en":"Charming two-room period apartment in the Nauwieser quarter."}'::jsonb,
+  '{"de":"Charmante 2-Zimmer-Altbauwohnung im Nauwieser Viertel","en":"Charming two-room period apartment in the Nauwieser quarter"}'::jsonb,
   '{"de":"Diese Altbauwohnung im zweiten Stock eines Gründerzeithauses wurde 2018 sorgfältig saniert. Originaler Dielenboden, hohe Decken mit Stuck, eine helle Wohnküche und ein modernes Duschbad.\n\nDas Nauwieser Viertel ist Saarbrückens lebendigstes Innenstadtquartier — Cafés, Bars, kleine Läden und der Nauwieser Platz bilden ein soziales Zentrum. Nichts für Ruhesuchende, viel für Menschen, die urbanes Leben schätzen.\n\nDie Wohnung wird provisionsfrei vermietet. Nichtraucherhaushalt, ohne Haustiere.","en":"This period apartment on the second floor of a Wilhelminian townhouse was carefully renovated in 2018. Original board flooring, high stuccoed ceilings, a bright eat-in kitchen and a modern shower room.\n\nThe Nauwieser quarter is Saarbrücken''s most lively inner-city neighbourhood — cafés, bars, small shops and the Nauwieser square form its social heart. Not for those looking for silence; ideal for people who value urban life.\n\nOffered without agency fee. Non-smoking household, no pets."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["Sanierter Altbau 2018","Originaler Dielenboden","Stuckdecken","Provisionsfrei"],"en":["Renovated period building 2018","Original board flooring","Stuccoed ceilings","No agency fee"]}},
@@ -289,7 +289,7 @@ INSERT INTO public.listings (
   '{"certificate_type":"Verbrauchsausweis","final_energy":128,"energy_source":"Gas","efficiency_class":"D","year_built":1978}'::jsonb,
   ARRAY['garage','garden','terrace','cellar'],
   'good','Gas-Zentralheizung',
-  '{"de":"Freistehendes Reihenendhaus zur Miete mit Garten und Garage.","en":"Detached end-of-terrace house to rent with garden and garage."}'::jsonb,
+  '{"de":"Freistehendes Reihenendhaus zur Miete mit Garten und Garage","en":"Detached end-of-terrace house to rent with garden and garage"}'::jsonb,
   '{"de":"Vier Zimmer auf zwei Ebenen mit Süd-Terrasse und einem 380 m² großen Garten. Küche mit Einbaugeräten, Familienbad und ein separates Gäste-WC.\n\nDie Miete richtet sich an eine Familie mit langfristiger Perspektive. Nichtraucherhaushalt bevorzugt, Haustiere nach Absprache.","en":"Four rooms across two levels with a south-facing terrace and a 380 m² garden. Fitted kitchen, family bathroom and separate guest WC.\n\nOffered to a family looking for a long-term rental. Non-smoking household preferred, pets by arrangement."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["Freistehendes Reihenendhaus","Süd-Terrasse","Garten 380 m²","Einzelgarage"],"en":["End-of-terrace, detached feel","South-facing terrace","380 m² garden","Single garage"]}},
@@ -311,7 +311,7 @@ INSERT INTO public.listings (
   '{"certificate_type":"Bedarfsausweis","final_energy":88,"energy_source":"Gas","efficiency_class":"C","year_built":1965}'::jsonb,
   ARRAY['garage','garden','terrace','cellar'],
   'renovated','Gas-Brennwert',
-  '{"de":"Elegantes Stadthaus in St. Ingbert — Vermarktung in Vorbereitung.","en":"Elegant townhouse in St. Ingbert — going to market shortly."}'::jsonb,
+  '{"de":"Elegantes Stadthaus in St. Ingbert — Vermarktung in Vorbereitung","en":"Elegant townhouse in St. Ingbert — going to market shortly"}'::jsonb,
   '{"de":"Ein durchgehend sanierter Familiensitz nahe der Innenstadt. Fünf Zimmer, zwei Bäder, hochwertige Ausstattung. Fotos, Grundrisse und Preis werden Anfang der kommenden Woche freigegeben.\n\nInteressenten können sich bereits vormerken lassen — Besichtigungen ausschließlich nach terminlicher Abstimmung.","en":"A comprehensively refurbished family residence near the town centre. Five rooms, two bathrooms, high-end finishes. Photos, floor plans and price will be released early next week.\n\nInterested parties may register in advance — viewings strictly by appointment."}'::jsonb,
   '[
     {"key":"highlights","items":{"de":["Vollständig saniert 2022","Ruhige Zentrumslage","Vormerkung möglich"],"en":["Comprehensively refurbished 2022","Quiet central location","Advance registration open"]}},
@@ -333,8 +333,8 @@ INSERT INTO public.listings (
   '{"certificate_type":"Verbrauchsausweis","final_energy":124,"energy_source":"Gas","efficiency_class":"D","year_built":1988}'::jsonb,
   ARRAY['garage','garden','terrace'],
   'good','Gas-Zentralheizung',
-  '{"de":"Einfamilienhaus in Völklingen — erfolgreich vermittelt.","en":"Single-family home in Völklingen — successfully sold."}'::jsonb,
-  '{"de":"Ein freistehendes Haus in einer ruhigen Wohnstraße, das wir innerhalb von sechs Wochen an eine junge Familie aus dem Regionalverband vermitteln konnten.","en":"A detached house on a quiet residential street, sold within six weeks to a young family from the regional district."}'::jsonb,
+  '{"de":"Einfamilienhaus in Völklingen — erfolgreich vermittelt","en":"Single-family home in Völklingen — successfully sold"}'::jsonb,
+  '{"de":"Ein freistehendes Haus in einer ruhigen Wohnstraße, das wir innerhalb von sechs Wochen an eine junge Familie aus dem Regionalverband vermitteln konnten","en":"A detached house on a quiet residential street, sold within six weeks to a young family from the regional district"}'::jsonb,
   '[]'::jsonb
 ),
 -- 12. Sold — Saarbrücken (2 months ago)
@@ -350,8 +350,8 @@ INSERT INTO public.listings (
   '{"certificate_type":"Verbrauchsausweis","final_energy":98,"energy_source":"Fernwärme","efficiency_class":"C","year_built":1965}'::jsonb,
   ARRAY['balcony','elevator','cellar'],
   'renovated','Fernwärme',
-  '{"de":"Sanierte Eigentumswohnung am Triller — erfolgreich vermittelt.","en":"Refurbished condominium in Triller — successfully sold."}'::jsonb,
-  '{"de":"Eine helle Wohnung mit Süd-West-Balkon, die wir off-market an einen langjährigen Interessenten unserer Kartei vermittelt haben.","en":"A bright apartment with south-west balcony, sold off-market to a long-standing candidate from our register."}'::jsonb,
+  '{"de":"Sanierte Eigentumswohnung am Triller — erfolgreich vermittelt","en":"Refurbished condominium in Triller — successfully sold"}'::jsonb,
+  '{"de":"Eine helle Wohnung mit Süd-West-Balkon, die wir off-market an einen langjährigen Interessenten unserer Kartei vermittelt haben","en":"A bright apartment with south-west balcony, sold off-market to a long-standing candidate from our register"}'::jsonb,
   '[]'::jsonb
 );
 

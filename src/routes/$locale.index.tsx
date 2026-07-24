@@ -19,7 +19,10 @@ import {
   featuredListingsQueryOptions,
   recentSoldQueryOptions,
 } from "@/lib/listings/queries.functions";
-import { propertyTypeCountsQueryOptions } from "@/lib/listings/counts.functions";
+import {
+  propertyTypeCountsQueryOptions,
+  publicCitiesQueryOptions,
+} from "@/lib/listings/counts.functions";
 import { publicTeamQueryOptions } from "@/lib/team/queries.functions";
 import { featureFlagsQueryOptions } from "@/lib/config/feature-flags.functions";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
@@ -33,6 +36,7 @@ export const Route = createFileRoute("/$locale/")({
       context.queryClient.ensureQueryData(featuredListingsQueryOptions),
       context.queryClient.ensureQueryData(recentSoldQueryOptions),
       context.queryClient.ensureQueryData(propertyTypeCountsQueryOptions),
+      context.queryClient.ensureQueryData(publicCitiesQueryOptions),
       context.queryClient.ensureQueryData(publicTeamQueryOptions),
       context.queryClient.ensureQueryData(featureFlagsQueryOptions),
     ]);
@@ -64,6 +68,7 @@ function HomePage() {
   const { data: featured } = useSuspenseQuery(featuredListingsQueryOptions);
   const { data: sold } = useSuspenseQuery(recentSoldQueryOptions);
   const { data: counts } = useSuspenseQuery(propertyTypeCountsQueryOptions);
+  const { data: cities } = useSuspenseQuery(publicCitiesQueryOptions);
   const { data: team } = useSuspenseQuery(publicTeamQueryOptions);
   const { data: flags } = useSuspenseQuery(featureFlagsQueryOptions);
 
@@ -90,7 +95,7 @@ function HomePage() {
     sold: () => <SoldStrip locale={l} items={sold.items} settings={settings} />,
     about: () => <AboutBroker />,
     team: () => (teamEnabled && team.length > 0 ? <TeamSection members={team} /> : null),
-    areas: () => <AreaLinks locale={l} />,
+    areas: () => <AreaLinks locale={l} cities={cities} />,
     contact: () => <ContactSection settings={settings} />,
   };
 

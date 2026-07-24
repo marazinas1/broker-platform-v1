@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { stripSearchParams } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { zodValidator } from "@tanstack/zod-adapter";
@@ -12,6 +13,8 @@ import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { listPublicListings } from "@/lib/listings/queries.functions";
 import {
   listingsSearchSchema,
+  SEARCH_DEFAULTS,
+  canonicalListingsQuery,
   PAGE_SIZE,
   type ListingsSearch,
 } from "@/lib/listings/search-schema";
@@ -46,6 +49,11 @@ function listingsQueryOptions(s: ListingsSearch) {
 
 export const Route = createFileRoute("/$locale/immobilien/")({
   validateSearch: zodValidator(listingsSearchSchema),
+  search: {
+    // Strip any param that equals its default so shared/bookmarked URLs
+    // stay clean (?type=house instead of ?deal=&type=house&city=…).
+    middlewares: [stripSearchParams(SEARCH_DEFAULTS)],
+  },
   loaderDeps: ({ search }) => search,
   loader: async ({ context, params, deps }) => {
     const [settings, origin] = await Promise.all([
@@ -53,15 +61,16 @@ export const Route = createFileRoute("/$locale/immobilien/")({
       getRequestOrigin(),
       context.queryClient.ensureQueryData(listingsQueryOptions(deps)),
     ]);
-    return { settings, origin, locale: params.locale as Locale };
+    return { settings, origin, locale: params.locale as Locale, search: deps };
   },
   head: ({ loaderData }) => {
     if (!loaderData) return { meta: [{ title: "…" }] };
-    const { settings, origin, locale } = loaderData;
+    const { settings, origin, locale, search } = loaderData;
     const title = `${translate(locale, "listings.title")} — ${settings.site_name}`;
+    const path = `/${locale}/immobilien${canonicalListingsQuery(search)}`;
     return buildHead({
       origin,
-      path: `/${locale}/immobilien`,
+      path,
       locale,
       enabledLocales: settings.enabled_locales,
       defaultLocale: settings.default_locale,

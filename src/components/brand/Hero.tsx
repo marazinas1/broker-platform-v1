@@ -54,11 +54,6 @@ function RegionHero({
           <h1 className="max-w-5xl font-heading text-5xl leading-[0.98] text-white md:text-7xl lg:text-[7.5rem]">
             {t("home.hero_line")}
           </h1>
-          {settings.address_city ? (
-            <p className="mt-6 text-[11px] uppercase tracking-[0.2em] text-white/80">
-              {settings.address_city}
-            </p>
-          ) : null}
         </div>
       </div>
     </section>

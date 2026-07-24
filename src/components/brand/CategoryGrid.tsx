@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import type { Locale } from "@/i18n/config";
 import type { PropertyTypeCounts } from "@/lib/listings/counts.functions";
+import { SEARCH_DEFAULTS } from "@/lib/listings/search-schema";
 
 const KNOWN_TYPES = ["house", "apartment", "land", "commercial"] as const;
 
@@ -34,18 +35,7 @@ export function CategoryGrid({ locale, counts }: Props) {
               key={k}
               to="/$locale/immobilien"
               params={{ locale }}
-              search={{
-                deal: "",
-                type: k,
-                city: "",
-                rooms_min: 0,
-                price_min: 0,
-                price_max: 0,
-                area_min: 0,
-                sort: "newest",
-                page: 1,
-                view: "grid",
-              }}
+              search={{ ...SEARCH_DEFAULTS, type: k }}
               className="group flex items-baseline justify-between gap-6 border-border py-8 transition-opacity duration-300 hover:opacity-70 sm:flex-col sm:items-start sm:border-t sm:py-10 sm:pr-8"
             >
               <div className="font-heading text-3xl md:text-4xl">
