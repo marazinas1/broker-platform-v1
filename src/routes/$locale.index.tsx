@@ -58,19 +58,34 @@ function HomePage() {
   const { data: sold } = useSuspenseQuery(recentSoldQueryOptions);
   const { data: counts } = useSuspenseQuery(propertyTypeCountsQueryOptions);
 
+  const sections = settings.homepage_sections ?? [];
+  const l = locale as Locale;
+
+  const renderers: Record<string, () => JSX.Element | null> = {
+    hero: () => <Hero locale={l} featured={featured.items} />,
+    categories: () => <CategoryGrid locale={l} counts={counts} />,
+    featured: () => (
+      <FeaturedListings locale={l} items={featured.items} settings={settings} />
+    ),
+    credibility: () => (
+      <CredibilityBar locale={l} stats={settings.credibility_stats ?? []} />
+    ),
+    sold: () => <SoldStrip locale={l} items={sold.items} settings={settings} />,
+    about: () => <AboutBroker />,
+    team: () => null,
+    areas: () => <AreaLinks locale={l} />,
+    contact: () => <ContactSection settings={settings} />,
+  };
+
   return (
-    <PublicChrome locale={locale as Locale} settings={settings}>
-      <Hero locale={locale as Locale} featured={featured.items} />
-      <FeaturedListings
-        locale={locale as Locale}
-        items={featured.items}
-        settings={settings}
-      />
-      <CategoryGrid locale={locale as Locale} counts={counts} />
-      <SoldStrip locale={locale as Locale} items={sold.items} settings={settings} />
-      <AreaLinks locale={locale as Locale} />
-      <AboutBroker />
-      <ContactSection settings={settings} />
+    <PublicChrome locale={l} settings={settings}>
+      {sections
+        .filter((s) => s.enabled)
+        .map((s, i) => {
+          const render = renderers[s.key];
+          if (!render) return null;
+          return <div key={`${s.key}-${i}`}>{render()}</div>;
+        })}
     </PublicChrome>
   );
 }
