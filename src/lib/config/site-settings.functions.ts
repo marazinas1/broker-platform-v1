@@ -23,7 +23,7 @@ export const getSiteSettings = createServerFn({ method: "GET" }).handler(
       .maybeSingle();
     if (error) throw new Error(`Failed to load site_settings: ${error.message}`);
     if (!data) throw new Error("site_settings row missing; run the initial migration.");
-    return data as SiteSettings;
+    return data as unknown as SiteSettings;
   },
 );
 
@@ -95,5 +95,5 @@ export const updateSiteSettings = createServerFn({ method: "POST" })
         status: 500,
       });
     }
-    return updated as SiteSettings;
+    return updated as unknown as SiteSettings;
   });

@@ -39,4 +39,30 @@ export interface SiteSettings {
   primary_agent_name: string | null;
   primary_agent_role: string | null;
   primary_agent_photo_url: string | null;
+  homepage_sections: HomepageSection[];
+  credibility_stats: CredibilityStat[];
+}
+
+export type HomepageSectionKey =
+  | "hero"
+  | "categories"
+  | "featured"
+  | "credibility"
+  | "sold"
+  | "about"
+  | "team"
+  | "areas"
+  | "contact";
+
+export type HeroVariant = "region" | "property" | "broker";
+
+export interface HomepageSection {
+  key: HomepageSectionKey;
+  enabled: boolean;
+  variant?: HeroVariant;
+}
+
+export interface CredibilityStat {
+  value: string;
+  label: Record<string, string>;
 }
