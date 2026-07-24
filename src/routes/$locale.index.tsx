@@ -8,6 +8,7 @@ import { FeaturedListings } from "@/components/brand/FeaturedListings";
 import { SoldStrip } from "@/components/brand/SoldStrip";
 import { AreaLinks } from "@/components/brand/AreaLinks";
 import { AboutBroker } from "@/components/brand/AboutBroker";
+import { CredibilityBar } from "@/components/brand/CredibilityBar";
 import { ContactSection } from "@/components/brand/ContactSection";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
