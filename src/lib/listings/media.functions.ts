@@ -13,6 +13,7 @@ import { assertPermission } from "@/lib/auth/require-permission.server";
 import {
   DOCUMENTS_BUCKET,
   IMAGES_BUCKET,
+  ORIGINALS_BUCKET,
   imageFolderPrefix,
   VARIANT_FORMATS,
   VARIANT_SPECS,
@@ -56,10 +57,17 @@ export const enqueueImageProcessing = createServerFn({ method: "POST" })
     if (insertError) throw new Response(insertError.message, { status: 400 });
 
     // Fire the edge function. It returns 202 immediately and processes in
-    // the background via EdgeRuntime.waitUntil.
+    // the background via EdgeRuntime.waitUntil. A shared secret authenticates
+    // the server-to-function hop; verify_jwt is disabled for that function
+    // since this header is the gate.
+    const edgeSecret = process.env.EDGE_FUNCTION_SECRET;
+    if (!edgeSecret) {
+      throw new Response("EDGE_FUNCTION_SECRET is not configured", { status: 500 });
+    }
     const { error: invokeError } = await supabase.functions.invoke(
       "process-listing-image",
       {
+        headers: { "x-edge-secret": edgeSecret },
         body: {
           listingId: data.listingId,
           imageId: data.imageId,
@@ -120,10 +128,10 @@ export const deleteListingImage = createServerFn({ method: "POST" })
       await supabase.storage.from(IMAGES_BUCKET).remove(uniquePaths);
     }
 
-    // Original lives in the private documents bucket.
+    // Original lives in the private originals bucket.
     if (row.original_storage_path) {
       await supabase.storage
-        .from(DOCUMENTS_BUCKET)
+        .from(ORIGINALS_BUCKET)
         .remove([row.original_storage_path]);
     }
 

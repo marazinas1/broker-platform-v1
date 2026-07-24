@@ -26,7 +26,7 @@ import {
 
 // Path helpers duplicated from src/lib/listings/media-paths.ts. Keep in sync.
 const IMAGES_BUCKET = "listing-images";
-const DOCUMENTS_BUCKET = "listing-documents";
+const ORIGINALS_BUCKET = "listing-originals";
 type Variant = "thumb" | "medium" | "large" | "og";
 type Fmt = "avif" | "webp";
 const SPECS: { key: Variant; width: number; height?: number; crop?: "center" }[] = [
@@ -52,8 +52,28 @@ const admin = createClient(
   { auth: { persistSession: false } },
 );
 
+const EDGE_SECRET = Deno.env.get("EDGE_FUNCTION_SECRET") ?? "";
+
+// Constant-time string compare. Returns false on any length mismatch or
+// character mismatch without an early exit.
+function timingSafeEqual(a: string, b: string): boolean {
+  const enc = new TextEncoder();
+  const ab = enc.encode(a);
+  const bb = enc.encode(b);
+  if (ab.byteLength !== bb.byteLength) return false;
+  let diff = 0;
+  for (let i = 0; i < ab.byteLength; i++) diff |= ab[i] ^ bb[i];
+  return diff === 0;
+}
+
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
+
+  // Shared-secret gate. Reject BEFORE parsing or touching the database.
+  const provided = req.headers.get("x-edge-secret") ?? "";
+  if (!EDGE_SECRET || !timingSafeEqual(provided, EDGE_SECRET)) {
+    return new Response("Unauthorized", { status: 401 });
+  }
 
   let payload: Payload;
   try {
@@ -63,6 +83,23 @@ Deno.serve(async (req) => {
   }
   if (!payload?.listingId || !payload?.imageId || !payload?.originalStoragePath) {
     return new Response("Missing fields", { status: 400 });
+  }
+
+  // Defence in depth: even if the secret leaks, the row identified by
+  // imageId must already reference this listing and this original path.
+  // This prevents cross-listing writes from a stolen secret.
+  const { data: row, error: rowErr } = await admin
+    .from("listing_images")
+    .select("id, listing_id, original_storage_path")
+    .eq("id", payload.imageId)
+    .maybeSingle();
+  if (rowErr) return new Response(rowErr.message, { status: 500 });
+  if (!row) return new Response("Image row not found", { status: 404 });
+  if (row.listing_id !== payload.listingId) {
+    return new Response("Listing mismatch", { status: 403 });
+  }
+  if (row.original_storage_path !== payload.originalStoragePath) {
+    return new Response("Original path mismatch", { status: 403 });
   }
 
   // Kick off async work; respond immediately.
@@ -85,7 +122,7 @@ async function processImage(p: Payload) {
 
   // 1. Download original from the private documents bucket.
   const { data: blob, error: dlError } = await admin.storage
-    .from(DOCUMENTS_BUCKET)
+    .from(ORIGINALS_BUCKET)
     .download(p.originalStoragePath);
   if (dlError || !blob) throw new Error(`download failed: ${dlError?.message}`);
   const bytes = new Uint8Array(await blob.arrayBuffer());

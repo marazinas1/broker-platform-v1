@@ -3,6 +3,7 @@
 // so storage RLS can derive the listing id from `(storage.foldername(name))[2]`.
 
 export const IMAGES_BUCKET = "listing-images";
+export const ORIGINALS_BUCKET = "listing-originals";
 export const DOCUMENTS_BUCKET = "listing-documents";
 
 export type ImageVariant = "thumb" | "medium" | "large" | "og";
