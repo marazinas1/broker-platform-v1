@@ -3,22 +3,19 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { PublicChrome } from "@/components/public/PublicChrome";
-import { Gallery } from "@/components/public/Gallery";
-import { EnergyPanel } from "@/components/public/EnergyPanel";
-import { InquiryForm } from "@/components/public/InquiryForm";
 import { MapView } from "@/components/public/MapView";
 import { ShareButtons } from "@/components/public/ShareButtons";
+import { ListingGallery } from "@/components/brand/ListingGallery";
+import { ListingHero } from "@/components/brand/ListingHero";
+import { ListingFacts } from "@/components/brand/ListingFacts";
+import { EnergyPanel } from "@/components/brand/EnergyPanel";
+import { ListingInquiryForm } from "@/components/brand/ListingInquiryForm";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { getListingBySlug, type PublicListing } from "@/lib/listings/queries.functions";
 import { pickImageUrl } from "@/lib/listings/image";
-import {
-  formatArea,
-  formatPrice,
-  formatRooms,
-  pickLocalized,
-} from "@/lib/listings/format";
+import { pickLocalized } from "@/lib/listings/format";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 import { buildHead } from "@/lib/seo/build-head";
 
@@ -44,7 +41,12 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
     if (!loaderData) {
       return {
         meta: [
-          { title: translate((params.locale as Locale) ?? "de", "listings.detail.unavailable_title") },
+          {
+            title: translate(
+              (params.locale as Locale) ?? "de",
+              "listings.detail.unavailable_title",
+            ),
+          },
           { name: "robots", content: "noindex" },
         ],
       };
@@ -54,7 +56,8 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
     const localDesc = pickLocalized(listing.description, locale);
     const title = `${localTitle} — ${settings.site_name}`;
     const primary = listing.images.find((i) => i.is_primary) ?? listing.images[0];
-    const ogImage = pickImageUrl(primary?.variants, "og") ?? pickImageUrl(primary?.variants, "large");
+    const ogImage =
+      pickImageUrl(primary?.variants, "og") ?? pickImageUrl(primary?.variants, "large");
 
     const head = buildHead({
       origin,
@@ -110,10 +113,7 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
     return {
       ...head,
       scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify(ldJson),
-        },
+        { type: "application/ld+json", children: JSON.stringify(ldJson) },
       ],
     };
   },
@@ -140,142 +140,90 @@ function ListingDetail() {
 
   if (!listing) return null;
   const l = listing as PublicListing;
-
   const title = pickLocalized(l.title, locale) || l.slug;
   const description = pickLocalized(l.description, locale);
-  const price = formatPrice(l.price, settings.currency, locale as Locale, {
-    onRequest: l.price_on_request,
-    period: l.price_period,
-    onRequestLabel: t("listings.on_request"),
-  });
   const shareUrl = `${origin}/${locale}/immobilien/${l.slug}`;
-
-  const facts: Array<[string, string]> = [];
-  if (l.living_area != null)
-    facts.push([t("listings.detail.living_area"), formatArea(l.living_area, settings.area_unit, locale as Locale)]);
-  if (l.plot_area != null)
-    facts.push([t("listings.detail.plot_area"), formatArea(l.plot_area, settings.area_unit, locale as Locale)]);
-  if (l.rooms != null) facts.push([t("listings.detail.rooms"), formatRooms(l.rooms, locale as Locale)]);
-  if (l.bedrooms != null) facts.push([t("listings.detail.bedrooms"), String(l.bedrooms)]);
-  if (l.bathrooms != null) facts.push([t("listings.detail.bathrooms"), String(l.bathrooms)]);
-  if (l.year_built != null) facts.push([t("listings.detail.year_built"), String(l.year_built)]);
-  if (l.year_renovated != null)
-    facts.push([t("listings.detail.year_renovated"), String(l.year_renovated)]);
-  if (l.condition) facts.push([t("listings.detail.condition"), l.condition]);
-  if (l.heating_type) facts.push([t("listings.detail.heating"), l.heating_type]);
-
-  const locationLine =
-    l.geo_precision === "hidden"
-      ? [l.address_zip, l.address_city].filter(Boolean).join(" ")
-      : [l.address_street, l.address_zip, l.address_city].filter(Boolean).join(" · ");
 
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>
       <article>
         <section className="mx-auto max-w-[1400px] px-2 pt-6 sm:px-6 lg:px-10">
-          <Gallery images={l.images} locale={locale as Locale} title={title} />
+          <ListingGallery images={l.images} locale={locale as Locale} title={title} />
         </section>
 
-        <section className="mx-auto max-w-[1400px] px-6 pt-12 lg:px-10">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
-            <div className="lg:col-span-2">
-              <div className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                {l.reference_code
-                  ? `${t("listings.detail.reference")} · ${l.reference_code}`
-                  : ""}
-              </div>
-              <h1 className="mt-2 font-heading text-4xl leading-tight md:text-6xl">
-                {title}
-              </h1>
-              <div className="mt-3 text-sm text-muted-foreground">
-                {l.geo_precision === "hidden" ? t("listings.detail.location_hidden") : locationLine}
-              </div>
-
-              <div className="mt-10 flex flex-wrap items-baseline gap-x-10 gap-y-3 border-y border-border py-6">
-                <div>
-                  <div className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                    {t(l.deal_type === "rent" ? "listings.for_rent" : "listings.for_sale")}
-                  </div>
-                  <div className="font-heading text-3xl tabular-figures">{price}</div>
-                </div>
-                {l.living_area ? (
-                  <div>
-                    <div className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                      {t("listings.detail.living_area")}
-                    </div>
-                    <div className="font-heading text-3xl tabular-figures">
-                      {formatArea(l.living_area, settings.area_unit, locale as Locale)}
-                    </div>
-                  </div>
-                ) : null}
-                {l.rooms ? (
-                  <div>
-                    <div className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                      {t("listings.detail.rooms")}
-                    </div>
-                    <div className="font-heading text-3xl tabular-figures">{l.rooms}</div>
-                  </div>
-                ) : null}
-              </div>
+        <section className="mx-auto max-w-[1400px] px-6 pt-20 lg:px-10">
+          <div className="grid grid-cols-1 gap-16 lg:grid-cols-3">
+            <div className="space-y-20 lg:col-span-2">
+              <ListingHero
+                listing={l}
+                locale={locale as Locale}
+                settings={settings}
+              />
 
               {description ? (
-                <div className="mt-12">
-                  <h2 className="font-heading text-3xl">{t("listings.detail.description")}</h2>
-                  <p className="mt-4 whitespace-pre-line text-base leading-relaxed text-foreground/90">
+                <section>
+                  <h2 className="font-heading text-3xl md:text-4xl">
+                    {t("listings.detail.description")}
+                  </h2>
+                  <p className="mt-6 max-w-2xl whitespace-pre-line text-base leading-relaxed text-foreground/90">
                     {description}
                   </p>
-                </div>
+                </section>
               ) : null}
 
-              <div className="mt-14">
-                <h2 className="font-heading text-3xl">{t("listings.detail.key_facts")}</h2>
-                <dl className="mt-6 grid grid-cols-1 gap-y-3 sm:grid-cols-2">
-                  {facts.map(([k, v]) => (
-                    <div key={k} className="flex items-baseline justify-between border-b border-border py-3">
-                      <dt className="text-sm text-muted-foreground">{k}</dt>
-                      <dd className="text-sm tabular-figures text-foreground">{v}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
+              <ListingFacts
+                listing={l}
+                locale={locale as Locale}
+                settings={settings}
+              />
 
               {l.features && l.features.length > 0 ? (
-                <div className="mt-14">
-                  <h2 className="font-heading text-3xl">{t("listings.detail.features")}</h2>
-                  <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-foreground">
+                <section>
+                  <h2 className="font-heading text-3xl md:text-4xl">
+                    {t("listings.detail.features")}
+                  </h2>
+                  <ul className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-foreground">
                     {l.features.map((f) => (
-                      <li key={f}>· {f}</li>
+                      <li key={f} className="border-b border-border pb-1">
+                        {f}
+                      </li>
                     ))}
                   </ul>
-                </div>
+                </section>
               ) : null}
 
-              <div className="mt-14">
-                <h2 className="font-heading text-3xl">{t("listings.detail.location")}</h2>
-                <div className="mt-6">
-                  <MapView lat={l.geo_lat} lng={l.geo_lng} precision={l.geo_precision} />
-                </div>
-              </div>
-
-              <div className="mt-14">
-                <EnergyPanel energy={l.energy} propertyType={l.property_type} />
-              </div>
-
-              <div className="mt-14">
-                <h2 className="font-heading text-lg text-muted-foreground">
-                  {t("listings.detail.share")}
+              <section>
+                <h2 className="font-heading text-3xl md:text-4xl">
+                  {t("listings.detail.location")}
                 </h2>
-                <div className="mt-3">
+                <div className="mt-8">
+                  <MapView
+                    lat={l.geo_lat}
+                    lng={l.geo_lng}
+                    precision={l.geo_precision}
+                  />
+                </div>
+              </section>
+
+              <EnergyPanel energy={l.energy} propertyType={l.property_type} />
+
+              <section>
+                <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  {t("listings.detail.share")}
+                </div>
+                <div className="mt-4">
                   <ShareButtons url={shareUrl} title={title} />
                 </div>
-              </div>
+              </section>
             </div>
 
             <aside className="lg:sticky lg:top-24 lg:h-fit">
-              <InquiryForm listingId={l.id} />
+              <ListingInquiryForm listingId={l.id} />
             </aside>
           </div>
         </section>
+
+        <div className="pb-32" />
       </article>
     </PublicChrome>
   );
