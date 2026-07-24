@@ -206,7 +206,109 @@
           "crm_sync": { "title": "CRM-Sync", "description": "Anfragen an das CRM übermitteln." }
         }
       },
-      "analytics": { "google_analytics_id": "Google Analytics ID", "google_site_verification": "Google Site Verification", "plausible_domain": "Plausible Domain" }
+    }
+  },
+  "pages": {
+    "valuation": {
+      "title": "Immobilienbewertung",
+      "meta_description": "Fundierte Wertermittlung für Häuser und Wohnungen — vertraulich, kostenfrei und ohne Verpflichtung.",
+      "kicker": "Was ist Ihre Immobilie wert",
+      "headline": "Eine Bewertung, auf die Sie eine Entscheidung stützen können.",
+      "intro": "Der Marktwert einer Immobilie hängt von deutlich mehr ab als von Quadratmetern und Baujahr. Lage, Zustand, Ausstattung, Nachfrage im konkreten Ort und der aktuelle Zinsmarkt spielen zusammen. Ich schaue mir Ihre Immobilie persönlich an und ordne sie in die aktuelle Marktlage ein.",
+      "steps_title": "So läuft die Bewertung ab",
+      "steps": [
+        { "title": "Erste Angaben", "body": "Sie füllen das Formular unten mit den wichtigsten Eckdaten aus — Objektart, Adresse, Fläche, Zimmer, Zustand. Optional gerne mit Fotos." },
+        { "title": "Vor-Ort-Termin", "body": "Wir vereinbaren einen Termin bei Ihnen. Ich sehe die Immobilie mit einem geschulten Blick — nicht nur die Highlights, auch das, was später Käuferfragen auslöst." },
+        { "title": "Marktanalyse", "body": "Vergleichsobjekte, aktuelle Angebote in der Umgebung, tatsächliche Abschlüsse. Daraus entsteht eine belastbare Preisspanne, keine Wunschzahl." },
+        { "title": "Schriftliche Auswertung", "body": "Sie erhalten eine nachvollziehbare Einschätzung als PDF — verständlich formuliert, mit den wichtigsten wertbildenden Faktoren." }
+      ],
+      "deliverables_title": "Sie erhalten",
+      "deliverables": [
+        "Eine realistische Preisspanne — Ober- und Untergrenze mit Begründung",
+        "Eine Einschätzung der aktuellen Nachfrage in Ihrer Lage",
+        "Konkrete Hinweise, was den Wert vor einem Verkauf noch heben kann",
+        "Eine unverbindliche Empfehlung zum weiteren Vorgehen"
+      ],
+      "form_title": "Bewertung anfordern",
+      "form_intro": "Je genauer die Angaben, desto präziser die erste Einschätzung. Alle Angaben sind vertraulich."
+    },
+    "selling": {
+      "title": "Verkaufen",
+      "meta_description": "So läuft der Verkauf Ihrer Immobilie — vom ersten Gespräch über die Vermarktung bis zur Übergabe.",
+      "kicker": "Der Weg zum Verkauf",
+      "headline": "In acht Schritten zum richtigen Käufer.",
+      "intro": "Ein Immobilienverkauf ist selten eine Bauchentscheidung. Meist steht eine familiäre oder berufliche Veränderung dahinter, und dann muss der Prozess verlässlich sein. Ich begleite Sie ruhig und strukturiert — hier sehen Sie, wie das konkret abläuft.",
+      "steps": [
+        { "title": "Erstes Gespräch", "body": "Wir treffen uns oder telefonieren in Ruhe. Sie erzählen, warum verkauft werden soll, wie Ihr Zeithorizont aussieht und was Ihnen wichtig ist. Kein Verkaufsdruck, kein Formular." },
+        { "title": "Bewertung", "body": "Ich sehe die Immobilie vor Ort und erstelle eine belastbare Marktwertermittlung. Auf dieser Basis besprechen wir den Angebotspreis — nicht zu niedrig, nicht illusorisch." },
+        { "title": "Vorbereitung & Fotografie", "body": "Wir gehen gemeinsam durch, was vor der Vermarktung sinnvoll ist. Anschließend professionelle Fotos, Grundrisse und — wenn passend — ein kurzer Rundgangsfilm." },
+        { "title": "Vermarktung", "body": "Zielgerichtete Ansprache passender Käufer aus meiner Datei und, wenn gewünscht, sichtbare Vermarktung auf Portalen. Sie entscheiden über den Grad der Öffentlichkeit." },
+        { "title": "Besichtigungen", "body": "Ich führe die Termine persönlich und in kleinem Kreis — nicht als Massenbesichtigung. Interessenten werden vorab qualifiziert, damit Sie nicht Ihre Zeit verlieren." },
+        { "title": "Verhandlung", "body": "Ich verhandle in Ihrem Auftrag mit dem ernsthaftesten Interessenten. Ziel ist ein guter Preis mit einem Käufer, der auch tatsächlich abschließt." },
+        { "title": "Notartermin", "body": "Vorbereitung des Kaufvertrags mit dem Notar, Abstimmung aller Unterlagen, Begleitung zur Beurkundung. Sie müssen keinen Termin allein wahrnehmen." },
+        { "title": "Übergabe", "body": "Übergabeprotokoll, Zählerstände, Schlüssel — sauber dokumentiert. Damit ist der Verkauf abgeschlossen, und Sie haben klare Verhältnisse." }
+      ],
+      "cta_title": "Bereit für den ersten Schritt?",
+      "cta_body": "Der Prozess beginnt mit einer ehrlichen Bewertung. Kostenfrei, vertraulich, ohne Verpflichtung.",
+      "cta_button": "Immobilie bewerten lassen"
+    },
+    "about": {
+      "meta_description_solo": "Über Dorothe Waltner — Immobilienberatung im Saarland mit persönlicher Betreuung von der Bewertung bis zur Übergabe.",
+      "meta_description_team": "Lernen Sie das Team hinter der Immobilienberatung kennen — persönlich, sorgfältig, in der Region verwurzelt.",
+      "kicker": "Persönlich",
+      "solo": {
+        "headline": "Ich vermittle Immobilien so, wie ich selbst gerne verkauft oder gekauft würde.",
+        "paragraphs": [
+          "Meine Arbeit beginnt mit Zuhören. Bevor ich eine Bewertung mache oder Fotos plane, will ich verstehen, warum verkauft wird, wer die Immobilie bisher bewohnt hat und was Ihnen im weiteren Verlauf wirklich wichtig ist. Aus diesen Gesprächen wird der Rest.",
+          "Ich habe mich bewusst gegen ein Team entschieden. Wer mich anruft, bekommt mich ans Telefon — nicht ein Callcenter, nicht wechselnde Kolleginnen. Das begrenzt die Anzahl der Objekte, die ich gleichzeitig betreuen kann, macht aber genau den Unterschied, den ein persönlicher Verkauf verlangt.",
+          "Fachlich stehe ich auf einem soliden Fundament: IHK-zertifiziert, langjährige Praxis in der Bewertung, gute Vernetzung mit den Notariaten, Handwerksbetrieben und Finanzierungspartnern in der Region. Das hilft, wenn im Prozess Fragen auftauchen, die schnell beantwortet werden müssen."
+        ],
+        "qualifications_title": "Qualifikationen & Werdegang",
+        "qualifications": [
+          "IHK-zertifizierte Immobilienmaklerin",
+          "Über 12 Jahre in der Immobilienvermittlung im Saarland",
+          "Zertifizierte Sachkundige für Immobilienbewertung",
+          "Mitglied im Immobilienverband IVD"
+        ]
+      },
+      "team": {
+        "headline": "Wir vermitteln Immobilien so, wie wir selbst gerne verkauft oder gekauft würden.",
+        "paragraphs": [
+          "Unsere Arbeit beginnt mit Zuhören. Bevor wir eine Bewertung machen oder Fotos planen, wollen wir verstehen, warum verkauft wird, wer die Immobilie bisher bewohnt hat und was Ihnen im weiteren Verlauf wirklich wichtig ist.",
+          "Als Team können wir mehrere Prozesse parallel führen, ohne dass es an Aufmerksamkeit für den einzelnen Auftrag mangelt. Sie haben eine feste Ansprechperson — und im Hintergrund Kolleginnen und Kollegen, die einspringen, wenn es schnell gehen muss.",
+          "Fachlich stehen wir auf einem soliden Fundament: IHK-zertifiziert, langjährige Praxis in der Bewertung, gute Vernetzung mit den Notariaten, Handwerksbetrieben und Finanzierungspartnern in der Region."
+        ]
+      },
+      "contact_title_solo": "So erreichen Sie mich",
+      "contact_title_team": "So erreichen Sie uns"
+    },
+    "contact": {
+      "title": "Kontakt",
+      "meta_description": "Kontaktdaten, Öffnungszeiten und Anfahrt. Schreiben Sie mir — ich melde mich innerhalb eines Werktags zurück.",
+      "kicker": "Kontakt",
+      "headline_solo": "Rufen Sie an, schreiben Sie, oder kommen Sie vorbei.",
+      "headline_team": "Rufen Sie an, schreiben Sie, oder kommen Sie vorbei.",
+      "address_title": "Büro",
+      "hours_title": "Sprechzeiten",
+      "hours_default": [
+        { "day": "Montag – Freitag", "time": "09:00 – 18:00" },
+        { "day": "Samstag", "time": "Nach Vereinbarung" },
+        { "day": "Sonntag", "time": "Geschlossen" }
+      ],
+      "channels_title": "Direkter Draht",
+      "form_title": "Nachricht senden",
+      "form_intro_solo": "Kurz Ihr Anliegen, und ich melde mich innerhalb eines Werktags.",
+      "form_intro_team": "Kurz Ihr Anliegen, und wir melden uns innerhalb eines Werktags.",
+      "form_name": "Name",
+      "form_email": "E-Mail",
+      "form_phone": "Telefon (optional)",
+      "form_message": "Nachricht",
+      "form_submit": "Nachricht senden",
+      "form_submitting": "Wird gesendet…",
+      "form_success": "Danke — Ihre Nachricht ist angekommen.",
+      "form_error": "Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.",
+      "map_title": "Anfahrt",
+      "map_missing": "Kartenansicht wird verfügbar, sobald die Bürokoordinaten hinterlegt sind."
     }
   }
 }
