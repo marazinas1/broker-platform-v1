@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { zodValidator } from "@tanstack/zod-adapter";
 
 import { PublicChrome } from "@/components/public/PublicChrome";
-import { ListingCard } from "@/components/public/ListingCard";
+import { ListingCard } from "@/components/brand/ListingCard";
 import { FiltersBar } from "@/components/public/FiltersBar";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
