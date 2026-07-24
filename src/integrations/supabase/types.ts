@@ -212,6 +212,7 @@ export type Database = {
           bathrooms: number | null
           bedrooms: number | null
           commission_note: string | null
+          commission_note_public: boolean
           condition: string | null
           created_at: string
           created_by: string | null
@@ -269,6 +270,7 @@ export type Database = {
           bathrooms?: number | null
           bedrooms?: number | null
           commission_note?: string | null
+          commission_note_public?: boolean
           condition?: string | null
           created_at?: string
           created_by?: string | null
@@ -326,6 +328,7 @@ export type Database = {
           bathrooms?: number | null
           bedrooms?: number | null
           commission_note?: string | null
+          commission_note_public?: boolean
           condition?: string | null
           created_at?: string
           created_by?: string | null
@@ -777,7 +780,6 @@ export type Database = {
           address_street: string | null
           address_zip: string | null
           agent_id: string | null
-          archived_at: string | null
           availability_date: string | null
           bathrooms: number | null
           bedrooms: number | null
@@ -787,6 +789,7 @@ export type Database = {
           deal_type: string | null
           description: Json | null
           energy: Json | null
+          expose_notes: Json | null
           features: string[] | null
           floor: number | null
           geo_lat: number | null
@@ -795,7 +798,6 @@ export type Database = {
           heating_type: string | null
           highlights: Json | null
           id: string | null
-          inquiry_count: number | null
           is_exclusive: boolean | null
           is_featured: boolean | null
           living_area: number | null
@@ -817,7 +819,6 @@ export type Database = {
           total_floors: number | null
           updated_at: string | null
           usable_area: number | null
-          view_count: number | null
           year_built: number | null
           year_renovated: number | null
         }
@@ -825,30 +826,29 @@ export type Database = {
           additional_costs?: Json | null
           address_city?: string | null
           address_country?: string | null
-          address_number?: string | null
+          address_number?: never
           address_region?: string | null
-          address_street?: string | null
+          address_street?: never
           address_zip?: string | null
           agent_id?: string | null
-          archived_at?: string | null
           availability_date?: string | null
           bathrooms?: number | null
           bedrooms?: number | null
-          commission_note?: string | null
+          commission_note?: never
           condition?: string | null
           created_at?: string | null
           deal_type?: string | null
           description?: Json | null
           energy?: Json | null
+          expose_notes?: Json | null
           features?: string[] | null
           floor?: number | null
-          geo_lat?: number | null
-          geo_lng?: number | null
+          geo_lat?: never
+          geo_lng?: never
           geo_precision?: string | null
           heating_type?: string | null
           highlights?: Json | null
           id?: string | null
-          inquiry_count?: number | null
           is_exclusive?: boolean | null
           is_featured?: boolean | null
           living_area?: number | null
@@ -870,7 +870,6 @@ export type Database = {
           total_floors?: number | null
           updated_at?: string | null
           usable_area?: number | null
-          view_count?: number | null
           year_built?: number | null
           year_renovated?: number | null
         }
@@ -878,30 +877,29 @@ export type Database = {
           additional_costs?: Json | null
           address_city?: string | null
           address_country?: string | null
-          address_number?: string | null
+          address_number?: never
           address_region?: string | null
-          address_street?: string | null
+          address_street?: never
           address_zip?: string | null
           agent_id?: string | null
-          archived_at?: string | null
           availability_date?: string | null
           bathrooms?: number | null
           bedrooms?: number | null
-          commission_note?: string | null
+          commission_note?: never
           condition?: string | null
           created_at?: string | null
           deal_type?: string | null
           description?: Json | null
           energy?: Json | null
+          expose_notes?: Json | null
           features?: string[] | null
           floor?: number | null
-          geo_lat?: number | null
-          geo_lng?: number | null
+          geo_lat?: never
+          geo_lng?: never
           geo_precision?: string | null
           heating_type?: string | null
           highlights?: Json | null
           id?: string | null
-          inquiry_count?: number | null
           is_exclusive?: boolean | null
           is_featured?: boolean | null
           living_area?: number | null
@@ -923,7 +921,6 @@ export type Database = {
           total_floors?: number | null
           updated_at?: string | null
           usable_area?: number | null
-          view_count?: number | null
           year_built?: number | null
           year_renovated?: number | null
         }
