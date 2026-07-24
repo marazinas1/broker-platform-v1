@@ -1,9 +1,9 @@
 {
   "setup": { "complete": "Einrichtung abgeschlossen" },
   "home": {
-    "title": "Immobilien im Aichfeld",
-    "description": "Ausgewählte Häuser, Wohnungen und Grundstücke in Fohnsdorf, Judenburg, Knittelfeld und Zeltweg.",
-    "hero_line": "Immobilien mit Anspruch. Im Herzen der Obersteiermark.",
+    "title": "Immobilien im Saarland",
+    "description": "Sorgfältig ausgewählte Häuser, Wohnungen und Grundstücke in Saarbrücken, Völklingen, Püttlingen, Sulzbach, Riegelsberg und St. Ingbert.",
+    "hero_line": "Immobilien mit Anspruch. Zuhause an der Saar.",
     "featured": "Ausgewählte Objekte",
     "categories": "Objektarten",
     "count_suffix": "Objekte",
