@@ -95,5 +95,5 @@ export const updateSiteSettings = createServerFn({ method: "POST" })
         status: 500,
       });
     }
-    return updated as SiteSettings;
+    return updated as unknown as SiteSettings;
   });
