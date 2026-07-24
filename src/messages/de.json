@@ -22,7 +22,10 @@
   "nav": {
     "listings": "Angebote",
     "sold": "Verkauft",
-    "about": "Über uns",
+    "valuation": "Immobilienbewertung",
+    "selling": "Verkaufen",
+    "about_solo": "Über mich",
+    "about_team": "Über uns",
     "contact": "Kontakt",
     "admin": "Verwaltung",
     "menu": "Menü"
