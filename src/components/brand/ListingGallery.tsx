@@ -18,7 +18,8 @@ type Props = {
   title: string;
 };
 
-export function Gallery({ images, locale, title }: Props) {
+/** Detail-page gallery. Hero + up to four secondary shots. Keyboard-driven lightbox. */
+export function ListingGallery({ images, locale, title }: Props) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const list = images.filter((i) => pickImageUrl(i.variants, "large"));
 
@@ -47,12 +48,12 @@ export function Gallery({ images, locale, title }: Props) {
         <button
           type="button"
           onClick={() => setOpenIdx(0)}
-          className="relative aspect-[4/3] w-full overflow-hidden bg-muted md:col-span-3 md:aspect-[16/10]"
+          className="group relative aspect-[4/3] w-full overflow-hidden bg-muted md:col-span-3 md:aspect-[16/10]"
         >
           <img
             src={pickImageUrl(hero.variants, "large") ?? ""}
             alt={pickLocalized(hero.alt_text, locale) || title}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.02]"
           />
         </button>
         <div className="grid grid-cols-2 gap-1 md:grid-cols-1">
@@ -61,13 +62,13 @@ export function Gallery({ images, locale, title }: Props) {
               key={img.id ?? i}
               type="button"
               onClick={() => setOpenIdx(i + 1)}
-              className="relative aspect-[4/3] w-full overflow-hidden bg-muted"
+              className="group relative aspect-[4/3] w-full overflow-hidden bg-muted"
             >
               <img
                 src={pickImageUrl(img.variants, "medium") ?? ""}
                 alt={pickLocalized(img.alt_text, locale) || title}
-                className="h-full w-full object-cover"
                 loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.03]"
               />
             </button>
           ))}
@@ -76,7 +77,7 @@ export function Gallery({ images, locale, title }: Props) {
 
       {openIdx != null ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-6"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-6"
           onClick={() => setOpenIdx(null)}
         >
           <img
@@ -90,7 +91,7 @@ export function Gallery({ images, locale, title }: Props) {
               e.stopPropagation();
               setOpenIdx(null);
             }}
-            className="absolute right-4 top-4 rounded-sm bg-background/10 px-3 py-1 text-sm text-white hover:bg-background/20"
+            className="absolute right-4 top-4 bg-background/10 px-3 py-1 text-sm text-white hover:bg-background/20"
           >
             ×
           </button>

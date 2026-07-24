@@ -8,7 +8,13 @@ type Props = {
   defaultMessage?: string;
 };
 
-export function InquiryForm({ listingId, defaultMessage }: Props) {
+const inputCls =
+  "w-full border-0 border-b border-border bg-transparent px-0 py-3 text-sm text-foreground outline-none transition-colors duration-300 focus:border-foreground";
+const labelCls =
+  "block text-[11px] uppercase tracking-[0.16em] text-muted-foreground";
+
+/** Listing-specific inquiry form used on the detail page. */
+export function ListingInquiryForm({ listingId, defaultMessage }: Props) {
   const { t } = useTranslation();
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
     "idle",
@@ -37,22 +43,18 @@ export function InquiryForm({ listingId, defaultMessage }: Props) {
 
   if (status === "success") {
     return (
-      <div className="border border-border p-8 text-sm text-foreground">
+      <div className="border-t border-border pt-10 text-sm text-foreground">
         {t("inquiry.success")}
       </div>
     );
   }
 
-  const inputCls =
-    "w-full border-0 border-b border-border bg-transparent px-0 py-3 text-sm text-foreground outline-none focus:border-foreground";
-  const labelCls = "block text-[11px] uppercase tracking-[0.14em] text-muted-foreground";
-
   return (
-    <form onSubmit={onSubmit} className="border border-border p-8">
-      <h2 className="font-heading text-3xl">{t("inquiry.title")}</h2>
-      <p className="mt-2 text-sm text-muted-foreground">{t("inquiry.subtitle")}</p>
+    <form onSubmit={onSubmit} className="border-t border-border pt-10">
+      <h2 className="font-heading text-3xl md:text-4xl">{t("inquiry.title")}</h2>
+      <p className="mt-3 text-sm text-muted-foreground">{t("inquiry.subtitle")}</p>
 
-      <div className="mt-8 grid gap-6">
+      <div className="mt-8 grid gap-8">
         <div>
           <label className={labelCls} htmlFor="inq-name">{t("inquiry.name")}</label>
           <input id="inq-name" name="name" required className={inputCls} />
@@ -85,7 +87,7 @@ export function InquiryForm({ listingId, defaultMessage }: Props) {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-8 inline-flex h-11 items-center justify-center rounded-sm bg-primary px-6 text-sm text-primary-foreground transition-opacity duration-300 hover:opacity-90 disabled:opacity-60"
+        className="mt-10 inline-flex h-12 items-center justify-center bg-foreground px-8 text-[11px] uppercase tracking-[0.18em] text-background transition-opacity duration-300 hover:opacity-85 disabled:opacity-60"
       >
         {status === "submitting" ? t("inquiry.submitting") : t("inquiry.submit")}
       </button>

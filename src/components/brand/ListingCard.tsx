@@ -19,6 +19,11 @@ type Props = {
   size?: "large" | "compact";
 };
 
+/**
+ * Brand-owned listing card. Photography leads; hairline border on top only,
+ * no shadow, no rounded corners. Hover triggers a slow 400ms image scale.
+ * Status shown through typographic label, never a coloured pill.
+ */
 export function ListingCard({ listing, locale, settings, size = "large" }: Props) {
   const { t } = useTranslation();
   const primary = listing.images.find((i) => i.is_primary) ?? listing.images[0];
@@ -36,7 +41,7 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
       ? formatArea(listing.plot_area, settings.area_unit, locale)
       : formatArea(listing.living_area, settings.area_unit, locale);
 
-  const statusChip =
+  const statusLabel =
     listing.status === "coming_soon"
       ? t("listings.coming_soon")
       : listing.status === "sold"
@@ -57,38 +62,44 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
             src={image}
             alt={pickLocalized(primary?.alt_text, locale) || title}
             loading="lazy"
-            className="h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-90"
+            className="h-full w-full object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.03]"
           />
         ) : (
           <div className="h-full w-full bg-muted" />
         )}
-        {statusChip ? (
-          <div className="absolute left-4 top-4 bg-background/95 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-foreground">
-            {statusChip}
-          </div>
-        ) : null}
       </div>
-      <div className="mt-5 flex items-start justify-between gap-6">
-        <div className="min-w-0 flex-1">
-          <h3 className="font-heading text-2xl leading-tight text-foreground">
-            {title}
-          </h3>
-          <div className="mt-1 text-sm text-muted-foreground">
-            {listing.address_city}
-            {listing.status === "sold" && listing.sold_at ? (
-              <span className="ml-2 text-muted-foreground/70">
-                · {t("listings.sold_on").replace("{{date}}", formatDate(listing.sold_at, locale))}
-              </span>
-            ) : null}
-          </div>
-        </div>
-        <div className="shrink-0 text-right">
-          <div className="font-heading text-lg tabular-figures text-foreground">{price}</div>
-          <div className="mt-1 text-xs tabular-figures uppercase tracking-wider text-muted-foreground">
-            {area}
-          </div>
-        </div>
+
+      <div className="mt-6 flex items-baseline justify-between gap-4 border-t border-border pt-4">
+        {statusLabel ? (
+          <span className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+            {statusLabel}
+          </span>
+        ) : (
+          <span className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+            {t(listing.deal_type === "rent" ? "listings.for_rent" : "listings.for_sale")}
+          </span>
+        )}
+        <span className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+          {listing.address_city}
+        </span>
       </div>
+
+      <h3 className="mt-4 font-heading text-2xl leading-tight text-foreground md:text-3xl">
+        {title}
+      </h3>
+
+      <div className="mt-4 flex items-baseline justify-between gap-6 text-sm">
+        <span className="font-heading text-lg tabular-figures text-foreground">
+          {price}
+        </span>
+        <span className="tabular-figures text-muted-foreground">{area}</span>
+      </div>
+
+      {listing.status === "sold" && listing.sold_at ? (
+        <div className="mt-2 text-xs text-muted-foreground/70">
+          {t("listings.sold_on").replace("{{date}}", formatDate(listing.sold_at, locale))}
+        </div>
+      ) : null}
     </Link>
   );
 }

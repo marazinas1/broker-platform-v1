@@ -1,0 +1,52 @@
+import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+
+import type { Locale } from "@/i18n/config";
+import type { PublicListing } from "@/lib/listings/queries.functions";
+import type { SiteSettings } from "@/types/site-settings";
+
+import { ListingCard } from "./ListingCard";
+
+type Props = {
+  locale: Locale;
+  items: PublicListing[];
+  settings: SiteSettings;
+};
+
+export function FeaturedListings({ locale, items, settings }: Props) {
+  const { t } = useTranslation();
+  if (items.length === 0) return null;
+
+  return (
+    <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
+      <div className="mb-16 flex items-end justify-between gap-8">
+        <h2 className="max-w-3xl font-heading text-4xl md:text-6xl">
+          {t("home.featured")}
+        </h2>
+        <Link
+          to="/$locale/immobilien"
+          params={{ locale }}
+          className="hidden shrink-0 text-[11px] uppercase tracking-[0.18em] text-muted-foreground transition-opacity duration-300 hover:text-foreground md:block"
+        >
+          {t("home.view_all")} →
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 gap-x-10 gap-y-24 md:grid-cols-2">
+        {items.map((l) => (
+          <ListingCard key={l.id} listing={l} locale={locale} settings={settings} />
+        ))}
+      </div>
+
+      <div className="mt-14 md:hidden">
+        <Link
+          to="/$locale/immobilien"
+          params={{ locale }}
+          className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground"
+        >
+          {t("home.view_all")} →
+        </Link>
+      </div>
+    </section>
+  );
+}

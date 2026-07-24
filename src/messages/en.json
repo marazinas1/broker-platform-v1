@@ -5,12 +5,15 @@
     "description": "Carefully selected houses, apartments and building plots across Fohnsdorf, Judenburg, Knittelfeld and Zeltweg.",
     "hero_line": "Considered real estate. At the heart of Upper Styria.",
     "featured": "Selected properties",
+    "categories": "Browse by type",
+    "count_suffix": "listings",
     "recent_sales": "Recently sold",
     "recent_sales_intro": "A short selection of properties recently handed over.",
     "areas": "Where we work",
-    "about": "About us",
-    "about_body": "We accompany owners and buyers through the whole process discreetly. From first valuation to handover. Personal, careful, well connected in the region.",
-    "contact": "Contact",
+    "about": "About",
+    "about_body": "We accompany owners and buyers through the whole process discreetly. From the first valuation to the handover — personal, careful, well connected across the region.",
+    "contact": "Get in touch",
+    "contact_headline": "Buying or selling — tell us where to start.",
     "view_all": "View all properties",
     "view_all_sold": "Browse sold archive"
   },
@@ -108,7 +111,31 @@
     "submit": "Send enquiry",
     "submitting": "Sending…",
     "success": "Thank you. Your enquiry has been received.",
-    "error": "Could not send the enquiry. Please try again."
+    "error": "Could not send the enquiry. Please try again.",
+    "buyer": {
+      "tab": "I'm looking",
+      "property_type": "Property type",
+      "city": "Preferred location",
+      "rooms_min": "Rooms from",
+      "area_min": "Area from (m²)",
+      "price_max": "Budget up to (EUR)",
+      "submit": "Send buyer enquiry"
+    },
+    "seller": {
+      "tab": "I'm selling",
+      "property_type": "Property type",
+      "address_street": "Street & number",
+      "address_zip": "Postal code",
+      "address_city": "Town",
+      "living_area": "Living area (m²)",
+      "rooms": "Rooms",
+      "year_built": "Year built",
+      "condition": "Condition",
+      "photos": "Photos (optional, up to 4)",
+      "photos_selected": "{{n}} photo(s) attached",
+      "photo_too_large": "Each photo must be under 3 MB.",
+      "submit": "Request valuation"
+    }
   },
   "share": {
     "copy": "Copy link",

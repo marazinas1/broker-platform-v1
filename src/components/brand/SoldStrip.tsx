@@ -1,0 +1,53 @@
+import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+
+import type { Locale } from "@/i18n/config";
+import type { PublicListing } from "@/lib/listings/queries.functions";
+import type { SiteSettings } from "@/types/site-settings";
+
+import { ListingCard } from "./ListingCard";
+
+type Props = {
+  locale: Locale;
+  items: PublicListing[];
+  settings: SiteSettings;
+};
+
+/** Sold properties as credibility proof. Kept tight, three items max. */
+export function SoldStrip({ locale, items, settings }: Props) {
+  const { t } = useTranslation();
+  if (items.length === 0) return null;
+
+  return (
+    <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
+      <div className="mb-14 max-w-2xl">
+        <h2 className="font-heading text-4xl md:text-6xl">{t("home.recent_sales")}</h2>
+        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+          {t("home.recent_sales_intro")}
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
+        {items.slice(0, 3).map((l) => (
+          <ListingCard
+            key={l.id}
+            listing={l}
+            locale={locale}
+            settings={settings}
+            size="compact"
+          />
+        ))}
+      </div>
+
+      <div className="mt-14">
+        <Link
+          to="/$locale/verkauft"
+          params={{ locale }}
+          className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground transition-opacity duration-300 hover:text-foreground"
+        >
+          {t("home.view_all_sold")} →
+        </Link>
+      </div>
+    </section>
+  );
+}

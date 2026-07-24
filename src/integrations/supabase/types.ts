@@ -43,34 +43,43 @@ export type Database = {
           created_at: string
           email: string
           id: string
-          listing_id: string
+          listing_id: string | null
           locale: string | null
           message: string | null
           name: string | null
+          payload: Json
           phone: string | null
+          photo_paths: string[]
           source: string | null
+          type: string
         }
         Insert: {
           created_at?: string
           email: string
           id?: string
-          listing_id: string
+          listing_id?: string | null
           locale?: string | null
           message?: string | null
           name?: string | null
+          payload?: Json
           phone?: string | null
+          photo_paths?: string[]
           source?: string | null
+          type?: string
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
-          listing_id?: string
+          listing_id?: string | null
           locale?: string | null
           message?: string | null
           name?: string | null
+          payload?: Json
           phone?: string | null
+          photo_paths?: string[]
           source?: string | null
+          type?: string
         }
         Relationships: [
           {

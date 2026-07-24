@@ -5,12 +5,15 @@
     "description": "Ausgewählte Häuser, Wohnungen und Grundstücke in Fohnsdorf, Judenburg, Knittelfeld und Zeltweg.",
     "hero_line": "Immobilien mit Anspruch. Im Herzen der Obersteiermark.",
     "featured": "Ausgewählte Objekte",
+    "categories": "Objektarten",
+    "count_suffix": "Objekte",
     "recent_sales": "Kürzlich vermittelt",
     "recent_sales_intro": "Ein Auszug aus den zuletzt vermittelten Objekten.",
     "areas": "Unsere Standorte",
     "about": "Über uns",
-    "about_body": "Wir begleiten Eigentümer und Käufer diskret durch den gesamten Verkaufsprozess. Von der ersten Bewertung bis zur Übergabe. Persönlich, sorgfältig, gut vernetzt in der Region.",
+    "about_body": "Wir begleiten Eigentümer und Käufer diskret durch den gesamten Prozess. Von der ersten Bewertung bis zur Übergabe — persönlich, sorgfältig, gut vernetzt in der Region.",
     "contact": "Kontakt",
+    "contact_headline": "Kaufen oder verkaufen — sagen Sie uns, worum es geht.",
     "view_all": "Alle Objekte ansehen",
     "view_all_sold": "Zum Verkauft-Archiv"
   },
@@ -108,7 +111,31 @@
     "submit": "Anfrage senden",
     "submitting": "Wird gesendet…",
     "success": "Vielen Dank. Ihre Anfrage ist bei uns eingegangen.",
-    "error": "Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+    "error": "Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    "buyer": {
+      "tab": "Ich suche",
+      "property_type": "Objektart",
+      "city": "Wunschort",
+      "rooms_min": "Zimmer ab",
+      "area_min": "Fläche ab (m²)",
+      "price_max": "Budget bis (EUR)",
+      "submit": "Suchanfrage senden"
+    },
+    "seller": {
+      "tab": "Ich verkaufe",
+      "property_type": "Objektart",
+      "address_street": "Straße & Nr.",
+      "address_zip": "PLZ",
+      "address_city": "Ort",
+      "living_area": "Wohnfläche (m²)",
+      "rooms": "Zimmer",
+      "year_built": "Baujahr",
+      "condition": "Zustand",
+      "photos": "Fotos (optional, bis zu 4)",
+      "photos_selected": "{{n}} Foto(s) angehängt",
+      "photo_too_large": "Jedes Foto muss unter 3 MB liegen.",
+      "submit": "Bewertung anfordern"
+    }
   },
   "share": {
     "copy": "Link kopieren",
