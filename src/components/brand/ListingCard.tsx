@@ -60,7 +60,7 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
         {image ? (
           <img
             src={image}
-            alt={pickLocalized(primary?.alt_text, locale) || title}
+            alt={pickLocalized(primary?.alt_text, locale) || ""}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.03]"
           />
