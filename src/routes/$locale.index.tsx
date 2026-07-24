@@ -64,12 +64,22 @@ function HomePage() {
   const { data: featured } = useSuspenseQuery(featuredListingsQueryOptions);
   const { data: sold } = useSuspenseQuery(recentSoldQueryOptions);
   const { data: counts } = useSuspenseQuery(propertyTypeCountsQueryOptions);
+  const { data: team } = useSuspenseQuery(publicTeamQueryOptions);
+  const { data: flags } = useSuspenseQuery(featureFlagsQueryOptions);
 
   const sections = settings.homepage_sections ?? [];
   const l = locale as Locale;
+  const teamEnabled = flags?.team?.enabled !== false;
 
-  const renderers: Record<string, () => ReactNode> = {
-    hero: () => <Hero locale={l} featured={featured.items} />,
+  const renderers: Record<string, (section: (typeof sections)[number]) => ReactNode> = {
+    hero: (section) => (
+      <Hero
+        locale={l}
+        featured={featured.items}
+        settings={settings}
+        variant={section.variant ?? "region"}
+      />
+    ),
     categories: () => <CategoryGrid locale={l} counts={counts} />,
     featured: () => (
       <FeaturedListings locale={l} items={featured.items} settings={settings} />
@@ -79,7 +89,7 @@ function HomePage() {
     ),
     sold: () => <SoldStrip locale={l} items={sold.items} settings={settings} />,
     about: () => <AboutBroker />,
-    team: () => null,
+    team: () => (teamEnabled && team.length > 0 ? <TeamSection members={team} /> : null),
     areas: () => <AreaLinks locale={l} />,
     contact: () => <ContactSection settings={settings} />,
   };
@@ -91,7 +101,7 @@ function HomePage() {
         .map((s, i) => {
           const render = renderers[s.key];
           if (!render) return null;
-          return <div key={`${s.key}-${i}`}>{render()}</div>;
+          return <div key={`${s.key}-${i}`}>{render(s)}</div>;
         })}
     </PublicChrome>
   );
