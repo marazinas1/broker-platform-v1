@@ -289,6 +289,7 @@ export type Database = {
           commission_note: string | null
           commission_note_public: boolean
           condition: string | null
+          content_sections: Json
           created_at: string
           created_by: string | null
           deal_type: string
@@ -347,6 +348,7 @@ export type Database = {
           commission_note?: string | null
           commission_note_public?: boolean
           condition?: string | null
+          content_sections?: Json
           created_at?: string
           created_by?: string | null
           deal_type: string
@@ -405,6 +407,7 @@ export type Database = {
           commission_note?: string | null
           commission_note_public?: boolean
           condition?: string | null
+          content_sections?: Json
           created_at?: string
           created_by?: string | null
           deal_type?: string
@@ -630,6 +633,9 @@ export type Database = {
           og_default_image: string | null
           opening_hours: Json
           plausible_domain: string | null
+          primary_agent_name: string | null
+          primary_agent_photo_url: string | null
+          primary_agent_role: string | null
           primary_color: string | null
           secondary_color: string | null
           site_name: string
@@ -667,6 +673,9 @@ export type Database = {
           og_default_image?: string | null
           opening_hours?: Json
           plausible_domain?: string | null
+          primary_agent_name?: string | null
+          primary_agent_photo_url?: string | null
+          primary_agent_role?: string | null
           primary_color?: string | null
           secondary_color?: string | null
           site_name: string
@@ -704,6 +713,9 @@ export type Database = {
           og_default_image?: string | null
           opening_hours?: Json
           plausible_domain?: string | null
+          primary_agent_name?: string | null
+          primary_agent_photo_url?: string | null
+          primary_agent_role?: string | null
           primary_color?: string | null
           secondary_color?: string | null
           site_name?: string
@@ -860,6 +872,7 @@ export type Database = {
           bedrooms: number | null
           commission_note: string | null
           condition: string | null
+          content_sections: Json | null
           created_at: string | null
           deal_type: string | null
           description: Json | null
@@ -910,6 +923,7 @@ export type Database = {
           bedrooms?: number | null
           commission_note?: never
           condition?: string | null
+          content_sections?: Json | null
           created_at?: string | null
           deal_type?: string | null
           description?: Json | null
@@ -960,6 +974,7 @@ export type Database = {
           bedrooms?: number | null
           commission_note?: never
           condition?: string | null
+          content_sections?: Json | null
           created_at?: string | null
           deal_type?: string | null
           description?: Json | null

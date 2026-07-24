@@ -85,9 +85,16 @@
       "year_renovated": "Renovated",
       "condition": "Condition",
       "heating": "Heating",
-      "agent": "Contact",
+      "floor": "Floor",
+      "agent": "Your contact",
       "share": "Share",
       "map_soon": "Map view coming soon.",
+      "sections": {
+        "highlights": "Highlights",
+        "property_info": "Property information",
+        "building_info": "Building & technology",
+        "surroundings": "Location & surroundings"
+      },
       "unavailable_title": "Property unavailable",
       "unavailable_body": "This listing is no longer online. Browse our current offerings instead."
     },

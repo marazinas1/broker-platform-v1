@@ -50,8 +50,8 @@ export function ListingInquiryForm({ listingId, defaultMessage }: Props) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="border-t border-border pt-10">
-      <h2 className="font-heading text-3xl md:text-4xl">{t("inquiry.title")}</h2>
+    <form onSubmit={onSubmit}>
+      <h2 className="font-heading text-2xl md:text-3xl">{t("inquiry.title")}</h2>
       <p className="mt-3 text-sm text-muted-foreground">{t("inquiry.subtitle")}</p>
 
       <div className="mt-8 grid gap-8">

@@ -6,10 +6,11 @@ import { PublicChrome } from "@/components/public/PublicChrome";
 import { MapView } from "@/components/public/MapView";
 import { ShareButtons } from "@/components/public/ShareButtons";
 import { ListingGallery } from "@/components/brand/ListingGallery";
-import { ListingHero } from "@/components/brand/ListingHero";
-import { ListingFacts } from "@/components/brand/ListingFacts";
+import { ListingFactsBar } from "@/components/brand/ListingFactsBar";
+import { ListingHeadline } from "@/components/brand/ListingHeadline";
+import { ListingContentSections } from "@/components/brand/ListingContentSections";
 import { EnergyPanel } from "@/components/brand/EnergyPanel";
-import { ListingInquiryForm } from "@/components/brand/ListingInquiryForm";
+import { ListingAgent } from "@/components/brand/ListingAgent";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
@@ -112,9 +113,7 @@ export const Route = createFileRoute("/$locale/immobilien/$slug")({
 
     return {
       ...head,
-      scripts: [
-        { type: "application/ld+json", children: JSON.stringify(ldJson) },
-      ],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(ldJson) }],
     };
   },
   component: ListingDetail,
@@ -141,89 +140,73 @@ function ListingDetail() {
   if (!listing) return null;
   const l = listing as PublicListing;
   const title = pickLocalized(l.title, locale) || l.slug;
-  const description = pickLocalized(l.description, locale);
   const shareUrl = `${origin}/${locale}/immobilien/${l.slug}`;
 
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>
-      <article>
-        <section className="mx-auto max-w-[1400px] px-2 pt-6 sm:px-6 lg:px-10">
+      <article className="pb-40">
+        {/* 1. Gallery */}
+        <section className="mx-auto max-w-[1600px] px-2 pt-6 sm:px-4 lg:px-6">
           <ListingGallery images={l.images} locale={locale as Locale} title={title} />
         </section>
 
-        <section className="mx-auto max-w-[1400px] px-6 pt-20 lg:px-10">
-          <div className="grid grid-cols-1 gap-16 lg:grid-cols-3">
-            <div className="space-y-20 lg:col-span-2">
-              <ListingHero
-                listing={l}
-                locale={locale as Locale}
-                settings={settings}
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-10">
+          {/* 2. Facts bar */}
+          <section className="mt-16">
+            <ListingFactsBar
+              listing={l}
+              locale={locale as Locale}
+              settings={settings}
+            />
+          </section>
+
+          {/* 3. Headline + description */}
+          <section className="mt-24">
+            <ListingHeadline listing={l} locale={locale as Locale} />
+          </section>
+
+          {/* 4. Content sections */}
+          <section className="mt-32">
+            <ListingContentSections
+              sections={l.content_sections}
+              locale={locale as Locale}
+            />
+          </section>
+
+          {/* 5. Energy panel */}
+          <section className="mt-32">
+            <EnergyPanel energy={l.energy} propertyType={l.property_type} />
+          </section>
+
+          {/* 6. Map */}
+          <section className="mt-32">
+            <h2 className="font-heading text-3xl md:text-4xl">
+              {t("listings.detail.location")}
+            </h2>
+            <div className="mt-8">
+              <MapView
+                lat={l.geo_lat}
+                lng={l.geo_lng}
+                precision={l.geo_precision}
               />
-
-              {description ? (
-                <section>
-                  <h2 className="font-heading text-3xl md:text-4xl">
-                    {t("listings.detail.description")}
-                  </h2>
-                  <p className="mt-6 max-w-2xl whitespace-pre-line text-base leading-relaxed text-foreground/90">
-                    {description}
-                  </p>
-                </section>
-              ) : null}
-
-              <ListingFacts
-                listing={l}
-                locale={locale as Locale}
-                settings={settings}
-              />
-
-              {l.features && l.features.length > 0 ? (
-                <section>
-                  <h2 className="font-heading text-3xl md:text-4xl">
-                    {t("listings.detail.features")}
-                  </h2>
-                  <ul className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm text-foreground">
-                    {l.features.map((f) => (
-                      <li key={f} className="border-b border-border pb-1">
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              ) : null}
-
-              <section>
-                <h2 className="font-heading text-3xl md:text-4xl">
-                  {t("listings.detail.location")}
-                </h2>
-                <div className="mt-8">
-                  <MapView
-                    lat={l.geo_lat}
-                    lng={l.geo_lng}
-                    precision={l.geo_precision}
-                  />
-                </div>
-              </section>
-
-              <EnergyPanel energy={l.energy} propertyType={l.property_type} />
-
-              <section>
-                <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                  {t("listings.detail.share")}
-                </div>
-                <div className="mt-4">
-                  <ShareButtons url={shareUrl} title={title} />
-                </div>
-              </section>
             </div>
+          </section>
 
-            <aside className="lg:sticky lg:top-24 lg:h-fit">
-              <ListingInquiryForm listingId={l.id} />
-            </aside>
-          </div>
-        </section>
+          {/* 7. Agent + inquiry */}
+          <section className="mt-32">
+            <ListingAgent listingId={l.id} settings={settings} />
+          </section>
 
-        <div className="pb-32" />
+          {/* 8. Share */}
+          <section className="mt-24">
+            <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              {t("listings.detail.share")}
+            </div>
+            <div className="mt-4">
+              <ShareButtons url={shareUrl} title={title} />
+            </div>
+          </section>
+        </div>
       </article>
     </PublicChrome>
   );

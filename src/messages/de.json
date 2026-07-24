@@ -85,9 +85,16 @@
       "year_renovated": "Saniert",
       "condition": "Zustand",
       "heating": "Heizung",
-      "agent": "Ansprechpartner",
+      "floor": "Etage",
+      "agent": "Ihr Ansprechpartner",
       "share": "Teilen",
       "map_soon": "Kartenansicht wird in Kürze aktiviert.",
+      "sections": {
+        "highlights": "Highlights",
+        "property_info": "Objektdaten",
+        "building_info": "Gebäude & Technik",
+        "surroundings": "Lage und Umgebung"
+      },
       "unavailable_title": "Objekt nicht verfügbar",
       "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an."
     },

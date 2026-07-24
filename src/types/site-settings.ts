@@ -36,4 +36,7 @@ export interface SiteSettings {
   legal_impressum: Record<string, string>;
   legal_privacy: Record<string, string>;
   legal_terms: Record<string, string>;
+  primary_agent_name: string | null;
+  primary_agent_role: string | null;
+  primary_agent_photo_url: string | null;
 }

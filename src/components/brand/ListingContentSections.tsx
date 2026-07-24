@@ -1,0 +1,58 @@
+import { useTranslation } from "react-i18next";
+
+import type { Locale } from "@/i18n/config";
+
+type Section = {
+  key: string;
+  items?: Record<string, unknown> | null;
+};
+
+type Props = {
+  sections: unknown;
+  locale: Locale;
+};
+
+const KNOWN_KEYS = ["highlights", "property_info", "building_info", "surroundings"] as const;
+
+function pickItems(items: unknown, locale: string): string[] {
+  if (!items || typeof items !== "object") return [];
+  const obj = items as Record<string, unknown>;
+  const primary = obj[locale];
+  const fb = obj.de ?? obj.en ?? Object.values(obj)[0];
+  const chosen = Array.isArray(primary) ? primary : Array.isArray(fb) ? fb : [];
+  return chosen.filter((v): v is string => typeof v === "string" && v.trim().length > 0);
+}
+
+/**
+ * Structured content blocks (highlights, property info, building info, surroundings).
+ * Sections without items are skipped. Order comes from the DB.
+ */
+export function ListingContentSections({ sections, locale }: Props) {
+  const { t } = useTranslation();
+  if (!Array.isArray(sections)) return null;
+
+  const rendered = (sections as Section[])
+    .map((s) => ({ key: s.key, items: pickItems(s?.items, locale) }))
+    .filter((s) => KNOWN_KEYS.includes(s.key as (typeof KNOWN_KEYS)[number]) && s.items.length > 0);
+
+  if (rendered.length === 0) return null;
+
+  return (
+    <div className="space-y-24">
+      {rendered.map((s) => (
+        <section key={s.key}>
+          <h2 className="font-heading text-3xl md:text-4xl">
+            {t(`listings.detail.sections.${s.key}`)}
+          </h2>
+          <ul className="mt-8 max-w-3xl divide-y divide-border border-y border-border">
+            {s.items.map((item, i) => (
+              <li key={`${s.key}-${i}`} className="py-3 text-sm leading-relaxed text-foreground">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  );
+}
