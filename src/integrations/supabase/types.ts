@@ -38,6 +38,361 @@ export type Database = {
         }
         Relationships: []
       }
+      listing_documents: {
+        Row: {
+          created_at: string
+          filename: string
+          id: string
+          is_public: boolean
+          listing_id: string
+          requires_lead: boolean
+          storage_path: string
+          type: string | null
+        }
+        Insert: {
+          created_at?: string
+          filename: string
+          id?: string
+          is_public?: boolean
+          listing_id: string
+          requires_lead?: boolean
+          storage_path: string
+          type?: string | null
+        }
+        Update: {
+          created_at?: string
+          filename?: string
+          id?: string
+          is_public?: boolean
+          listing_id?: string
+          requires_lead?: boolean
+          storage_path?: string
+          type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_documents_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_documents_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listing_images: {
+        Row: {
+          alt_text: Json
+          blurhash: string | null
+          caption: Json
+          created_at: string
+          height: number | null
+          id: string
+          is_floorplan: boolean
+          is_primary: boolean
+          is_visualization: boolean
+          listing_id: string
+          sort_order: number
+          storage_path: string
+          variants: Json
+          width: number | null
+        }
+        Insert: {
+          alt_text?: Json
+          blurhash?: string | null
+          caption?: Json
+          created_at?: string
+          height?: number | null
+          id?: string
+          is_floorplan?: boolean
+          is_primary?: boolean
+          is_visualization?: boolean
+          listing_id: string
+          sort_order?: number
+          storage_path: string
+          variants?: Json
+          width?: number | null
+        }
+        Update: {
+          alt_text?: Json
+          blurhash?: string | null
+          caption?: Json
+          created_at?: string
+          height?: number | null
+          id?: string
+          is_floorplan?: boolean
+          is_primary?: boolean
+          is_visualization?: boolean
+          listing_id?: string
+          sort_order?: number
+          storage_path?: string
+          variants?: Json
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_images_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_images_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listing_tours: {
+        Row: {
+          created_at: string
+          id: string
+          listing_id: string
+          sort_order: number
+          thumbnail_url: string | null
+          type: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          listing_id: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          type?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          listing_id?: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          type?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_tours_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_tours_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings: {
+        Row: {
+          additional_costs: Json
+          address_city: string | null
+          address_country: string | null
+          address_number: string | null
+          address_region: string | null
+          address_street: string | null
+          address_zip: string | null
+          agent_id: string | null
+          archived_at: string | null
+          availability_date: string | null
+          bathrooms: number | null
+          bedrooms: number | null
+          commission_note: string | null
+          condition: string | null
+          created_at: string
+          created_by: string | null
+          deal_type: string
+          description: Json
+          energy: Json
+          expose_notes: Json
+          features: string[]
+          floor: number | null
+          geo_lat: number | null
+          geo_lng: number | null
+          geo_precision: string
+          heating_type: string | null
+          highlights: Json
+          id: string
+          inquiry_count: number
+          is_exclusive: boolean
+          is_featured: boolean
+          living_area: number | null
+          meta_description: Json
+          meta_title: Json
+          plot_area: number | null
+          price: number | null
+          price_on_request: boolean
+          price_period: string | null
+          property_type: string
+          published_at: string | null
+          reference_code: string | null
+          rooms: number | null
+          slug: string
+          sold_at: string | null
+          sold_price: number | null
+          sort_order: number
+          status: string
+          title: Json
+          total_floors: number | null
+          updated_at: string
+          updated_by: string | null
+          usable_area: number | null
+          view_count: number
+          year_built: number | null
+          year_renovated: number | null
+        }
+        Insert: {
+          additional_costs?: Json
+          address_city?: string | null
+          address_country?: string | null
+          address_number?: string | null
+          address_region?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          agent_id?: string | null
+          archived_at?: string | null
+          availability_date?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          commission_note?: string | null
+          condition?: string | null
+          created_at?: string
+          created_by?: string | null
+          deal_type: string
+          description?: Json
+          energy?: Json
+          expose_notes?: Json
+          features?: string[]
+          floor?: number | null
+          geo_lat?: number | null
+          geo_lng?: number | null
+          geo_precision?: string
+          heating_type?: string | null
+          highlights?: Json
+          id?: string
+          inquiry_count?: number
+          is_exclusive?: boolean
+          is_featured?: boolean
+          living_area?: number | null
+          meta_description?: Json
+          meta_title?: Json
+          plot_area?: number | null
+          price?: number | null
+          price_on_request?: boolean
+          price_period?: string | null
+          property_type: string
+          published_at?: string | null
+          reference_code?: string | null
+          rooms?: number | null
+          slug: string
+          sold_at?: string | null
+          sold_price?: number | null
+          sort_order?: number
+          status?: string
+          title?: Json
+          total_floors?: number | null
+          updated_at?: string
+          updated_by?: string | null
+          usable_area?: number | null
+          view_count?: number
+          year_built?: number | null
+          year_renovated?: number | null
+        }
+        Update: {
+          additional_costs?: Json
+          address_city?: string | null
+          address_country?: string | null
+          address_number?: string | null
+          address_region?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          agent_id?: string | null
+          archived_at?: string | null
+          availability_date?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          commission_note?: string | null
+          condition?: string | null
+          created_at?: string
+          created_by?: string | null
+          deal_type?: string
+          description?: Json
+          energy?: Json
+          expose_notes?: Json
+          features?: string[]
+          floor?: number | null
+          geo_lat?: number | null
+          geo_lng?: number | null
+          geo_precision?: string
+          heating_type?: string | null
+          highlights?: Json
+          id?: string
+          inquiry_count?: number
+          is_exclusive?: boolean
+          is_featured?: boolean
+          living_area?: number | null
+          meta_description?: Json
+          meta_title?: Json
+          plot_area?: number | null
+          price?: number | null
+          price_on_request?: boolean
+          price_period?: string | null
+          property_type?: string
+          published_at?: string | null
+          reference_code?: string | null
+          rooms?: number | null
+          slug?: string
+          sold_at?: string | null
+          sold_price?: number | null
+          sort_order?: number
+          status?: string
+          title?: Json
+          total_floors?: number | null
+          updated_at?: string
+          updated_by?: string | null
+          usable_area?: number | null
+          view_count?: number
+          year_built?: number | null
+          year_renovated?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listings_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listings_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       owner_only_permissions: {
         Row: {
           created_at: string
@@ -145,6 +500,24 @@ export type Database = {
           sort_order?: number
           specializations?: string[] | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      role_permissions: {
+        Row: {
+          granted: boolean
+          permission_key: string
+          role: string
+        }
+        Insert: {
+          granted: boolean
+          permission_key: string
+          role: string
+        }
+        Update: {
+          granted?: boolean
+          permission_key?: string
+          role?: string
         }
         Relationships: []
       }
@@ -305,13 +678,277 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      listing_documents_public: {
+        Row: {
+          created_at: string | null
+          filename: string | null
+          id: string | null
+          is_public: boolean | null
+          listing_id: string | null
+          requires_lead: boolean | null
+          storage_path: string | null
+          type: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_documents_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_documents_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listing_images_public: {
+        Row: {
+          alt_text: Json | null
+          blurhash: string | null
+          caption: Json | null
+          created_at: string | null
+          height: number | null
+          id: string | null
+          is_floorplan: boolean | null
+          is_primary: boolean | null
+          is_visualization: boolean | null
+          listing_id: string | null
+          sort_order: number | null
+          storage_path: string | null
+          variants: Json | null
+          width: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_images_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_images_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listing_tours_public: {
+        Row: {
+          created_at: string | null
+          id: string | null
+          listing_id: string | null
+          sort_order: number | null
+          thumbnail_url: string | null
+          type: string | null
+          url: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_tours_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_tours_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listings_public: {
+        Row: {
+          additional_costs: Json | null
+          address_city: string | null
+          address_country: string | null
+          address_number: string | null
+          address_region: string | null
+          address_street: string | null
+          address_zip: string | null
+          agent_id: string | null
+          archived_at: string | null
+          availability_date: string | null
+          bathrooms: number | null
+          bedrooms: number | null
+          commission_note: string | null
+          condition: string | null
+          created_at: string | null
+          deal_type: string | null
+          description: Json | null
+          energy: Json | null
+          features: string[] | null
+          floor: number | null
+          geo_lat: number | null
+          geo_lng: number | null
+          geo_precision: string | null
+          heating_type: string | null
+          highlights: Json | null
+          id: string | null
+          inquiry_count: number | null
+          is_exclusive: boolean | null
+          is_featured: boolean | null
+          living_area: number | null
+          meta_description: Json | null
+          meta_title: Json | null
+          plot_area: number | null
+          price: number | null
+          price_on_request: boolean | null
+          price_period: string | null
+          property_type: string | null
+          published_at: string | null
+          reference_code: string | null
+          rooms: number | null
+          slug: string | null
+          sold_at: string | null
+          sort_order: number | null
+          status: string | null
+          title: Json | null
+          total_floors: number | null
+          updated_at: string | null
+          usable_area: number | null
+          view_count: number | null
+          year_built: number | null
+          year_renovated: number | null
+        }
+        Insert: {
+          additional_costs?: Json | null
+          address_city?: string | null
+          address_country?: string | null
+          address_number?: string | null
+          address_region?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          agent_id?: string | null
+          archived_at?: string | null
+          availability_date?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          commission_note?: string | null
+          condition?: string | null
+          created_at?: string | null
+          deal_type?: string | null
+          description?: Json | null
+          energy?: Json | null
+          features?: string[] | null
+          floor?: number | null
+          geo_lat?: number | null
+          geo_lng?: number | null
+          geo_precision?: string | null
+          heating_type?: string | null
+          highlights?: Json | null
+          id?: string | null
+          inquiry_count?: number | null
+          is_exclusive?: boolean | null
+          is_featured?: boolean | null
+          living_area?: number | null
+          meta_description?: Json | null
+          meta_title?: Json | null
+          plot_area?: number | null
+          price?: number | null
+          price_on_request?: boolean | null
+          price_period?: string | null
+          property_type?: string | null
+          published_at?: string | null
+          reference_code?: string | null
+          rooms?: number | null
+          slug?: string | null
+          sold_at?: string | null
+          sort_order?: number | null
+          status?: string | null
+          title?: Json | null
+          total_floors?: number | null
+          updated_at?: string | null
+          usable_area?: number | null
+          view_count?: number | null
+          year_built?: number | null
+          year_renovated?: number | null
+        }
+        Update: {
+          additional_costs?: Json | null
+          address_city?: string | null
+          address_country?: string | null
+          address_number?: string | null
+          address_region?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          agent_id?: string | null
+          archived_at?: string | null
+          availability_date?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          commission_note?: string | null
+          condition?: string | null
+          created_at?: string | null
+          deal_type?: string | null
+          description?: Json | null
+          energy?: Json | null
+          features?: string[] | null
+          floor?: number | null
+          geo_lat?: number | null
+          geo_lng?: number | null
+          geo_precision?: string | null
+          heating_type?: string | null
+          highlights?: Json | null
+          id?: string | null
+          inquiry_count?: number | null
+          is_exclusive?: boolean | null
+          is_featured?: boolean | null
+          living_area?: number | null
+          meta_description?: Json | null
+          meta_title?: Json | null
+          plot_area?: number | null
+          price?: number | null
+          price_on_request?: boolean | null
+          price_period?: string | null
+          property_type?: string | null
+          published_at?: string | null
+          reference_code?: string | null
+          rooms?: number | null
+          slug?: string | null
+          sold_at?: string | null
+          sort_order?: number | null
+          status?: string | null
+          title?: Json | null
+          total_floors?: number | null
+          updated_at?: string | null
+          usable_area?: number | null
+          view_count?: number | null
+          year_built?: number | null
+          year_renovated?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listings_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       count_active_owners: { Args: never; Returns: number }
+      current_user_has_permission: { Args: { _key: string }; Returns: boolean }
       current_user_is_active: { Args: never; Returns: boolean }
       current_user_role: { Args: never; Returns: string }
       has_role: { Args: { _roles: string[] }; Returns: boolean }
+      slugify: { Args: { _input: string }; Returns: string }
+      validate_listing_energy: {
+        Args: { _country: string; _energy: Json; _property_type: string }
+        Returns: string[]
+      }
     }
     Enums: {
       [_ in never]: never

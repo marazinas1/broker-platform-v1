@@ -1,5 +1,8 @@
-// Permission matrix and pure hasPermission check.
-// Client-side checks hide UI only; every mutation must re-verify server-side.
+// Types and pure permission check. The role matrix itself lives in the
+// database (public.role_permissions) as the single source of truth. Server
+// code should prefer the SQL helper `current_user_has_permission(text)`;
+// client code loads the matrix via getPermissionMatrix and passes it to
+// hasPermission(), which stays pure and unit-testable.
 
 export type Role = "owner" | "admin" | "agent" | "assistant" | "viewer";
 
@@ -29,25 +32,7 @@ export type PermissionKey =
   | "analytics.view.own"
   | "analytics.view.any";
 
-// Rows transcribed from the spec matrix; T=allowed, F=denied unless overridden.
-export const PERMISSION_MATRIX: Record<PermissionKey, Record<Role, boolean>> = {
-  "listing.create":        { owner: true,  admin: true,  agent: true,  assistant: true,  viewer: false },
-  "listing.edit.own":      { owner: true,  admin: true,  agent: true,  assistant: true,  viewer: false },
-  "listing.edit.any":      { owner: true,  admin: true,  agent: false, assistant: false, viewer: false },
-  "listing.publish":       { owner: true,  admin: true,  agent: true,  assistant: false, viewer: false },
-  "listing.delete":        { owner: true,  admin: true,  agent: false, assistant: false, viewer: false },
-  "listing.status.change": { owner: true,  admin: true,  agent: true,  assistant: false, viewer: false },
-  "inquiry.view.own":      { owner: true,  admin: true,  agent: true,  assistant: true,  viewer: true  },
-  "inquiry.view.any":      { owner: true,  admin: true,  agent: false, assistant: true,  viewer: true  },
-  "inquiry.assign":        { owner: true,  admin: true,  agent: false, assistant: true,  viewer: false },
-  "user.invite":           { owner: true,  admin: true,  agent: false, assistant: false, viewer: false },
-  "user.manage":           { owner: true,  admin: true,  agent: false, assistant: false, viewer: false },
-  "settings.edit":         { owner: true,  admin: true,  agent: false, assistant: false, viewer: false },
-  "design.edit":           { owner: true,  admin: false, agent: false, assistant: false, viewer: false },
-  "content.edit":          { owner: true,  admin: true,  agent: false, assistant: true,  viewer: false },
-  "analytics.view.own":    { owner: true,  admin: true,  agent: true,  assistant: false, viewer: true  },
-  "analytics.view.any":    { owner: true,  admin: true,  agent: false, assistant: false, viewer: true  },
-};
+export type PermissionMatrix = Record<PermissionKey, Record<Role, boolean>>;
 
 export interface PermissionOverride {
   permission_key: string;
@@ -61,17 +46,20 @@ export interface PermissionProfile {
 
 /**
  * Pure permission check. Overrides win over the role matrix.
- * Inactive users fail every check.
+ * Inactive users fail every check. The matrix argument is loaded from the
+ * database — it is the single source of truth.
  */
 export function hasPermission(
   profile: PermissionProfile | null | undefined,
   overrides: readonly PermissionOverride[],
   key: PermissionKey,
+  matrix: PermissionMatrix | null | undefined,
 ): boolean {
   if (!profile || !profile.is_active) return false;
   const override = overrides.find((o) => o.permission_key === key);
   if (override) return override.granted;
-  return PERMISSION_MATRIX[key][profile.role] ?? false;
+  if (!matrix) return false;
+  return matrix[key]?.[profile.role] ?? false;
 }
 
 export function isRole(value: unknown): value is Role {

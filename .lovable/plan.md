@@ -1,165 +1,108 @@
+## Phase 1, Step 1 — Listings data model (DB only) — revised
 
-# User Management & Permission System (revised)
+Database-only. One migration + supporting TypeScript in `/lib/validation/` and `/lib/auth/`.
 
-Foundation-only step: database schema, RLS, signup trigger, permission matrix, server loader, and client hook. No admin pages, no invitation UI.
+### 1. Migration: tables
 
-## 1. Database migration
+Create in `public`, each followed by `GRANT`, `ENABLE RLS`, then policies:
 
-Single migration; three tables, helpers, triggers, RLS. Explicit GRANTs on every `public` table.
+- `listings` — all spec columns, inline `check`s, `agent_id/created_by/updated_by → profiles(id) ON DELETE SET NULL`, `updated_at` via existing `tg_set_updated_at`.
+- `listing_images`, `listing_documents`, `listing_tours` — as specced, `ON DELETE CASCADE`.
 
-### 1.1 `public.profiles`
+Base-table grants: `SELECT, INSERT, UPDATE, DELETE` to `authenticated`; `ALL` to `service_role`. **No `anon` grant on base tables** — public reads go through views (§4).
 
-Columns per spec. `id uuid primary key references auth.users(id) on delete cascade`. `role` CHECK constrained to the five roles. `updated_at` via existing `public.tg_set_updated_at()` trigger.
+### 2. Indexes
 
-Grants: `SELECT, INSERT, UPDATE, DELETE` → `authenticated`; `SELECT` → `anon` (public team via `show_on_website = true`); `ALL` → `service_role`.
+`listings`: btree on `status`, `deal_type`, `property_type`, `address_city`, `price`, `published_at DESC`, `agent_id`; GIN on `features`. Btree on `listing_images(listing_id, sort_order)`, `listing_documents(listing_id)`, `listing_tours(listing_id, sort_order)`.
 
-### 1.2 `public.permissions`
+### 3. Functions and triggers
 
-Per-user overrides. `unique (profile_id, permission_key)`. Auth-only: `authenticated` + `service_role`; no `anon`.
+- `slugify(text)` — lowercase, translit `äöüß/áé…`, non-alphanum → `-`, collapse.
+- `listings_generate_slug()` BEFORE INSERT — build `{property_type}-{city}-{rooms}-zimmer-{hex4}`, LOOP with unique-violation retry (max 5). Never re-generate on UPDATE.
+- `validate_listing_energy(country, energy, property_type) → text[]`:
+  - `property_type IN ('land','garage')` → `'{}'`.
+  - `AT`: require `hwb` numeric, `eeb` numeric, `efficiency_class` ∈ (A++,A+,A,B,C,D,E,F,G).
+  - `DE`: require `certificate_type` ∈ (Bedarfsausweis|Verbrauchsausweis), `final_energy` numeric, `energy_source` text, `efficiency_class` ∈ (A+..H), `year_built` int.
+  - `CH,IS,US` → `'{}'` (extensible).
+- `listings_validate_energy_on_publish()` BEFORE INSERT/UPDATE — when target status ∈ (`active`,`coming_soon`) and (INSERT or status changed):
+  - Read `country` from `site_settings LIMIT 1`. **If NULL/no row → `RAISE EXCEPTION 'Site country is not configured; set site_settings.country before publishing listings'`** (correction #3).
+  - Run validator; raise with the missing/invalid field names if non-empty.
+- `listings_enforce_status_flow()` BEFORE UPDATE — allowed transitions per spec, else raise. Side-effects: → `active` sets `published_at = COALESCE(published_at, now())`; → `sold`/`rented` sets `sold_at = now()`; → `archived` sets `archived_at = now()`.
+- `listings_enforce_publish_permission()` BEFORE INSERT/UPDATE — if target status ∈ (`active`,`coming_soon`) and (INSERT or status changed), require `listing.publish`; if target ∈ (`sold`,`rented`) and status changed, require `listing.status.change`. Raises readable errors (per approved trigger approach).
+- `listings_set_actor()` BEFORE INSERT/UPDATE — set `created_by`/`updated_by` from `auth.uid()`.
 
-### 1.3 `public.user_invitations`
+### 4. Public views (correction #1)
 
-Per spec. Auth-only: `authenticated` + `service_role`; no `anon`.
+Single explicit public surface. Base tables have **no anon read policy**.
 
-### 1.4 Security-definer helpers (avoid RLS recursion)
+- `CREATE VIEW listings_public WITH (security_invoker = true) AS SELECT <all cols except sold_price> FROM listings WHERE status IN ('active','coming_soon','reserved','sold','rented');`
+- `CREATE VIEW listing_images_public WITH (security_invoker = true) AS SELECT i.* FROM listing_images i JOIN listings_public p ON p.id = i.listing_id;`
+- `CREATE VIEW listing_documents_public WITH (security_invoker = true) AS SELECT d.* FROM listing_documents d JOIN listings_public p ON p.id = d.listing_id WHERE d.is_public = true;`
+- `CREATE VIEW listing_tours_public WITH (security_invoker = true) AS SELECT t.* FROM listing_tours t JOIN listings_public p ON p.id = t.listing_id;`
+- `GRANT SELECT` on all four views to `anon` and `authenticated`.
+- Because views are `security_invoker`, they run under the caller's role and need a matching policy on the base table. Add a `TO anon` SELECT policy on each base table with the same predicate as the view (statuses list; `is_public = true` for documents) so the view actually returns rows for anonymous callers. This policy is only reachable via the view (base tables have no anon grant), keeping the public surface one-place-defined.
 
-All `security definer`, `set search_path = public`, `stable`, `EXECUTE` to `authenticated`:
+### 5. Role matrix — single source of truth in DB (correction #2)
 
-- `current_user_role() returns text` — reads `profiles.role` for `auth.uid()`.
-- `current_user_is_active() returns boolean`.
-- `has_role(_roles text[]) returns boolean` — role in `_roles` AND active.
-- `count_active_owners() returns int` — used by last-owner guard trigger.
+Chosen approach: **runtime load + cache on both server and client.** No codegen file to keep in sync.
 
-`security definer` bypasses RLS on inner reads → no recursion when used in `profiles` policies.
+- Table `role_permissions(role text, permission_key text, granted boolean, primary key(role, permission_key))`. Grants `SELECT` to `anon, authenticated`; `ALL` to `service_role`. Enable RLS; policy: `TO anon, authenticated USING (true)` (matrix is not sensitive; hiding it would break the client hook and the seed test).
+- Seed all 16 keys × 5 roles in the same migration (this is authoritative going forward; the TS constant is deleted).
+- Helper `current_user_has_permission(_key text) → boolean` SECURITY DEFINER: inactive → false; else `permissions` override wins; else look up `role_permissions` for caller's role.
+- TypeScript changes in `src/lib/auth/permissions.ts`:
+  - Delete the hand-written `PERMISSION_MATRIX` constant.
+  - Keep `Role`, `ROLES`, `PermissionKey` union, `PermissionOverride`, `PermissionProfile` types.
+  - Add `type PermissionMatrix = Record<PermissionKey, Record<Role, boolean>>`.
+  - `hasPermission(profile, overrides, key, matrix)` becomes **pure with matrix as an argument** (stays unit-testable, no I/O).
+- New `src/lib/auth/permission-matrix.functions.ts`: `getPermissionMatrix` server fn that selects from `role_permissions` and returns the shaped matrix. `queryOptions` with generous `staleTime` (matrix rarely changes).
+- Update `src/lib/auth/use-permission.ts` and the server assertions in `require-permission.server.ts` to load the matrix via that query / server fn and pass it to `hasPermission`. Server-side `assertPermission` can also call `current_user_has_permission(_key)` directly instead of re-implementing the check in TS — pick that path where possible (single round-trip, DB is the arbiter). The TS `hasPermission` remains for client-side UI hiding.
+- The route `/$locale/admin` loader preloads `getPermissionMatrix` so the admin shell has it synchronously.
 
-### 1.5 Signup trigger
+### 6. RLS policies
 
-`public.handle_new_user()` (`security definer`, `search_path = public`) `AFTER INSERT ON auth.users`:
+**listings** (no anon SELECT):
+- `SELECT` authenticated: `current_user_has_permission('listing.edit.any')` OR (`current_user_has_permission('listing.edit.own')` AND (`agent_id = auth.uid()` OR `created_by = auth.uid()`)) OR the row is publicly visible (status list). This lets signed-in staff see drafts they own plus everything public without leaking others' drafts.
+- `INSERT`: `current_user_has_permission('listing.create')`. Publish/status-change permission is enforced by the trigger (readable errors).
+- `UPDATE` USING/WITH CHECK: `listing.edit.any` OR (`listing.edit.own` AND owner match).
+- `DELETE`: `current_user_has_permission('listing.delete')`.
 
-1. Find unaccepted, unexpired `user_invitations` for `NEW.email`.
-2. If found → use its `role`, set `accepted_at = now()`.
-3. Else → `'viewer'`.
-4. `INSERT INTO public.profiles (id, email, role) ...`.
+**listing_images / listing_documents / listing_tours** base tables:
+- Anon SELECT policy scoped to public-view predicate (see §4). No anon grant on the table, so only reachable through the view.
+- Authenticated SELECT: parent listing is readable by caller (mirrors listings SELECT).
+- INSERT/UPDATE/DELETE: caller can UPDATE the parent (same predicate).
 
-### 1.6 Role / is_active integrity trigger — revised
+**Base `listings`** gets no anon SELECT policy or grant; `listings_public` is the only public read path.
 
-`public.profiles_enforce_role_integrity()` `BEFORE UPDATE ON public.profiles`. Ordered rules; only trigger meaningfully when `NEW.role IS DISTINCT FROM OLD.role` or `NEW.is_active IS DISTINCT FROM OLD.is_active`.
+### 7. TypeScript
 
-Rules:
+- New `src/lib/validation/energy.ts` (under 200 lines): `EFFICIENCY_CLASS_AT`, `EFFICIENCY_CLASS_DE` tuples; `energySchemas: Record<Country, ZodSchema>` (AT/DE strict, CH/IS/US passthrough); `validateEnergy(country, energy, propertyType) → { missing: string[] }` matching DB output.
+- `src/lib/validation/energy-cert.ts` becomes a thin re-export from `energy.ts`.
+- `src/lib/auth/permissions.ts` — remove `PERMISSION_MATRIX`, refactor `hasPermission` to accept `matrix` argument.
+- `src/lib/auth/permission-matrix.functions.ts` — new server fn + query options.
+- `src/lib/auth/use-permission.ts` and `require-permission.server.ts` — update call sites to use the DB-loaded matrix or `current_user_has_permission` directly on the server.
 
-1. **Only owner may set role='owner'** — evaluated regardless of whose row is being updated. If `NEW.role = 'owner' AND OLD.role <> 'owner'` and `current_user_role() <> 'owner'` → raise.
-2. **Only owner may clear role='owner'** — symmetric: if `OLD.role = 'owner' AND NEW.role <> 'owner'` and `current_user_role() <> 'owner'` → raise. (Prevents admin from demoting owners.)
-3. **Non-owner self-modification blocked** — if `auth.uid() = OLD.id` AND `current_user_role() <> 'owner'` AND (role or is_active changed) → raise.
-4. **Owner self-modification allowed with last-owner guard** — if `auth.uid() = OLD.id` AND `current_user_role() = 'owner'`: allow the change; last-owner guard (§1.7) enforces at least one active owner remains.
+### 8. Types
 
-RLS policies still gate whether the UPDATE reaches the row at all; this trigger enforces the invariants that policies can't express cleanly.
+Regenerate automatically after migration. No manual edit to `types.ts`.
 
-### 1.7 Last-owner guard trigger
+### 9. Verification (post-migration, before closing the step)
 
-`public.profiles_protect_last_owner()`:
+1. AT house draft, empty energy, → `active` → raises naming `hwb, eeb, efficiency_class`.
+2. Land listing → `active` with empty energy → succeeds.
+3. `site_settings` empty → publish attempt → raises "Site country is not configured".
+4. Invalid status transition (`draft → sold`) → raises.
+5. Two agent profiles: B cannot UPDATE A's row.
+6. Assistant cannot publish (trigger error surfaces `listing.publish` requirement).
+7. Anonymous `SELECT sold_price FROM listings_public` → column does not exist; `SELECT * FROM listings` as anon → permission denied.
+8. `SELECT role, permission_key, granted FROM role_permissions ORDER BY 1,2` — captured; used as truth for the client hook.
 
-- `BEFORE UPDATE ON public.profiles`: if `OLD.role = 'owner' AND OLD.is_active = true` AND (`NEW.role <> 'owner'` OR `NEW.is_active = false`) AND `count_active_owners() <= 1` → raise `'Cannot demote or deactivate the last active owner'`.
-- `BEFORE DELETE ON public.profiles`: if `OLD.role = 'owner' AND OLD.is_active = true AND count_active_owners() <= 1` → raise `'Cannot delete the last active owner'`.
+### Out of scope this step
 
-Runs after the integrity trigger.
+Admin listing UI, public listing pages, storage buckets, image upload, PDF expose, CI parity test (unnecessary — DB is now sole source of truth).
 
-### 1.8 RLS policies
+### Technical notes
 
-**profiles** (RLS on):
-- `SELECT` to `anon, authenticated` USING `show_on_website = true`.
-- `SELECT` to `authenticated` USING `true`.
-- `UPDATE` to `authenticated` USING `id = auth.uid()` WITH CHECK `id = auth.uid()` — own row; triggers enforce role/is_active invariants.
-- `UPDATE` to `authenticated` USING `has_role(ARRAY['owner','admin'])` WITH CHECK `has_role(ARRAY['owner','admin'])` — manage others; triggers restrict owner-role changes to owners only.
-- `DELETE` to `authenticated` USING `has_role(ARRAY['owner','admin'])`; last-owner guard blocks the destructive case.
-- No `INSERT` policy — profiles come from the signup trigger only.
-
-**permissions**:
-- `SELECT` USING `profile_id = auth.uid() OR has_role(ARRAY['owner','admin'])`.
-- `INSERT/UPDATE/DELETE` USING/CHECK `has_role(ARRAY['owner','admin'])`.
-
-**user_invitations**:
-- `SELECT/INSERT/DELETE` USING/CHECK `has_role(ARRAY['owner','admin'])`. No `anon`.
-
-## 2. Permission matrix — `src/lib/auth/permissions.ts`
-
-Typed `Role` and `PermissionKey` unions. `PERMISSION_MATRIX: Record<PermissionKey, Record<Role, boolean>>` transcribed exactly from the spec.
-
-```ts
-export function hasPermission(
-  profile: { role: Role; is_active: boolean } | null | undefined,
-  overrides: Array<{ permission_key: string; granted: boolean }>,
-  key: PermissionKey,
-): boolean {
-  if (!profile || !profile.is_active) return false;
-  const o = overrides.find(x => x.permission_key === key);
-  if (o) return o.granted;
-  return PERMISSION_MATRIX[key][profile.role] ?? false;
-}
-```
-
-Pure, no I/O.
-
-## 3. Server loader — `src/lib/auth/current-user.functions.ts`
-
-`getCurrentUserWithPermissions` — `createServerFn({ method: 'GET' }).middleware([requireSupabaseAuth]).handler(...)`:
-- Uses `context.supabase` (RLS as user).
-- Loads `profiles` row for `context.userId` + all `permissions` rows for that profile.
-- Returns `{ profile, overrides } | null`.
-
-Exports `currentUserQueryOptions` (`queryKey: ['current-user']`, `staleTime: 60_000`).
-
-## 4. Root loader — session-gated preload
-
-Public routes must not issue an authenticated RPC for anonymous visitors.
-
-- New `.server.ts` helper `hasSupabaseSessionCookie()` inspects the incoming request via `getRequest()` and returns true iff a Supabase auth cookie is present (matches `sb-*-auth-token` — the same pattern the auth cookies use). Server-only, no DB call.
-- New `getCurrentUserIfSignedIn` server function (no auth middleware): calls the helper; if no cookie → returns `null` immediately; if cookie → dynamically imports and delegates to `getCurrentUserWithPermissions` (which runs the auth middleware). This keeps `requireSupabaseAuth` off the anonymous fast path entirely.
-- `currentUserQueryOptions.queryFn` calls `getCurrentUserIfSignedIn`; on any thrown auth error → return `null` (defensive).
-- `src/routes/__root.tsx` loader adds `ensureQueryData(currentUserQueryOptions)` in the existing `Promise.all`.
-
-Note: the bearer token attached client-side by `attachSupabaseAuth` covers the authenticated case; the cookie check is strictly a server-side "is there any session at all" gate for SSR.
-
-## 5. Client hook — `src/lib/auth/use-permission.ts`
-
-```ts
-export function usePermission(key: PermissionKey): boolean {
-  const { data } = useSuspenseQuery(currentUserQueryOptions);
-  return hasPermission(data?.profile, data?.overrides ?? [], key);
-}
-export function useCurrentUser() { /* returns { profile, overrides } | null */ }
-```
-
-File header comment: client checks hide UI only; server functions must independently verify.
-
-## 6. Server-side check helper — `src/lib/auth/require-permission.server.ts`
-
-`assertPermission(supabase, userId, key)` — loads profile + overrides via the RLS-scoped client, throws `Response('Forbidden', { status: 403 })` when `hasPermission` is false. Pattern for future protected mutations.
-
-## 7. File layout
-
-```
-src/lib/auth/
-  permissions.ts                # matrix + hasPermission (pure)
-  current-user.functions.ts     # protected + session-gated server fns + queryOptions
-  session-cookie.server.ts      # cookie presence check
-  use-permission.ts             # client hooks
-  require-permission.server.ts  # server-side assert
-```
-
-All ≤200 lines. No UI strings introduced.
-
-## 8. Verification checklist
-
-1. `hasPermission({role:'assistant',is_active:true}, [], 'listing.publish') === false`.
-2. Non-owner signed-in user issuing `UPDATE profiles SET role='admin' WHERE id = auth.uid()` → integrity trigger raises.
-3. `hasPermission({role:'owner',is_active:false}, [], 'settings.edit') === false`.
-4. Insert `user_invitations(email='x@y.z', role='agent', …)`, sign that user up → `profiles.role='agent'`, invitation `accepted_at` set. Signup with no invitation → role `viewer`.
-5. Regular signed-in user `SELECT * FROM profiles` succeeds (no recursion).
-6. Non-admin `SELECT` on `permissions` returns only own rows; on `user_invitations` returns none.
-7. **Last-owner guard**: with exactly one active owner, `UPDATE profiles SET role='admin' WHERE id = <that owner>` and `UPDATE ... SET is_active=false` and `DELETE FROM profiles WHERE id = <that owner>` all raise. With ≥2 active owners, the same owner may demote or deactivate self.
-8. Admin attempting `UPDATE profiles SET role='owner' WHERE id = <other>` or `UPDATE ... SET role='admin' WHERE OLD.role='owner'` → integrity trigger raises.
-9. Anonymous request to `/de` issues zero authenticated Supabase requests server-side (verify by inspecting the server-fn call chain: `getCurrentUserIfSignedIn` short-circuits when no `sb-*-auth-token` cookie is present).
-
-## Out of scope
-
-Invitation acceptance flow, admin management UI, and applying `assertPermission` to feature server functions (done per-feature later).
+- Views are `security_invoker = true` so RLS still applies as the caller — the split "no anon grant on base table; anon policy only reached via view" gives one explicit public surface.
+- Triggers reading `site_settings` / `role_permissions` are `SECURITY DEFINER SET search_path = public`.
+- `check` constraints only on immutable scalars; time-dependent rules live in triggers (per template rules).
+- The `listings.agent_id` FK uses `ON DELETE SET NULL` so deleting a profile does not cascade-delete listings.
