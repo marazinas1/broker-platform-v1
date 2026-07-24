@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
