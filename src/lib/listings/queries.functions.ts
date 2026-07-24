@@ -99,7 +99,10 @@ export const listPublicListings = createServerFn({ method: "GET" })
     if (data.price_min > 0) query = query.gte("price", data.price_min);
     if (data.price_max > 0) query = query.lte("price", data.price_max);
     if (data.area_min > 0) query = query.gte("living_area", data.area_min);
-    if (data.featured) query = query.eq("is_featured", true);
+    // A `featured` request also surfaces coming-soon listings, so a
+    // pre-market property never disappears just because it isn't flagged
+    // is_featured yet — those are the strongest listings a broker has.
+    if (data.featured) query = query.or("is_featured.eq.true,status.eq.coming_soon");
 
     switch (data.sort) {
       case "price_asc":
