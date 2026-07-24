@@ -22,7 +22,10 @@
   "nav": {
     "listings": "Properties",
     "sold": "Sold",
-    "about": "About",
+    "valuation": "Valuation",
+    "selling": "Selling",
+    "about_solo": "About me",
+    "about_team": "About us",
     "contact": "Contact",
     "admin": "Admin",
     "menu": "Menu"
