@@ -63,7 +63,7 @@ function HomePage() {
   const sections = settings.homepage_sections ?? [];
   const l = locale as Locale;
 
-  const renderers: Record<string, () => React.ReactNode> = {
+  const renderers: Record<string, () => ReactNode> = {
     hero: () => <Hero locale={l} featured={featured.items} />,
     categories: () => <CategoryGrid locale={l} counts={counts} />,
     featured: () => (
