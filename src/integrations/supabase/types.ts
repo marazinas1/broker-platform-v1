@@ -38,6 +38,57 @@ export type Database = {
         }
         Relationships: []
       }
+      inquiries: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          listing_id: string
+          locale: string | null
+          message: string | null
+          name: string | null
+          phone: string | null
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          listing_id: string
+          locale?: string | null
+          message?: string | null
+          name?: string | null
+          phone?: string | null
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          listing_id?: string
+          locale?: string | null
+          message?: string | null
+          name?: string | null
+          phone?: string | null
+          source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inquiries_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inquiries_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       listing_documents: {
         Row: {
           created_at: string
@@ -91,6 +142,7 @@ export type Database = {
           alt_text: Json
           blurhash: string | null
           caption: Json
+          content_type: string | null
           created_at: string
           height: number | null
           id: string
@@ -98,6 +150,10 @@ export type Database = {
           is_primary: boolean
           is_visualization: boolean
           listing_id: string
+          original_size_bytes: number | null
+          original_storage_path: string | null
+          processing_error: string | null
+          processing_status: string
           sort_order: number
           storage_path: string
           variants: Json
@@ -107,6 +163,7 @@ export type Database = {
           alt_text?: Json
           blurhash?: string | null
           caption?: Json
+          content_type?: string | null
           created_at?: string
           height?: number | null
           id?: string
@@ -114,6 +171,10 @@ export type Database = {
           is_primary?: boolean
           is_visualization?: boolean
           listing_id: string
+          original_size_bytes?: number | null
+          original_storage_path?: string | null
+          processing_error?: string | null
+          processing_status?: string
           sort_order?: number
           storage_path: string
           variants?: Json
@@ -123,6 +184,7 @@ export type Database = {
           alt_text?: Json
           blurhash?: string | null
           caption?: Json
+          content_type?: string | null
           created_at?: string
           height?: number | null
           id?: string
@@ -130,6 +192,10 @@ export type Database = {
           is_primary?: boolean
           is_visualization?: boolean
           listing_id?: string
+          original_size_bytes?: number | null
+          original_storage_path?: string | null
+          processing_error?: string | null
+          processing_status?: string
           sort_order?: number
           storage_path?: string
           variants?: Json
@@ -939,6 +1005,11 @@ export type Database = {
       current_user_role: { Args: never; Returns: string }
       has_role: { Args: { _roles: string[] }; Returns: boolean }
       slugify: { Args: { _input: string }; Returns: string }
+      storage_can_edit_listing_object: {
+        Args: { _bucket: string; _name: string }
+        Returns: boolean
+      }
+      storage_listing_id_from_path: { Args: { _name: string }; Returns: string }
       validate_listing_energy: {
         Args: { _country: string; _energy: Json; _property_type: string }
         Returns: string[]
