@@ -1,6 +1,7 @@
 import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
 
 import { verifyAdminAccess } from "@/lib/auth/admin-gate.functions";
+import { permissionMatrixQueryOptions } from "@/lib/auth/permission-matrix.functions";
 import { AdminShell } from "@/components/admin/AdminShell";
 
 export const Route = createFileRoute("/$locale/admin")({
@@ -19,6 +20,11 @@ export const Route = createFileRoute("/$locale/admin")({
       });
     }
     return { adminProfile: profile };
+  },
+  loader: async ({ context }) => {
+    // Preload the authoritative role matrix so the admin shell can resolve
+    // permissions synchronously via useSuspenseQuery.
+    await context.queryClient.ensureQueryData(permissionMatrixQueryOptions);
   },
   component: AdminLayout,
 });
