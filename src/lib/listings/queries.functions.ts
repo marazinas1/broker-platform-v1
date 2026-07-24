@@ -46,8 +46,13 @@ export type PublicListing = {
   geo_precision: string | null;
   energy: any;
   features: string[] | null;
+  content_sections: any;
+  highlights: any;
+  floor: number | null;
+  total_floors: number | null;
   title: any;
   description: any;
+  agent_id: string | null;
   sold_at: string | null;
   published_at: string | null;
   images: ImageRow[];
