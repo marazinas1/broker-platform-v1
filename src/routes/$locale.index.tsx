@@ -11,6 +11,7 @@ import { AreaLinks } from "@/components/brand/AreaLinks";
 import { AboutBroker } from "@/components/brand/AboutBroker";
 import { CredibilityBar } from "@/components/brand/CredibilityBar";
 import { ContactSection } from "@/components/brand/ContactSection";
+import { TeamSection } from "@/components/brand/TeamSection";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
@@ -19,6 +20,8 @@ import {
   recentSoldQueryOptions,
 } from "@/lib/listings/queries.functions";
 import { propertyTypeCountsQueryOptions } from "@/lib/listings/counts.functions";
+import { publicTeamQueryOptions } from "@/lib/team/queries.functions";
+import { featureFlagsQueryOptions } from "@/lib/config/feature-flags.functions";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 import { buildHead } from "@/lib/seo/build-head";
 
