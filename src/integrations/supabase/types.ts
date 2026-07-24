@@ -613,6 +613,7 @@ export type Database = {
           contact_email: string | null
           contact_phone: string | null
           country: string
+          credibility_stats: Json
           currency: string
           default_locale: string
           enabled_locales: string[]
@@ -623,6 +624,7 @@ export type Database = {
           geo_lng: number | null
           google_analytics_id: string | null
           google_site_verification: string | null
+          homepage_sections: Json
           id: string
           legal_impressum: Json
           legal_name: string | null
@@ -653,6 +655,7 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           country: string
+          credibility_stats?: Json
           currency?: string
           default_locale?: string
           enabled_locales?: string[]
@@ -663,6 +666,7 @@ export type Database = {
           geo_lng?: number | null
           google_analytics_id?: string | null
           google_site_verification?: string | null
+          homepage_sections?: Json
           id?: string
           legal_impressum?: Json
           legal_name?: string | null
@@ -693,6 +697,7 @@ export type Database = {
           contact_email?: string | null
           contact_phone?: string | null
           country?: string
+          credibility_stats?: Json
           currency?: string
           default_locale?: string
           enabled_locales?: string[]
@@ -703,6 +708,7 @@ export type Database = {
           geo_lng?: number | null
           google_analytics_id?: string | null
           google_site_verification?: string | null
+          homepage_sections?: Json
           id?: string
           legal_impressum?: Json
           legal_name?: string | null
