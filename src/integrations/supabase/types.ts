@@ -789,7 +789,6 @@ export type Database = {
           deal_type: string | null
           description: Json | null
           energy: Json | null
-          expose_notes: Json | null
           features: string[] | null
           floor: number | null
           geo_lat: number | null
@@ -840,7 +839,6 @@ export type Database = {
           deal_type?: string | null
           description?: Json | null
           energy?: Json | null
-          expose_notes?: Json | null
           features?: string[] | null
           floor?: number | null
           geo_lat?: never
@@ -891,7 +889,6 @@ export type Database = {
           deal_type?: string | null
           description?: Json | null
           energy?: Json | null
-          expose_notes?: Json | null
           features?: string[] | null
           floor?: number | null
           geo_lat?: never
