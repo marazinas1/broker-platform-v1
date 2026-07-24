@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import type { SiteSettings } from "@/types/site-settings";
 
 import { BuyerInquiryForm } from "./BuyerInquiryForm";
@@ -15,9 +16,12 @@ type Tab = "buyer" | "seller";
 /**
  * Homepage contact section — two lead paths (buyer / seller) plus the
  * broker's direct contact details. Never a single generic "contact us" form.
+ * Headline switches between solo and team wording based on the `team`
+ * feature flag so an agency still reads correctly.
  */
 export function ContactSection({ settings }: Props) {
   const { t } = useTranslation();
+  const teamEnabled = useFeatureFlag("team");
   const [tab, setTab] = useState<Tab>("buyer");
 
   return (
@@ -28,7 +32,7 @@ export function ContactSection({ settings }: Props) {
             {t("home.contact")}
           </div>
           <h2 className="mt-6 font-heading text-4xl leading-[1.05] md:text-5xl">
-            {t("home.contact_headline")}
+            {t(teamEnabled ? "home.contact_headline" : "home.contact_headline_solo")}
           </h2>
 
           <div className="mt-10 space-y-2 text-base text-foreground">
