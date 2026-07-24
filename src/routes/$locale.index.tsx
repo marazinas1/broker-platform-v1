@@ -33,6 +33,8 @@ export const Route = createFileRoute("/$locale/")({
       context.queryClient.ensureQueryData(featuredListingsQueryOptions),
       context.queryClient.ensureQueryData(recentSoldQueryOptions),
       context.queryClient.ensureQueryData(propertyTypeCountsQueryOptions),
+      context.queryClient.ensureQueryData(publicTeamQueryOptions),
+      context.queryClient.ensureQueryData(featureFlagsQueryOptions),
     ]);
     return { settings, origin, locale: params.locale as Locale };
   },
