@@ -208,7 +208,7 @@ export const featuredListingsQueryOptions = queryOptions({
         page: 1,
         onlyStatus: [...PublicSaleStatuses],
         featured: true,
-        limit: 4,
+        limit: 6,
       },
     } as any),
   staleTime: 30_000,
