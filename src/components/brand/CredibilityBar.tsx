@@ -1,26 +1,35 @@
 import { useTranslation } from "react-i18next";
 
 import type { Locale } from "@/i18n/config";
-import type { CredibilityStat } from "@/types/site-settings";
+import type { CredibilityStat, SiteSettings } from "@/types/site-settings";
 
 type Props = {
   locale: Locale;
   stats: CredibilityStat[];
+  settings: SiteSettings;
 };
 
 /**
  * A row of large numerals with small labels beneath. Values come from
  * site_settings.credibility_stats so each client can state their own numbers.
+ * The section kicker/heading is drawn from site_settings.credibility_heading
+ * (localized) so it never inherits another client's brand name.
  */
-export function CredibilityBar({ locale, stats }: Props) {
+export function CredibilityBar({ locale, stats, settings }: Props) {
   const { t } = useTranslation();
   if (!stats || stats.length === 0) return null;
+
+  const heading =
+    settings.credibility_heading?.[locale] ??
+    settings.credibility_heading?.[settings.default_locale] ??
+    Object.values(settings.credibility_heading ?? {})[0] ??
+    t("home.credibility_kicker", { defaultValue: `Warum ${settings.site_name}` });
 
   return (
     <section className="mx-auto mt-40 max-w-[1400px] px-6 lg:px-10">
       <div className="mb-14 max-w-2xl">
         <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-          {t("home.credibility_kicker", { defaultValue: "Warum Rheinberger" })}
+          {heading}
         </div>
       </div>
 
