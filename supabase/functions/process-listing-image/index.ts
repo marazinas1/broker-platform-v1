@@ -1,0 +1,149 @@
+// Supabase Edge Function: process-listing-image
+// Trigger: invoked by src/lib/listings/media.functions.ts#enqueueImageProcessing
+// after the client has uploaded the original into the `listing-documents`
+// bucket. Runs asynchronously via EdgeRuntime.waitUntil so the caller sees
+// an immediate 202 while the pixel work continues in the background.
+//
+// Guarantees:
+//   - EXIF (including GPS) is never written to any output: we decode to raw
+//     RGBA, rotate per Orientation tag, then re-encode.
+//   - No upscaling: variants smaller than the target width use the original
+//     dimensions.
+//   - Failures are recorded on the DB row (processing_status='failed',
+//     processing_error) so the UI never sees a silent half-finished state.
+import { createClient } from "npm:@supabase/supabase-js@2.57.4";
+import {
+  applyOrientation,
+  computeBlurhash,
+  coverCrop,
+  decodeImage,
+  readOrientation,
+  resizeMax,
+  toAvif,
+  toWebp,
+  type PixelBuffer,
+} from "./pipeline.ts";
+
+// Path helpers duplicated from src/lib/listings/media-paths.ts. Keep in sync.
+const IMAGES_BUCKET = "listing-images";
+const DOCUMENTS_BUCKET = "listing-documents";
+type Variant = "thumb" | "medium" | "large" | "og";
+type Fmt = "avif" | "webp";
+const SPECS: { key: Variant; width: number; height?: number; crop?: "center" }[] = [
+  { key: "thumb", width: 400 },
+  { key: "medium", width: 1200 },
+  { key: "large", width: 2400 },
+  { key: "og", width: 1200, height: 630, crop: "center" },
+];
+const FORMATS: Fmt[] = ["avif", "webp"];
+const variantPath = (l: string, i: string, v: Variant, f: Fmt) =>
+  `listings/${l}/${i}/${v}.${f}`;
+
+interface Payload {
+  listingId: string;
+  imageId: string;
+  originalStoragePath: string;
+  contentType: string;
+}
+
+const admin = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  { auth: { persistSession: false } },
+);
+
+Deno.serve(async (req) => {
+  if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
+
+  let payload: Payload;
+  try {
+    payload = (await req.json()) as Payload;
+  } catch {
+    return new Response("Invalid JSON", { status: 400 });
+  }
+  if (!payload?.listingId || !payload?.imageId || !payload?.originalStoragePath) {
+    return new Response("Missing fields", { status: 400 });
+  }
+
+  // Kick off async work; respond immediately.
+  // deno-lint-ignore no-explicit-any
+  const rt = (globalThis as any).EdgeRuntime;
+  const task = processImage(payload).catch((err) => recordFailure(payload.imageId, err));
+  if (rt?.waitUntil) rt.waitUntil(task); else await task;
+
+  return new Response(JSON.stringify({ status: "processing" }), {
+    status: 202,
+    headers: { "content-type": "application/json" },
+  });
+});
+
+async function processImage(p: Payload) {
+  await admin
+    .from("listing_images")
+    .update({ processing_status: "processing", processing_error: null })
+    .eq("id", p.imageId);
+
+  // 1. Download original from the private documents bucket.
+  const { data: blob, error: dlError } = await admin.storage
+    .from(DOCUMENTS_BUCKET)
+    .download(p.originalStoragePath);
+  if (dlError || !blob) throw new Error(`download failed: ${dlError?.message}`);
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+
+  // 2. Orient + decode to raw RGBA (EXIF stripped by re-encoding downstream).
+  const orientation = await readOrientation(bytes, p.contentType);
+  const decoded = await decodeImage(bytes, p.contentType);
+  const rotated = applyOrientation(decoded, orientation);
+
+  // 3. Emit every variant × format.
+  const variants: Record<string, Record<string, { path: string; width: number; height: number; bytes: number }>> = {};
+  for (const spec of SPECS) {
+    const framed: PixelBuffer =
+      spec.crop === "center" && spec.height
+        ? await coverCrop(rotated, spec.width, spec.height)
+        : await resizeMax(rotated, spec.width);
+    for (const fmt of FORMATS) {
+      const encoded = fmt === "avif" ? await toAvif(framed) : await toWebp(framed);
+      const path = variantPath(p.listingId, p.imageId, spec.key, fmt);
+      const { error: upErr } = await admin.storage
+        .from(IMAGES_BUCKET)
+        .upload(path, encoded, {
+          contentType: fmt === "avif" ? "image/avif" : "image/webp",
+          upsert: true,
+        });
+      if (upErr) throw new Error(`upload ${spec.key}/${fmt} failed: ${upErr.message}`);
+      (variants[spec.key] ??= {})[fmt] = {
+        path,
+        width: framed.width,
+        height: framed.height,
+        bytes: encoded.byteLength,
+      };
+    }
+  }
+
+  // 4. blurhash + primary storage_path (points at the medium AVIF as canonical).
+  const blurhash = await computeBlurhash(rotated);
+  const primary = variants.medium?.avif?.path ?? variants.large?.avif?.path ?? "";
+
+  const { error: updError } = await admin
+    .from("listing_images")
+    .update({
+      variants,
+      blurhash,
+      width: rotated.width,
+      height: rotated.height,
+      storage_path: primary,
+      processing_status: "done",
+      processing_error: null,
+    })
+    .eq("id", p.imageId);
+  if (updError) throw new Error(`row update failed: ${updError.message}`);
+}
+
+async function recordFailure(imageId: string, err: unknown) {
+  const message = err instanceof Error ? err.message : String(err);
+  await admin
+    .from("listing_images")
+    .update({ processing_status: "failed", processing_error: message.slice(0, 500) })
+    .eq("id", imageId);
+}
