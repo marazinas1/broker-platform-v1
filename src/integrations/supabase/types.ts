@@ -105,7 +105,6 @@ export type Database = {
           id: string
           is_public: boolean
           listing_id: string
-          public_storage_path: string | null
           requires_lead: boolean
           storage_path: string
           type: string | null
@@ -116,7 +115,6 @@ export type Database = {
           id?: string
           is_public?: boolean
           listing_id: string
-          public_storage_path?: string | null
           requires_lead?: boolean
           storage_path: string
           type?: string | null
@@ -127,7 +125,6 @@ export type Database = {
           id?: string
           is_public?: boolean
           listing_id?: string
-          public_storage_path?: string | null
           requires_lead?: boolean
           storage_path?: string
           type?: string | null
@@ -318,11 +315,6 @@ export type Database = {
           price_on_request: boolean
           price_period: string | null
           property_type: string
-          public_address_number: string | null
-          public_address_street: string | null
-          public_commission_note: string | null
-          public_geo_lat: number | null
-          public_geo_lng: number | null
           published_at: string | null
           reference_code: string | null
           rooms: number | null
@@ -382,11 +374,6 @@ export type Database = {
           price_on_request?: boolean
           price_period?: string | null
           property_type: string
-          public_address_number?: string | null
-          public_address_street?: string | null
-          public_commission_note?: string | null
-          public_geo_lat?: number | null
-          public_geo_lng?: number | null
           published_at?: string | null
           reference_code?: string | null
           rooms?: number | null
@@ -446,11 +433,6 @@ export type Database = {
           price_on_request?: boolean
           price_period?: string | null
           property_type?: string
-          public_address_number?: string | null
-          public_address_street?: string | null
-          public_commission_note?: string | null
-          public_geo_lat?: number | null
-          public_geo_lng?: number | null
           published_at?: string | null
           reference_code?: string | null
           rooms?: number | null
@@ -477,29 +459,8 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "listings_agent_id_fkey"
-            columns: ["agent_id"]
-            isOneToOne: false
-            referencedRelation: "profiles_public"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "listings_created_by_fkey"
             columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "listings_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "profiles_public"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "listings_updated_by_fkey"
-            columns: ["updated_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -508,7 +469,7 @@ export type Database = {
             foreignKeyName: "listings_updated_by_fkey"
             columns: ["updated_by"]
             isOneToOne: false
-            referencedRelation: "profiles_public"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -559,13 +520,6 @@ export type Database = {
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "permissions_profile_id_fkey"
-            columns: ["profile_id"]
-            isOneToOne: false
-            referencedRelation: "profiles_public"
             referencedColumns: ["id"]
           },
         ]
@@ -822,35 +776,10 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "user_invitations_invited_by_fkey"
-            columns: ["invited_by"]
-            isOneToOne: false
-            referencedRelation: "profiles_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
     }
     Views: {
-      feature_flags_public: {
-        Row: {
-          config: Json | null
-          enabled: boolean | null
-          key: string | null
-        }
-        Insert: {
-          config?: Json | null
-          enabled?: boolean | null
-          key?: string | null
-        }
-        Update: {
-          config?: Json | null
-          enabled?: boolean | null
-          key?: string | null
-        }
-        Relationships: []
-      }
       listing_documents_public: {
         Row: {
           created_at: string | null
@@ -996,15 +925,15 @@ export type Database = {
           additional_costs?: Json | null
           address_city?: string | null
           address_country?: string | null
-          address_number?: string | null
+          address_number?: never
           address_region?: string | null
-          address_street?: string | null
+          address_street?: never
           address_zip?: string | null
           agent_id?: string | null
           availability_date?: string | null
           bathrooms?: number | null
           bedrooms?: number | null
-          commission_note?: string | null
+          commission_note?: never
           condition?: string | null
           content_sections?: Json | null
           created_at?: string | null
@@ -1013,8 +942,8 @@ export type Database = {
           energy?: Json | null
           features?: string[] | null
           floor?: number | null
-          geo_lat?: number | null
-          geo_lng?: number | null
+          geo_lat?: never
+          geo_lng?: never
           geo_precision?: string | null
           heating_type?: string | null
           highlights?: Json | null
@@ -1047,15 +976,15 @@ export type Database = {
           additional_costs?: Json | null
           address_city?: string | null
           address_country?: string | null
-          address_number?: string | null
+          address_number?: never
           address_region?: string | null
-          address_street?: string | null
+          address_street?: never
           address_zip?: string | null
           agent_id?: string | null
           availability_date?: string | null
           bathrooms?: number | null
           bedrooms?: number | null
-          commission_note?: string | null
+          commission_note?: never
           condition?: string | null
           content_sections?: Json | null
           created_at?: string | null
@@ -1064,8 +993,8 @@ export type Database = {
           energy?: Json | null
           features?: string[] | null
           floor?: number | null
-          geo_lat?: number | null
-          geo_lng?: number | null
+          geo_lat?: never
+          geo_lng?: never
           geo_precision?: string | null
           heating_type?: string | null
           highlights?: Json | null
@@ -1102,182 +1031,7 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "listings_agent_id_fkey"
-            columns: ["agent_id"]
-            isOneToOne: false
-            referencedRelation: "profiles_public"
-            referencedColumns: ["id"]
-          },
         ]
-      }
-      profiles_public: {
-        Row: {
-          full_name: string | null
-          id: string | null
-          languages_spoken: string[] | null
-          public_bio: Json | null
-          public_photo_url: string | null
-          public_title: string | null
-          sort_order: number | null
-          specializations: string[] | null
-        }
-        Insert: {
-          full_name?: string | null
-          id?: string | null
-          languages_spoken?: string[] | null
-          public_bio?: Json | null
-          public_photo_url?: string | null
-          public_title?: string | null
-          sort_order?: number | null
-          specializations?: string[] | null
-        }
-        Update: {
-          full_name?: string | null
-          id?: string | null
-          languages_spoken?: string[] | null
-          public_bio?: Json | null
-          public_photo_url?: string | null
-          public_title?: string | null
-          sort_order?: number | null
-          specializations?: string[] | null
-        }
-        Relationships: []
-      }
-      site_settings_public: {
-        Row: {
-          about_body: Json | null
-          accent_color: string | null
-          address_city: string | null
-          address_country: string | null
-          address_street: string | null
-          address_zip: string | null
-          area_unit: string | null
-          contact_email: string | null
-          contact_phone: string | null
-          country: string | null
-          credibility_heading: Json | null
-          credibility_stats: Json | null
-          currency: string | null
-          default_locale: string | null
-          enabled_locales: string[] | null
-          favicon_url: string | null
-          font_body: string | null
-          font_heading: string | null
-          geo_lat: number | null
-          geo_lng: number | null
-          google_analytics_id: string | null
-          google_site_verification: string | null
-          homepage_sections: Json | null
-          id: string | null
-          legal_impressum: Json | null
-          legal_name: string | null
-          legal_privacy: Json | null
-          legal_terms: Json | null
-          logo_dark_url: string | null
-          logo_url: string | null
-          og_default_image: string | null
-          opening_hours: Json | null
-          plausible_domain: string | null
-          primary_agent_name: string | null
-          primary_agent_photo_url: string | null
-          primary_agent_role: string | null
-          primary_color: string | null
-          secondary_color: string | null
-          site_name: string | null
-          social: Json | null
-          updated_at: string | null
-          whatsapp: string | null
-        }
-        Insert: {
-          about_body?: Json | null
-          accent_color?: string | null
-          address_city?: string | null
-          address_country?: string | null
-          address_street?: string | null
-          address_zip?: string | null
-          area_unit?: string | null
-          contact_email?: string | null
-          contact_phone?: string | null
-          country?: string | null
-          credibility_heading?: Json | null
-          credibility_stats?: Json | null
-          currency?: string | null
-          default_locale?: string | null
-          enabled_locales?: string[] | null
-          favicon_url?: string | null
-          font_body?: string | null
-          font_heading?: string | null
-          geo_lat?: number | null
-          geo_lng?: number | null
-          google_analytics_id?: string | null
-          google_site_verification?: string | null
-          homepage_sections?: Json | null
-          id?: string | null
-          legal_impressum?: Json | null
-          legal_name?: string | null
-          legal_privacy?: Json | null
-          legal_terms?: Json | null
-          logo_dark_url?: string | null
-          logo_url?: string | null
-          og_default_image?: string | null
-          opening_hours?: Json | null
-          plausible_domain?: string | null
-          primary_agent_name?: string | null
-          primary_agent_photo_url?: string | null
-          primary_agent_role?: string | null
-          primary_color?: string | null
-          secondary_color?: string | null
-          site_name?: string | null
-          social?: Json | null
-          updated_at?: string | null
-          whatsapp?: string | null
-        }
-        Update: {
-          about_body?: Json | null
-          accent_color?: string | null
-          address_city?: string | null
-          address_country?: string | null
-          address_street?: string | null
-          address_zip?: string | null
-          area_unit?: string | null
-          contact_email?: string | null
-          contact_phone?: string | null
-          country?: string | null
-          credibility_heading?: Json | null
-          credibility_stats?: Json | null
-          currency?: string | null
-          default_locale?: string | null
-          enabled_locales?: string[] | null
-          favicon_url?: string | null
-          font_body?: string | null
-          font_heading?: string | null
-          geo_lat?: number | null
-          geo_lng?: number | null
-          google_analytics_id?: string | null
-          google_site_verification?: string | null
-          homepage_sections?: Json | null
-          id?: string | null
-          legal_impressum?: Json | null
-          legal_name?: string | null
-          legal_privacy?: Json | null
-          legal_terms?: Json | null
-          logo_dark_url?: string | null
-          logo_url?: string | null
-          og_default_image?: string | null
-          opening_hours?: Json | null
-          plausible_domain?: string | null
-          primary_agent_name?: string | null
-          primary_agent_photo_url?: string | null
-          primary_agent_role?: string | null
-          primary_color?: string | null
-          secondary_color?: string | null
-          site_name?: string | null
-          social?: Json | null
-          updated_at?: string | null
-          whatsapp?: string | null
-        }
-        Relationships: []
       }
     }
     Functions: {
