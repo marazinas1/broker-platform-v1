@@ -1,0 +1,356 @@
+-- =============================================================================
+-- Demo seed: Berg Immobilien — Püttlingen / Saarbrücken area, Germany
+-- =============================================================================
+-- Fully fictional solo-broker demo used to show the platform to prospective
+-- clients. No real person, agency, domain or phone number appears here.
+-- Sales only, warm/personal tone, eight properties (150k–380k EUR).
+-- Swap wholesale with the other seed files under supabase/seed/ — see README.
+-- =============================================================================
+
+SET session_replication_role = 'replica';
+
+-- ---------------------------------------------------------------------------
+-- 0. Wipe existing demo data.
+-- ---------------------------------------------------------------------------
+DELETE FROM public.inquiries;
+DELETE FROM public.listing_documents;
+DELETE FROM public.listing_tours;
+DELETE FROM public.listing_images;
+DELETE FROM public.listings;
+
+-- ---------------------------------------------------------------------------
+-- 1. Site settings — one row per install, updated in place.
+-- ---------------------------------------------------------------------------
+-- primary_agent_photo_url stays NULL for now: the app falls back to a neutral
+-- silhouette placeholder shipped in src/assets. Pass 2 replaces it with a
+-- generated portrait of the fictional broker.
+UPDATE public.site_settings SET
+  site_name        = 'Berg Immobilien',
+  legal_name       = 'Katharina Berg — Berg Immobilien',
+  country          = 'DE',
+  default_locale   = 'de',
+  enabled_locales  = ARRAY['de','en'],
+  currency         = 'EUR',
+  area_unit        = 'sqm',
+  primary_color    = '#7a6a58',
+  secondary_color  = '#efeae2',
+  accent_color     = '#a8927a',
+  contact_email    = 'kontakt@berg-immobilien-saar.de',
+  contact_phone    = '+49 6898 5512 480',
+  whatsapp         = '+49 175 5512480',
+  address_street   = 'Rathausstraße 24',
+  address_zip      = '66346',
+  address_city     = 'Püttlingen',
+  address_country  = 'Deutschland',
+  geo_lat          = 49.28934,
+  geo_lng          = 6.88671,
+  primary_agent_name      = 'Katharina Berg',
+  primary_agent_role      = 'Inhaberin & Immobilienmaklerin',
+  primary_agent_photo_url = NULL,
+  og_default_image        = 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=1200&h=630&q=80',
+  opening_hours = '[
+    {"day":"mon","from":"09:00","to":"17:00"},
+    {"day":"tue","from":"09:00","to":"17:00"},
+    {"day":"wed","from":"09:00","to":"13:00"},
+    {"day":"thu","from":"09:00","to":"19:00"},
+    {"day":"fri","from":"09:00","to":"15:00"},
+    {"day":"sat","from":"10:00","to":"13:00","note":{"de":"nach Vereinbarung","en":"by appointment"}},
+    {"day":"sun","closed":true}
+  ]'::jsonb,
+  homepage_sections = '[
+    {"key":"hero","enabled":true,"variant":"broker"},
+    {"key":"categories","enabled":true},
+    {"key":"featured","enabled":true},
+    {"key":"credibility","enabled":true},
+    {"key":"sold","enabled":true},
+    {"key":"about","enabled":true},
+    {"key":"team","enabled":false},
+    {"key":"areas","enabled":true},
+    {"key":"contact","enabled":true}
+  ]'::jsonb,
+  credibility_stats = '[
+    {"value":"12","label":{"de":"Jahre persönliche Beratung","en":"Years of personal advice"}},
+    {"value":"150+","label":{"de":"Erfolgreich vermittelte Objekte","en":"Properties successfully sold"}},
+    {"value":"IHK","label":{"de":"Zertifizierte Immobilienmaklerin","en":"IHK-certified estate agent"}}
+  ]'::jsonb,
+  credibility_heading = '{"de":"Warum Berg Immobilien","en":"Why Berg Immobilien"}'::jsonb,
+  about_body = '{"de":"Ich bin Katharina Berg und begleite Eigentümer und Käufer im Saarland persönlich — von der ersten Wertermittlung bis zum Notartermin. Nach zwölf Jahren, zunächst in der Finanzierungsberatung einer Regionalbank und seit 2016 als selbstständige, IHK-zertifizierte Maklerin, weiß ich: Der Verkauf einer Immobilie ist selten nur eine Zahl. Es geht um ein Elternhaus, eine Trennung, einen neuen Lebensabschnitt.\n\nDeshalb arbeite ich bewusst mit wenigen Objekten gleichzeitig. Jedes Haus sehe ich selbst an, jedes Exposé schreibe ich selbst, jede Besichtigung führe ich selbst. Kein Callcenter, keine Übergabe an Kollegen: Sie sprechen von Anfang bis Ende mit mir.\n\nMein Gebiet ist überschaubar und ich kenne es genau — Püttlingen, Völklingen, Saarbrücken und Riegelsberg. Ich weiß, was eine Straße wert ist, welche Schule um die Ecke liegt und wie lange ein Objekt in dieser Lage realistisch braucht.","en":"I am Katharina Berg and I personally guide owners and buyers across the Saarland — from the first valuation to signing at the notary. After twelve years, first in mortgage advice at a regional bank and since 2016 as an independent, IHK-certified agent, I know that selling a property is rarely just a number. It is a family home, a separation, a new chapter.\n\nThat is why I deliberately handle only a handful of properties at a time. I view every house myself, write every listing myself, and run every viewing myself. No call centre, no handovers: you speak with me from beginning to end.\n\nMy area is small and I know it well — Püttlingen, Völklingen, Saarbrücken and Riegelsberg. I know what a street is worth, which school is around the corner, and how long a property in that location realistically takes."}'::jsonb,
+  legal_impressum = '{"de":"Angaben gemäß § 5 TMG\n\nKatharina Berg — Berg Immobilien\nRathausstraße 24\n66346 Püttlingen\nDeutschland\n\nTelefon: +49 6898 5512 480\nE-Mail: kontakt@berg-immobilien-saar.de\n\nInhaberin: Katharina Berg\nErlaubnis nach § 34c Abs. 1 GewO, erteilt durch die Stadt Püttlingen\nAufsichtsbehörde: Stadt Püttlingen, Ordnungsamt\nUmsatzsteuer-Identifikationsnummer gemäß § 27a UStG: DE000000000\n\nHinweis: Dies ist eine Demonstrationswebsite. Unternehmen, Personen und Objekte sind frei erfunden.","en":"Legal notice pursuant to § 5 TMG\n\nKatharina Berg — Berg Immobilien\nRathausstraße 24\n66346 Püttlingen\nGermany\n\nPhone: +49 6898 5512 480\nEmail: kontakt@berg-immobilien-saar.de\n\nOwner: Katharina Berg\nLicence under § 34c (1) GewO, issued by the town of Püttlingen\nSupervisory authority: Stadt Püttlingen, Ordnungsamt\nVAT identification number under § 27a UStG: DE000000000\n\nNote: this is a demonstration website. The business, people and properties shown are fictional."}'::jsonb;
+
+-- ---------------------------------------------------------------------------
+-- 2. Listings — eight sale-only properties in the Püttlingen / Saarbrücken area.
+-- ---------------------------------------------------------------------------
+INSERT INTO public.listings (
+  id, slug, reference_code, status, deal_type, property_type,
+  published_at, sold_at, sold_price,
+  is_featured, is_exclusive, sort_order,
+  price, price_on_request, price_period,
+  additional_costs,
+  living_area, plot_area, rooms, bedrooms, bathrooms, floor, total_floors,
+  year_built, year_renovated,
+  address_street, address_number, address_zip, address_city, address_region, address_country,
+  geo_lat, geo_lng, geo_precision,
+  energy, features, condition, heating_type,
+  title, description, meta_title, meta_description, content_sections
+) VALUES
+-- 1. Einfamilienhaus — Püttlingen (featured)
+(
+  '33333333-0000-0000-0000-000000000001', 'einfamilienhaus-puettlingen-5-zimmer', 'KB-2024-001',
+  'active','sale','house', now() - interval '14 days', NULL, NULL,
+  true, false, 10,
+  289000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig"}'::jsonb,
+  132, 405, 5, 3, 2, NULL, 2,
+  1979, 2017,
+  'Blumenweg', '14', '66346', 'Püttlingen', 'Saarland', 'Deutschland',
+  49.2860, 6.8890, 'approximate',
+  '{"certificate_type":"Verbrauchsausweis","final_energy":118,"energy_source":"Gas","efficiency_class":"D","year_built":1979,"valid_until":"2032-04-30"}'::jsonb,
+  ARRAY['garage','terrace','garden','cellar'],
+  'good','Gas-Zentralheizung',
+  '{"de":"Freistehendes Einfamilienhaus mit Garten und Garage in Püttlingen-Ritterstraße","en":"Detached family house with garden and garage in Püttlingen"}'::jsonb,
+  '{"de":"Dieses freistehende Einfamilienhaus aus dem Jahr 1979 steht in einer ruhigen Anliegerstraße am oberen Blumenweg, in einem Viertel, das über die Jahre gewachsen ist und in dem man die Nachbarn noch kennt. Die Eigentümer haben hier ihre Kinder großgezogen und das Haus durchgehend gepflegt — es kommt ohne Sanierungsstau auf den Markt.\n\nDas Erdgeschoss ist klassisch aufgeteilt: ein 31 m² großer Wohnbereich mit bodentiefer Terrassentür nach Süden, ein separates Esszimmer, eine 2017 erneuerte Küche mit Fenster sowie ein Gäste-WC. Im Obergeschoss liegen drei Schlafzimmer zwischen 11 und 17 m² und das Familienbad mit Wanne, Dusche und Tageslicht. Der Vollkeller ist trocken und beherbergt Waschküche, Heizraum und einen ausgebauten Hobbyraum, der sich als Büro eignet.\n\nBei der Modernisierung 2017 wurden die Böden im Erdgeschoss erneuert, das Bad komplett neu gefliest und die Küche eingebaut. Fenster sind isolierverglast, geheizt wird über eine gewartete Gas-Zentralheizung. Der 405 m² große Grundstücksanteil ist zur Südseite hin angelegt: gepflegter Rasen, alte Obstbäume, ein kleines Gerätehaus. Zum Haus gehören eine Einzelgarage und ein zusätzlicher Stellplatz in der Einfahrt.\n\nDie Grundschule Püttlingen erreichen Kinder in fünf Gehminuten, Supermarkt, Bäckerei und Ärzte liegen fußläufig. Die Saarbahn-Haltestelle ist 600 m entfernt, in Saarbrücken ist man in gut 25 Minuten. Wer lieber zu Fuß geht, hat das Köllertal direkt vor der Tür. Ich zeige Ihnen das Haus gerne in Ruhe — auch abends.","en":"This detached 1979 family house sits on a quiet residential street at the upper end of Blumenweg, in a neighbourhood that has grown over the years and where people still know their neighbours. The owners raised their children here and maintained the house continuously — it comes to market with no deferred maintenance.\n\nThe ground floor follows a classic layout: a 31 m² living area with floor-length terrace doors facing south, a separate dining room, a kitchen renewed in 2017 with a window, and a guest WC. Upstairs are three bedrooms between 11 and 17 m² and the family bathroom with tub, shower and daylight. The full cellar is dry and houses the laundry, boiler room and a converted hobby room that works well as an office.\n\nThe 2017 modernisation renewed the ground-floor flooring, fully retiled the bathroom and installed the kitchen. Windows are double glazed and heating is a serviced gas central system. The 405 m² plot is laid out to the south: kept lawn, mature fruit trees, a small garden shed. A single garage and an additional parking space on the drive belong to the property.\n\nThe primary school is a five-minute walk for children; supermarket, bakery and doctors are all walkable. The Saarbahn stop is 600 m away and Saarbrücken is around 25 minutes. For walkers, the Köllertal valley starts at the doorstep. I am happy to show you the house without any rush — evenings included."}'::jsonb,
+  '{"de":"Einfamilienhaus in Püttlingen kaufen — 132 m², Garten, Garage","en":"Detached house for sale in Püttlingen — 132 m², garden, garage"}'::jsonb,
+  '{"de":"Gepflegtes freistehendes Einfamilienhaus in Püttlingen: 5 Zimmer, 132 m² Wohnfläche, 405 m² Grundstück, Süd-Terrasse und Garage. 289.000 EUR.","en":"Well-kept detached house in Püttlingen: 5 rooms, 132 m², 405 m² plot, south terrace and garage. EUR 289,000."}'::jsonb,
+  '[
+    {"key":"highlights","items":{"de":["Freistehend in ruhiger Anliegerstraße","Sanft modernisiert 2017","Sonnige Süd-Terrasse","Gepflegter Garten mit 405 m²","Einzelgarage plus Stellplatz","Kein Sanierungsstau"],"en":["Detached, quiet residential street","Gently modernised 2017","Sunny south-facing terrace","Well-kept 405 m² garden","Single garage plus parking","No deferred maintenance"]}},
+    {"key":"property_info","items":{"de":["5 Zimmer, davon 3 Schlafzimmer","132 m² Wohnfläche auf zwei Ebenen","Wohnbereich 31 m² mit Terrassenzugang","Familienbad mit Wanne und Dusche","Gäste-WC im Erdgeschoss","Vollkeller mit Waschküche und Hobbyraum"],"en":["5 rooms, 3 of them bedrooms","132 m² living area over two floors","31 m² living room with terrace access","Family bath with tub and shower","Guest WC on the ground floor","Full cellar with laundry and hobby room"]}},
+    {"key":"building_info","items":{"de":["Baujahr 1979, modernisiert 2017","Massivbauweise, Satteldach","Gas-Zentralheizung, regelmäßig gewartet","Isolierverglaste Fenster","Verbrauchsausweis, 118 kWh/(m²·a)","Energieeffizienzklasse D, gültig bis 04/2032"],"en":["Built 1979, modernised 2017","Solid construction, pitched roof","Gas central heating, regularly serviced","Double-glazed windows","Consumption certificate, 118 kWh/(m²·a)","Efficiency class D, valid until 04/2032"]}},
+    {"key":"surroundings","items":{"de":["Grundschule Püttlingen in 5 Gehminuten","Supermarkt, Bäckerei und Apotheke fußläufig","Saarbahn-Haltestelle 600 m","Saarbrücken in rund 25 Minuten","Wanderwege im Köllertal direkt vor der Tür","A620 in 10 Fahrminuten"],"en":["Primary school 5 minutes on foot","Supermarket, bakery and pharmacy walkable","Saarbahn stop 600 m","Saarbrücken in around 25 minutes","Köllertal hiking trails at the doorstep","A620 motorway 10 minutes by car"]}}
+  ]'::jsonb
+),
+-- 2. Eigentumswohnung — Völklingen (featured)
+(
+  '33333333-0000-0000-0000-000000000002', 'eigentumswohnung-voelklingen-3-zimmer', 'KB-2024-002',
+  'active','sale','apartment', now() - interval '9 days', NULL, NULL,
+  true, false, 20,
+  158000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig","hausgeld":"175 EUR / Monat"}'::jsonb,
+  74, NULL, 3, 2, 1, 2, 4,
+  1976, 2013,
+  'Gartenstraße', '8', '66333', 'Völklingen', 'Saarland', 'Deutschland',
+  49.2508, 6.8595, 'approximate',
+  '{"certificate_type":"Verbrauchsausweis","final_energy":128,"energy_source":"Gas","efficiency_class":"D","year_built":1976,"valid_until":"2030-09-30"}'::jsonb,
+  ARRAY['balcony','cellar','elevator'],
+  'good','Gas-Zentralheizung',
+  '{"de":"Gepflegte 3-Zimmer-Wohnung mit Süd-Balkon und Aufzug in Völklingen","en":"Well-kept three-room apartment with south balcony and lift in Völklingen"}'::jsonb,
+  '{"de":"Eine ehrliche, klug geschnittene Eigentumswohnung im zweiten Obergeschoss eines gepflegten Mehrfamilienhauses von 1976. Die Eigentümerin hat hier über zwanzig Jahre selbst gewohnt und die Wohnung durchgehend instand gehalten — das merkt man an den Kleinigkeiten: dem sauber aufgearbeiteten Parkett im Wohnzimmer, den gerade sitzenden Türen, dem gefliesten Bad ohne einen einzigen Riss in der Fuge.\n\nDer Grundriss verteilt 74 m² auf drei Zimmer: ein 26 m² großes Wohnzimmer mit Zugang zum Süd-Balkon, zwei Schlafzimmer mit 14 und 11 m², dazu eine separate Küche mit Fenster, ein Tageslichtbad mit Wanne und ein Flur mit Einbauschrank. Der Balkon liegt zum ruhigen, begrünten Innenhof, nicht zur Straße.\n\n2013 wurden im gesamten Haus die Fenster gegen isolierverglaste Elemente getauscht und das Treppenhaus neu gestrichen. Die Gas-Zentralheizung versorgt alle Einheiten, das Hausgeld liegt bei 175 EUR monatlich inklusive Rücklage. Ein Aufzug ist vorhanden, ein abschließbarer Kellerraum gehört zur Wohnung, ein Stellplatz kann zugemietet werden.\n\nVölklingen-Mitte ist fußläufig, der Bahnhof 900 m entfernt und die S-Bahn braucht zwölf Minuten nach Saarbrücken. Die Wohnung eignet sich sowohl zum Selbstbezug als auch als überschaubare, gut vermietbare Kapitalanlage.","en":"An honest, sensibly arranged apartment on the second floor of a well-kept 1976 apartment building. The owner lived here for over twenty years and maintained it continuously — you notice it in the details: the neatly refinished parquet in the living room, the doors that still sit straight, the tiled bathroom without a single cracked joint.\n\nThe layout spreads 74 m² across three rooms: a 26 m² living room opening on to the south-facing balcony, two bedrooms of 14 and 11 m², plus a separate kitchen with a window, a daylight bathroom with tub, and a hallway with fitted storage. The balcony faces the quiet, planted courtyard rather than the street.\n\nIn 2013 the whole building had its windows replaced with double-glazed units and the stairwell repainted. Gas central heating serves all units and the monthly service charge is EUR 175 including reserves. There is a lift, a lockable cellar unit belongs to the flat, and a parking space can be rented additionally.\n\nVölklingen town centre is walkable, the station is 900 m away, and the S-Bahn reaches Saarbrücken in twelve minutes. The apartment works equally well as a first home or as a modest, easily lettable investment."}'::jsonb,
+  '{"de":"3-Zimmer-Wohnung in Völklingen kaufen — 74 m², Balkon, Aufzug","en":"Three-room apartment for sale in Völklingen — 74 m², balcony, lift"}'::jsonb,
+  '{"de":"Gepflegte 3-Zimmer-Eigentumswohnung in Völklingen: 74 m², Süd-Balkon zum Innenhof, Aufzug, Kellerraum. 158.000 EUR.","en":"Well-kept three-room apartment in Völklingen: 74 m², south courtyard balcony, lift, cellar. EUR 158,000."}'::jsonb,
+  '[
+    {"key":"highlights","items":{"de":["Durchgehend gepflegter Zustand","Süd-Balkon zum ruhigen Innenhof","Aufzug bis in die Etage","Fenster 2013 erneuert","Hausgeld nur 175 EUR inkl. Rücklage","Auch als Kapitalanlage geeignet"],"en":["Continuously maintained","South balcony over a quiet courtyard","Lift to the floor","Windows renewed 2013","Service charge only EUR 175 incl. reserves","Also suitable as an investment"]}},
+    {"key":"property_info","items":{"de":["3 Zimmer, davon 2 Schlafzimmer","74 m² Wohnfläche","Wohnzimmer 26 m² mit Balkonzugang","Separate Küche mit Fenster","Tageslichtbad mit Wanne","2. Obergeschoss von 4, Kellerraum inklusive"],"en":["3 rooms, 2 of them bedrooms","74 m² living area","26 m² living room with balcony access","Separate kitchen with window","Daylight bathroom with tub","2nd of 4 floors, cellar unit included"]}},
+    {"key":"building_info","items":{"de":["Baujahr 1976","Gas-Zentralheizung für das gesamte Haus","Isolierverglasung, Fenstertausch 2013","Treppenhaus 2013 renoviert","Verbrauchsausweis, 128 kWh/(m²·a)","Energieeffizienzklasse D, gültig bis 09/2030"],"en":["Built 1976","Gas central heating for the whole building","Double glazing, windows replaced 2013","Stairwell renovated 2013","Consumption certificate, 128 kWh/(m²·a)","Efficiency class D, valid until 09/2030"]}},
+    {"key":"surroundings","items":{"de":["Bahnhof Völklingen 900 m","Innenstadt und Wochenmarkt fußläufig","S-Bahn nach Saarbrücken in 12 Minuten","Grundschule und Kita in der Nachbarschaft","Weltkulturerbe Völklinger Hütte in 10 Gehminuten","Auffahrt A620 in 3 Fahrminuten"],"en":["Völklingen station 900 m","Town centre and weekly market walkable","S-Bahn to Saarbrücken in 12 minutes","Primary school and nursery nearby","Völklingen Ironworks world heritage site 10 min walk","A620 slip road 3 minutes by car"]}}
+  ]'::jsonb
+),
+-- 3. Altbauwohnung — Saarbrücken St. Johann (featured)
+(
+  '33333333-0000-0000-0000-000000000003', 'altbauwohnung-saarbruecken-st-johann-2-zimmer', 'KB-2024-003',
+  'active','sale','apartment', now() - interval '6 days', NULL, NULL,
+  true, false, 15,
+  179000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig","hausgeld":"195 EUR / Monat"}'::jsonb,
+  58, NULL, 2, 1, 1, 3, 4,
+  1908, 2016,
+  'Cecilienstraße', '19', '66111', 'Saarbrücken', 'Saarland', 'Deutschland',
+  49.2360, 6.9985, 'approximate',
+  '{"certificate_type":"Verbrauchsausweis","final_energy":108,"energy_source":"Gas","efficiency_class":"C","year_built":1908,"valid_until":"2031-06-30"}'::jsonb,
+  ARRAY['high_ceilings','wooden_floors','fitted_kitchen','cellar'],
+  'renovated','Gas-Etagenheizung',
+  '{"de":"Sanierte Altbauwohnung mit Stuck und Dielenboden in Saarbrücken-St. Johann","en":"Renovated period apartment with stucco and board floors in Saarbrücken-St. Johann"}'::jsonb,
+  '{"de":"Es gibt Wohnungen, in denen man beim ersten Rundgang stehen bleibt und einmal tief durchatmet. Diese Zweizimmerwohnung im dritten Obergeschoss eines Gründerzeithauses von 1908 gehört dazu: 3,10 m Raumhöhe, erhaltene Stuckrosetten, ein sanft knarrender Dielenboden aus Kiefer und hohe Sprossenfenster, durch die den ganzen Nachmittag Licht fällt.\n\nAuf 58 m² verteilen sich ein 24 m² großes Wohnzimmer zur ruhigen Seitenstraße, ein Schlafzimmer zum begrünten Hinterhof und ein großzügiger Flur, der als Arbeitsplatz taugt. Bad und Küche wurden 2016 sorgfältig erneuert — in einem zurückhaltenden Stil, der zum Haus passt: weiße Metrofliesen, Eichenarbeitsplatte, eine hochwertige Einbauküche, die verbleibt. Das Bad hat eine bodengleiche Dusche und ein Fenster.\n\nDas Haus wurde im Zuge der Sanierung 2016 innen aufgearbeitet, das Dach 2018 neu gedeckt. Geheizt wird über eine eigene Gas-Etagentherme, was die Nebenkosten überschaubar hält. Ein Kellerabteil gehört dazu, ein Fahrradraum steht im Hof zur Verfügung. Ein Aufzug ist nicht vorhanden.\n\nSt. Johann ist das Viertel, in dem sich in Saarbrücken das Leben abspielt: der St. Johanner Markt liegt fünf Gehminuten entfernt, Bäckereien, Buchläden und Cafés um die Ecke, der Hauptbahnhof zwölf Minuten zu Fuß. Ich vermittle diese Wohnung gerne an ein Paar oder einen Selbstnutzer, dem Charakter wichtiger ist als Neubaustandard.","en":"Some apartments make you pause on the first walk-through and simply breathe in. This two-room flat on the third floor of a 1908 Wilhelminian townhouse is one of them: 3.10 m ceilings, original stucco rosettes, softly creaking pine board floors, and tall sash windows that carry light all afternoon.\n\nThe 58 m² hold a 24 m² living room facing the quiet side street, a bedroom towards the planted rear courtyard, and a generous hallway that works as a desk space. Bathroom and kitchen were carefully renewed in 2016 in a restrained style that suits the building: white metro tiles, oak worktop, a good fitted kitchen that stays. The bathroom has a level-access shower and a window.\n\nThe building interior was reworked during the 2016 renovation and the roof re-covered in 2018. Heating is an individual gas boiler for the flat, which keeps running costs contained. A cellar compartment belongs to the apartment and there is a bicycle room in the courtyard. There is no lift.\n\nSt. Johann is where Saarbrücken really lives: St. Johanner Markt is five minutes on foot, bakeries, bookshops and cafés are around the corner, and the main station is twelve minutes away. I would like to place this apartment with a couple or an owner-occupier who values character over new-build standard."}'::jsonb,
+  '{"de":"Altbauwohnung in Saarbrücken St. Johann kaufen — 2 Zimmer, 58 m²","en":"Period apartment for sale in Saarbrücken St. Johann — 2 rooms, 58 m²"}'::jsonb,
+  '{"de":"Sanierte 2-Zimmer-Altbauwohnung in Saarbrücken-St. Johann: 58 m², Stuck, Dielenboden, Einbauküche, Bad 2016 erneuert. 179.000 EUR.","en":"Renovated two-room period apartment in Saarbrücken St. Johann: 58 m², stucco, board floors, fitted kitchen, bath renewed 2016. EUR 179,000."}'::jsonb,
+  '[
+    {"key":"highlights","items":{"de":["Gründerzeithaus von 1908, saniert 2016","Raumhöhe 3,10 m mit Stuckrosetten","Originaler Kiefern-Dielenboden","Bad und Küche 2016 erneuert","Hochwertige Einbauküche verbleibt","Dach 2018 neu gedeckt"],"en":["1908 Wilhelminian building, renovated 2016","3.10 m ceilings with stucco rosettes","Original pine board flooring","Bath and kitchen renewed 2016","Quality fitted kitchen included","Roof re-covered 2018"]}},
+    {"key":"property_info","items":{"de":["2 Zimmer, 1 Schlafzimmer","58 m² Wohnfläche","Wohnzimmer 24 m² zur ruhigen Seitenstraße","Schlafzimmer zum begrünten Hinterhof","Tageslichtbad mit bodengleicher Dusche","3. Obergeschoss von 4, kein Aufzug, Kellerabteil"],"en":["2 rooms, 1 bedroom","58 m² living area","24 m² living room facing the quiet side street","Bedroom towards the planted courtyard","Daylight bath with level-access shower","3rd of 4 floors, no lift, cellar compartment"]}},
+    {"key":"building_info","items":{"de":["Baujahr 1908, Sanierung 2016","Gas-Etagenheizung, eigene Therme","Kastenfenster mit Isolierverglasung","Verbrauchsausweis, 108 kWh/(m²·a)","Energieeffizienzklasse C, gültig bis 06/2031","Hausgeld 195 EUR inkl. Rücklage"],"en":["Built 1908, renovated 2016","Individual gas boiler for the flat","Box windows with insulating glazing","Consumption certificate, 108 kWh/(m²·a)","Efficiency class C, valid until 06/2031","Service charge EUR 195 incl. reserves"]}},
+    {"key":"surroundings","items":{"de":["St. Johanner Markt in 5 Gehminuten","Hauptbahnhof 12 Minuten zu Fuß","Cafés, Bäckereien und kleine Läden in der Nachbarschaft","Staatstheater und Saarufer fußläufig","Universität per Bus in 15 Minuten","Bewohnerparken in der Straße"],"en":["St. Johanner Markt 5 minutes on foot","Central station 12 minutes walk","Cafés, bakeries and small shops nearby","State theatre and riverside walkable","University 15 minutes by bus","Residents parking on the street"]}}
+  ]'::jsonb
+),
+-- 4. Einfamilienhaus — Riegelsberg (featured)
+(
+  '33333333-0000-0000-0000-000000000004', 'einfamilienhaus-riegelsberg-6-zimmer', 'KB-2024-004',
+  'active','sale','house', now() - interval '20 days', NULL, NULL,
+  true, false, 25,
+  379000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig"}'::jsonb,
+  158, 520, 6, 4, 2, NULL, 2,
+  1992, 2019,
+  'Ahornweg', '3', '66292', 'Riegelsberg', 'Saarland', 'Deutschland',
+  49.3005, 6.9425, 'approximate',
+  '{"certificate_type":"Bedarfsausweis","final_energy":98,"energy_source":"Gas","efficiency_class":"C","year_built":1992,"valid_until":"2029-11-30"}'::jsonb,
+  ARRAY['garage','terrace','garden','cellar','fitted_kitchen'],
+  'renovated','Gas-Brennwert',
+  '{"de":"Großzügiges Familienhaus mit 520 m² Garten und Doppelgarage in Riegelsberg","en":"Generous family home with 520 m² garden and double garage in Riegelsberg"}'::jsonb,
+  '{"de":"Ein Haus mit Platz — und mit dem seltenen Vorzug, dass wirklich jeder Raum durchdacht ist. Gebaut 1992 in massiver Bauweise, steht es am Ende einer Sackgasse in einem Wohngebiet, in dem Kinder noch auf der Straße spielen. Sechs Zimmer, zwei Bäder und 158 m² Wohnfläche verteilen sich auf zwei Vollgeschosse.\n\nIm Erdgeschoss öffnet sich ein 42 m² großer Wohn-Essbereich über eine breite Schiebetür direkt auf die überdachte Süd-Terrasse. Die Einbauküche von 2019 ist hochwertig ausgestattet und verbleibt im Haus, dazu kommen ein Arbeitszimmer und ein Gäste-WC mit Dusche. Im Obergeschoss liegen vier Schlafzimmer — das größte mit 19 m² und Ankleide — sowie das 2019 komplett erneuerte Wannenbad mit Fußbodenheizung. Der Vollkeller bietet Waschküche, Vorratsraum, Heizraum und einen 20 m² großen Raum mit Fenster.\n\n2019 wurde eine neue Gas-Brennwertheizung eingebaut, gleichzeitig entstanden das neue Obergeschossbad und die Küche. Die Bausubstanz ist ausgezeichnet, die Ausstattung wertig und zeitlos: Massivholzparkett, Rollläden mit Elektroantrieb, isolierverglaste Fenster. Das 520 m² große Grundstück ist gewachsen angelegt mit Rasenfläche, Hochbeeten, Kirschbaum und Gartenhaus. Zum Haus gehört eine Doppelgarage mit direktem Zugang.\n\nRiegelsberg ist ruhig, gut versorgt und über die Saarbahn zuverlässig an Saarbrücken angebunden. Grundschule und Kita liegen 400 m entfernt, Supermarkt und Bäcker fußläufig, das Köllertal beginnt hinter dem Wohngebiet. Ein Haus für eine Familie, die langfristig plant.","en":"A house with room to breathe — and the rare quality that every space feels considered. Built in 1992 in solid construction, it sits at the end of a cul-de-sac in a neighbourhood where children still play in the street. Six rooms, two bathrooms and 158 m² of living space across two full floors.\n\nOn the ground floor a 42 m² living and dining area opens through wide sliding doors on to the covered south-facing terrace. The 2019 fitted kitchen is well equipped and stays with the house, alongside a study and a guest WC with shower. Upstairs are four bedrooms — the largest 19 m² with a dressing area — and the bathroom fully renewed in 2019 with underfloor heating. The full cellar holds laundry, pantry, boiler room and a 20 m² room with a window.\n\nA new gas condensing boiler was installed in 2019, along with the new upstairs bathroom and the kitchen. The structure is excellent and the finishes solid and timeless: solid wood parquet, electric shutters, double-glazed windows. The 520 m² plot has matured well with lawn, raised beds, a cherry tree and a garden house. A double garage with direct access belongs to the property.\n\nRiegelsberg is quiet, well served, and reliably connected to Saarbrücken by Saarbahn. Primary school and nursery are 400 m away, supermarket and baker are walkable, and the Köllertal begins just behind the estate. A house for a family planning long-term."}'::jsonb,
+  '{"de":"Einfamilienhaus in Riegelsberg kaufen — 158 m², 6 Zimmer, Doppelgarage","en":"Family house for sale in Riegelsberg — 158 m², 6 rooms, double garage"}'::jsonb,
+  '{"de":"Gepflegtes Einfamilienhaus in Riegelsberg: 6 Zimmer, 158 m², 520 m² Garten, Brennwertheizung 2019, Doppelgarage. 379.000 EUR.","en":"Well-kept family house in Riegelsberg: 6 rooms, 158 m², 520 m² garden, 2019 condensing boiler, double garage. EUR 379,000."}'::jsonb,
+  '[
+    {"key":"highlights","items":{"de":["Ruhige Sackgassenlage","Neue Gas-Brennwertheizung 2019","Bad im Obergeschoss 2019 erneuert","Überdachte Süd-Terrasse","520 m² gewachsener Garten mit Gartenhaus","Doppelgarage mit Direktzugang"],"en":["Quiet cul-de-sac position","New gas condensing boiler 2019","Upstairs bathroom renewed 2019","Covered south-facing terrace","520 m² mature garden with garden house","Double garage with direct access"]}},
+    {"key":"property_info","items":{"de":["6 Zimmer, davon 4 Schlafzimmer","158 m² Wohnfläche auf zwei Vollgeschossen","Wohn-Essbereich 42 m² mit Terrassenzugang","Wannenbad mit Fußbodenheizung, Gäste-WC mit Dusche","Hochwertige Einbauküche verbleibt","Vollkeller mit Hobbyraum, Waschküche und Vorratsraum"],"en":["6 rooms, 4 of them bedrooms","158 m² across two full floors","42 m² living and dining area with terrace access","Bath with underfloor heating, guest WC with shower","Quality fitted kitchen included","Full cellar with hobby room, laundry and pantry"]}},
+    {"key":"building_info","items":{"de":["Baujahr 1992, modernisiert 2019","Massivbauweise, Satteldach","Gas-Brennwertheizung von 2019","Massivholzparkett, elektrische Rollläden","Bedarfsausweis, 98 kWh/(m²·a)","Energieeffizienzklasse C, gültig bis 11/2029"],"en":["Built 1992, modernised 2019","Solid construction, pitched roof","Gas condensing boiler from 2019","Solid wood parquet, electric shutters","Demand certificate, 98 kWh/(m²·a)","Efficiency class C, valid until 11/2029"]}},
+    {"key":"surroundings","items":{"de":["Grundschule und Kita in 400 m","Supermarkt und Bäckerei fußläufig","Saarbahn-Anschluss nach Saarbrücken","Ärzte und Apotheke im Ort","Wanderwege im Köllertal hinter dem Wohngebiet","A1 in 12 Fahrminuten"],"en":["Primary school and nursery 400 m","Supermarket and bakery walkable","Saarbahn connection to Saarbrücken","Doctors and pharmacy in the village","Köllertal hiking trails behind the estate","A1 motorway 12 minutes by car"]}}
+  ]'::jsonb
+),
+-- 5. Doppelhaushälfte — Püttlingen
+(
+  '33333333-0000-0000-0000-000000000005', 'doppelhaushaelfte-puettlingen-4-zimmer', 'KB-2024-005',
+  'active','sale','house', now() - interval '28 days', NULL, NULL,
+  false, false, 30,
+  245000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig"}'::jsonb,
+  118, 260, 4, 3, 1, NULL, 2,
+  1968, 2011,
+  'Lindenstraße', '27', '66346', 'Püttlingen', 'Saarland', 'Deutschland',
+  49.2820, 6.8845, 'approximate',
+  '{"certificate_type":"Verbrauchsausweis","final_energy":135,"energy_source":"Gas","efficiency_class":"D","year_built":1968,"valid_until":"2030-02-28"}'::jsonb,
+  ARRAY['garden','cellar','terrace'],
+  'good','Gas-Zentralheizung',
+  '{"de":"Solide Doppelhaushälfte mit geschützter Terrasse in Püttlingen","en":"Solid semi-detached house with sheltered terrace in Püttlingen"}'::jsonb,
+  '{"de":"Eine Doppelhaushälfte, wie es sie im Saarland viele gibt — und die trotzdem etwas für sich hat: 1968 solide gebaut, seither in einer Hand und ohne einen einzigen Punkt, den man sofort anfassen müsste. Wer ein eigenes Haus möchte, ohne ein Sanierungsprojekt zu übernehmen, sollte sich diese Adresse ansehen.\n\nDie 118 m² Wohnfläche verteilen sich auf vier Zimmer. Im Erdgeschoss liegen ein 28 m² großes Wohnzimmer mit Zugang zur geschützten Terrasse, ein Esszimmer, die Küche und ein Gäste-WC. Im Obergeschoss befinden sich drei Schlafzimmer und ein Wannenbad mit Fenster. Der Spitzboden ist über eine Bodentreppe erreichbar und bietet zusätzlichen Stauraum, der Vollkeller nimmt Waschküche, Heizung und Werkstatt auf.\n\n2011 wurden sämtliche Fenster gegen isolierverglaste Elemente getauscht, die Fassade instand gesetzt und neu gestrichen. Die Gas-Zentralheizung wird jährlich gewartet, die Elektrik ist in Ordnung. Der 260 m² große Grundstücksanteil ist pflegeleicht angelegt: eine gepflasterte Terrasse an der Westseite, Rasen, eine Hainbuchenhecke als Sichtschutz und ein Geräteschuppen.\n\nDie Lindenstraße ist eine ruhige Wohnstraße im Ortskern von Püttlingen. Grundschule in 500 m, Bäcker, Metzger und der kleine Wochenmarkt am Rathausplatz fußläufig, Saarbahn in zehn Gehminuten. Für ein Paar oder eine kleine Familie mit begrenztem Budget ein ehrlicher Einstieg ins Eigentum.","en":"A semi-detached house of a kind you find often in the Saarland — and yet with something of its own: solidly built in 1968, in one family''s hands ever since, with not a single item that needs attention straight away. Anyone wanting their own house without taking on a renovation project should look at this address.\n\nThe 118 m² are spread across four rooms. The ground floor holds a 28 m² living room opening on to the sheltered terrace, a dining room, the kitchen and a guest WC. Upstairs are three bedrooms and a bathroom with tub and window. The attic is reached by a loft ladder and gives extra storage; the full cellar takes laundry, heating and a workshop.\n\nIn 2011 all windows were replaced with double-glazed units and the facade was repaired and repainted. The gas central heating is serviced annually and the electrics are sound. The 260 m² plot is laid out for easy care: a paved terrace on the west side, lawn, a hornbeam hedge for privacy and a tool shed.\n\nLindenstraße is a quiet residential street in the centre of Püttlingen. Primary school 500 m, baker, butcher and the small weekly market on the town hall square all walkable, Saarbahn ten minutes on foot. For a couple or a small family on a modest budget, an honest way into ownership."}'::jsonb,
+  '{"de":"Doppelhaushälfte in Püttlingen kaufen — 118 m², 4 Zimmer, Garten","en":"Semi-detached house for sale in Püttlingen — 118 m², 4 rooms, garden"}'::jsonb,
+  '{"de":"Gepflegte Doppelhaushälfte im Ortskern von Püttlingen: 4 Zimmer, 118 m², 260 m² Grundstück, Terrasse, kein Sanierungsstau. 245.000 EUR.","en":"Well-kept semi-detached house in central Püttlingen: 4 rooms, 118 m², 260 m² plot, terrace, no deferred maintenance. EUR 245,000."}'::jsonb,
+  '[
+    {"key":"highlights","items":{"de":["Kein Sanierungsstau","Fenster und Fassade 2011 erneuert","Geschützte West-Terrasse","Pflegeleichter Garten mit Sichtschutzhecke","Zentrale, ruhige Lage im Ortskern","Ehrlicher Angebotspreis"],"en":["No deferred maintenance","Windows and facade renewed 2011","Sheltered west-facing terrace","Low-maintenance garden with privacy hedge","Central yet quiet position in the town","Honest asking price"]}},
+    {"key":"property_info","items":{"de":["4 Zimmer, davon 3 Schlafzimmer","118 m² Wohnfläche","Wohnzimmer 28 m² mit Terrassenzugang","Wannenbad mit Fenster, Gäste-WC","Spitzboden über Bodentreppe","Vollkeller mit Waschküche und Werkstatt"],"en":["4 rooms, 3 of them bedrooms","118 m² living area","28 m² living room with terrace access","Bath with window, guest WC","Attic via loft ladder","Full cellar with laundry and workshop"]}},
+    {"key":"building_info","items":{"de":["Baujahr 1968, Fenster und Fassade 2011","Massivbauweise","Gas-Zentralheizung, jährlich gewartet","Isolierverglasung","Verbrauchsausweis, 135 kWh/(m²·a)","Energieeffizienzklasse D, gültig bis 02/2030"],"en":["Built 1968, windows and facade 2011","Solid construction","Gas central heating, serviced annually","Double glazing","Consumption certificate, 135 kWh/(m²·a)","Efficiency class D, valid until 02/2030"]}},
+    {"key":"surroundings","items":{"de":["Grundschule in 500 m","Bäcker und Metzger fußläufig","Wochenmarkt am Rathausplatz","Saarbahn in 10 Gehminuten","Ärztehaus und Apotheke im Ort","Saarbrücken in rund 25 Minuten"],"en":["Primary school 500 m","Baker and butcher walkable","Weekly market on the town hall square","Saarbahn 10 minutes on foot","Medical centre and pharmacy in town","Saarbrücken in around 25 minutes"]}}
+  ]'::jsonb
+),
+-- 6. Coming soon — Altbauwohnung Saarbrücken Nauwieser Viertel
+(
+  '33333333-0000-0000-0000-000000000006', 'altbauwohnung-saarbruecken-nauwieser-3-zimmer-in-vorbereitung', 'KB-2024-006',
+  'coming_soon','sale','apartment', now() - interval '2 days', NULL, NULL,
+  false, true, 35,
+  219000, false, 'total', '{"maklerprovision":"3,57 % inkl. MwSt., käuferseitig","hausgeld":"215 EUR / Monat"}'::jsonb,
+  82, NULL, 3, 2, 1, 2, 4,
+  1905, 2020,
+  'Försterstraße', '46', '66111', 'Saarbrücken', 'Saarland', 'Deutschland',
+  49.2342, 7.0040, 'approximate',
+  '{"certificate_type":"Verbrauchsausweis","final_energy":102,"energy_source":"Gas","efficiency_class":"C","year_built":1905,"valid_until":"2031-01-31"}'::jsonb,
+  ARRAY['high_ceilings','wooden_floors','cellar'],
+  'renovated','Gas-Etagenheizung',
+  '{"de":"3-Zimmer-Altbau am Nauwieser Viertel — Vermarktung in Vorbereitung","en":"Three-room period apartment by the Nauwieser quarter — coming to market"}'::jsonb,
+  '{"de":"Eine liebevoll sanierte Altbauwohnung im zweiten Obergeschoss eines Gründerzeithauses von 1905, unmittelbar am Nauwieser Viertel. Ich bereite die Unterlagen gerade gemeinsam mit den Eigentümern vor — professionelle Fotos, Grundriss und Energieausweis werden in der kommenden Woche freigegeben.\n\nWas ich heute schon sagen kann: 82 m² auf drei Zimmer, Raumhöhe knapp drei Meter, restaurierter Dielenboden und Flügeltüren aus der Bauzeit. Die Sanierung von 2020 hat Leitungen, Bad und Küche erneuert, ohne dem Haus seinen Charakter zu nehmen. Das Wohnzimmer geht nach Westen zur ruhigen Seite, beide Schlafzimmer liegen zum Hof. Eine Gas-Etagentherme versorgt die Wohnung, ein Kellerabteil gehört dazu.\n\nDie Lage ist für Saarbrücken so gut, wie sie sein kann: Nauwieser Platz in 300 m, St. Johanner Markt in zehn Gehminuten, Universität per Bus in zwölf Minuten. Erfahrungsgemäß gehen Wohnungen in dieser Straße schnell.\n\nWer sich vormerken lassen möchte, ist herzlich eingeladen mich anzurufen oder mir kurz zu schreiben. Ich melde mich persönlich zurück, sobald die Wohnung offiziell auf den Markt geht — Vorgemerkte sehen sie vor allen anderen.","en":"A lovingly renovated period apartment on the second floor of a 1905 Wilhelminian townhouse, right by the Nauwieser quarter. I am currently preparing the documents together with the owners — professional photographs, floor plan and energy certificate will be released next week.\n\nWhat I can already say: 82 m² across three rooms, ceilings just under three metres, restored board floors and original double doors. The 2020 renovation renewed the services, bathroom and kitchen without stripping the building of its character. The living room faces west to the quiet side; both bedrooms look on to the courtyard. An individual gas boiler serves the flat and a cellar compartment belongs to it.\n\nThe location is about as good as Saarbrücken gets: Nauwieser square 300 m, St. Johanner Markt ten minutes on foot, the university twelve minutes by bus. In my experience apartments on this street move quickly.\n\nIf you would like to be added to the notification list, do call me or send a short message. I will come back to you personally as soon as the apartment officially goes to market — people on the list see it before anyone else."}'::jsonb,
+  '{"de":"3-Zimmer-Altbau in Saarbrücken Nauwieser Viertel — demnächst verfügbar","en":"Three-room period apartment, Saarbrücken Nauwieser quarter — coming soon"}'::jsonb,
+  '{"de":"Sanierte 3-Zimmer-Altbauwohnung mit 82 m² am Nauwieser Viertel in Saarbrücken. Vermarktung in Vorbereitung — Vormerkung ab sofort möglich.","en":"Renovated three-room period apartment, 82 m², by the Nauwieser quarter in Saarbrücken. Coming to market — advance registration open now."}'::jsonb,
+  '[
+    {"key":"highlights","items":{"de":["Gründerzeithaus von 1905, saniert 2020","Raumhöhe knapp 3 Meter","Restaurierter Dielenboden und Flügeltüren","Ruhige Innenstadtlage","Vormerkung ab sofort möglich","Vorgemerkte sehen die Wohnung zuerst"],"en":["1905 Wilhelminian building, renovated 2020","Ceilings just under 3 metres","Restored board floors and double doors","Quiet inner-city location","Advance registration open now","Registered buyers view it first"]}},
+    {"key":"property_info","items":{"de":["3 Zimmer, davon 2 Schlafzimmer","82 m² Wohnfläche","Wohnzimmer nach Westen zur ruhigen Seite","Schlafzimmer zum begrünten Hof","Bad und Küche 2020 erneuert","2. Obergeschoss von 4, Kellerabteil"],"en":["3 rooms, 2 of them bedrooms","82 m² living area","Living room facing west to the quiet side","Bedrooms towards the planted courtyard","Bath and kitchen renewed 2020","2nd of 4 floors, cellar compartment"]}},
+    {"key":"building_info","items":{"de":["Baujahr 1905, Sanierung 2020","Leitungen im Zuge der Sanierung erneuert","Gas-Etagenheizung, eigene Therme","Verbrauchsausweis, 102 kWh/(m²·a)","Energieeffizienzklasse C, gültig bis 01/2031","Hausgeld 215 EUR inkl. Rücklage"],"en":["Built 1905, renovated 2020","Services renewed during the renovation","Individual gas boiler for the flat","Consumption certificate, 102 kWh/(m²·a)","Efficiency class C, valid until 01/2031","Service charge EUR 215 incl. reserves"]}},
+    {"key":"surroundings","items":{"de":["Nauwieser Platz in 300 m","St. Johanner Markt in 10 Gehminuten","Universität per Bus in 12 Minuten","Cafés, Kinos und kleine Läden im Viertel","Hauptbahnhof in 15 Gehminuten","Bewohnerparken verfügbar"],"en":["Nauwieser square 300 m","St. Johanner Markt 10 minutes on foot","University 12 minutes by bus","Cafés, cinemas and small shops in the quarter","Central station 15 minutes on foot","Residents parking available"]}}
+  ]'::jsonb
+),
+-- 7. Sold — Reihenhaus Völklingen (~3 months ago)
+(
+  '33333333-0000-0000-0000-000000000007', 'reihenhaus-voelklingen-verkauft', 'KB-2023-018',
+  'sold','sale','house', now() - interval '7 months', now() - interval '3 months', 165000,
+  false, false, 100,
+  165000, false, 'total', '{}'::jsonb,
+  108, 180, 4, 3, 1, NULL, 2,
+  1965, 2009,
+  NULL, NULL, '66333', 'Völklingen', 'Saarland', 'Deutschland',
+  49.2492, 6.8608, 'approximate',
+  '{"certificate_type":"Verbrauchsausweis","final_energy":142,"energy_source":"Gas","efficiency_class":"E","year_built":1965,"valid_until":"2028-08-31"}'::jsonb,
+  ARRAY['garden','cellar'],
+  'good','Gas-Zentralheizung',
+  '{"de":"Reihenmittelhaus in Völklingen — in fünf Wochen an ein junges Paar vermittelt","en":"Mid-terrace house in Völklingen — sold to a young couple within five weeks"}'::jsonb,
+  '{"de":"Ein ehrliches Reihenmittelhaus von 1965 mit 108 m² Wohnfläche, vier Zimmern und einem schmalen, aber sonnigen Garten nach Süden. Die Eigentümer waren nach dem Auszug der Kinder auf der Suche nach etwas Kleinerem und wollten das Haus in gute Hände geben.\n\nWir haben vor der Vermarktung zwei Dinge getan, die den Unterschied gemacht haben: den Keller entrümpelt und professionell fotografieren lassen, sobald das Licht stimmte. Beim Preis sind wir bewusst realistisch geblieben statt hoch einzusteigen — bei Energieklasse E und einem Bad von 2009 gehört das zur Ehrlichkeit dazu.\n\nNach elf Besichtigungen in zwei Wochenenden gab es drei Angebote. Verkauft wurde an ein junges Paar aus dem Regionalverband, das im Erdgeschoss ohnehin umbauen wollte. Von der Beauftragung bis zum Notartermin vergingen fünf Wochen.","en":"An honest 1965 mid-terrace house with 108 m² of living space, four rooms and a narrow but sunny south-facing garden. With the children moved out, the owners were looking for something smaller and wanted the house to go into good hands.\n\nBefore marketing we did two things that made the difference: cleared the cellar and had it photographed professionally once the light was right. On price we deliberately stayed realistic rather than starting high — with efficiency class E and a bathroom from 2009, that is simply honest.\n\nAfter eleven viewings across two weekends there were three offers. It sold to a young couple from the regional district who intended to remodel the ground floor anyway. Five weeks passed between instruction and the notary appointment."}'::jsonb,
+  '{"de":"Reihenhaus in Völklingen — verkauft durch Berg Immobilien","en":"Terraced house in Völklingen — sold by Berg Immobilien"}'::jsonb,
+  '{"de":"Referenz: Reihenmittelhaus mit 108 m² in Völklingen, in fünf Wochen zum Angebotspreis an ein junges Paar aus der Region vermittelt.","en":"Reference: 108 m² mid-terrace house in Völklingen, sold at asking price to a young local couple within five weeks."}'::jsonb,
+  '[
+    {"key":"highlights","items":{"de":["Verkauft in fünf Wochen","Drei Angebote nach elf Besichtigungen","Zum Angebotspreis vermittelt","Käufer aus dem Regionalverband"],"en":["Sold in five weeks","Three offers after eleven viewings","Achieved the asking price","Buyers from the regional district"]}},
+    {"key":"property_info","items":{"de":["4 Zimmer, davon 3 Schlafzimmer","108 m² Wohnfläche","180 m² Grundstück mit Süd-Garten","Wannenbad von 2009","Vollkeller"],"en":["4 rooms, 3 of them bedrooms","108 m² living area","180 m² plot with south-facing garden","Bathroom from 2009","Full cellar"]}},
+    {"key":"building_info","items":{"de":["Baujahr 1965, teilmodernisiert 2009","Reihenmittelhaus in Massivbauweise","Gas-Zentralheizung","Verbrauchsausweis, 142 kWh/(m²·a)","Energieeffizienzklasse E"],"en":["Built 1965, partly modernised 2009","Mid-terrace, solid construction","Gas central heating","Consumption certificate, 142 kWh/(m²·a)","Efficiency class E"]}},
+    {"key":"surroundings","items":{"de":["Wohngebiet im Völklinger Norden","Grundschule und Kita in der Nähe","Bahnhof Völklingen per Bus in 8 Minuten","A620 in wenigen Fahrminuten"],"en":["Residential area in northern Völklingen","Primary school and nursery nearby","Völklingen station 8 minutes by bus","A620 a few minutes by car"]}}
+  ]'::jsonb
+),
+-- 8. Sold — 4-Zimmer-Wohnung Riegelsberg (~5 months ago)
+(
+  '33333333-0000-0000-0000-000000000008', 'eigentumswohnung-riegelsberg-verkauft', 'KB-2023-014',
+  'sold','sale','apartment', now() - interval '9 months', now() - interval '5 months', 198000,
+  false, false, 110,
+  198000, false, 'total', '{}'::jsonb,
+  92, NULL, 4, 2, 1, 1, 3,
+  1982, 2014,
+  NULL, NULL, '66292', 'Riegelsberg', 'Saarland', 'Deutschland',
+  49.3012, 6.9432, 'approximate',
+  '{"certificate_type":"Verbrauchsausweis","final_energy":122,"energy_source":"Gas","efficiency_class":"D","year_built":1982,"valid_until":"2029-05-31"}'::jsonb,
+  ARRAY['balcony','cellar'],
+  'good','Gas-Zentralheizung',
+  '{"de":"4-Zimmer-Wohnung in Riegelsberg — off-market aus der Kartei vermittelt","en":"Four-room apartment in Riegelsberg — sold off-market from my register"}'::jsonb,
+  '{"de":"Eine gut geschnittene 4-Zimmer-Wohnung von 1982 im ersten Obergeschoss, 92 m², mit Süd-Balkon und Blick ins Grüne. Die Eigentümer zogen aus beruflichen Gründen nach Baden-Württemberg und wollten den Verkauf ausdrücklich diskret abwickeln, ohne Inserat und ohne Massenbesichtigungen.\n\nDas ist genau die Situation, für die ich meine Interessentenkartei pflege. Ich habe vier vorgemerkte Parteien angesprochen, die seit Monaten in Riegelsberg suchten, und drei davon einzeln durch die Wohnung geführt. Die Wohnung war nie öffentlich inseriert.\n\nVerkauft wurde an einen langjährigen Interessenten, der zuvor zweimal knapp unterlegen war. Zwischen dem ersten Anruf bei den Eigentümern und der Unterschrift beim Notar lagen sechs Wochen — bei einem Preis, der leicht über der Wertermittlung lag.","en":"A well-arranged four-room apartment from 1982 on the first floor, 92 m², with a south-facing balcony and a green outlook. The owners were relocating to Baden-Württemberg for work and explicitly wanted a discreet sale — no listing, no mass viewings.\n\nThat is exactly the situation my register of registered buyers exists for. I approached four parties who had been searching in Riegelsberg for months and showed three of them the apartment individually. It was never publicly advertised.\n\nIt sold to a long-standing candidate who had narrowly missed out twice before. Six weeks passed between my first call with the owners and the signature at the notary — at a price slightly above the valuation."}'::jsonb,
+  '{"de":"4-Zimmer-Wohnung in Riegelsberg — off-market verkauft","en":"Four-room apartment in Riegelsberg — sold off-market"}'::jsonb,
+  '{"de":"Referenz: 92 m² große 4-Zimmer-Wohnung in Riegelsberg, ohne Inserat aus der Interessentenkartei in sechs Wochen vermittelt.","en":"Reference: 92 m² four-room apartment in Riegelsberg, sold in six weeks from my buyer register without any public listing."}'::jsonb,
+  '[
+    {"key":"highlights","items":{"de":["Off-market vermittelt, nie öffentlich inseriert","Verkauf in sechs Wochen","Preis leicht über der Wertermittlung","Nur drei Einzelbesichtigungen"],"en":["Sold off-market, never publicly listed","Sale completed in six weeks","Price slightly above valuation","Only three individual viewings"]}},
+    {"key":"property_info","items":{"de":["4 Zimmer, davon 2 Schlafzimmer","92 m² Wohnfläche","1. Obergeschoss von 3","Süd-Balkon mit Blick ins Grüne","Kellerraum inklusive"],"en":["4 rooms, 2 of them bedrooms","92 m² living area","1st of 3 floors","South-facing balcony with a green outlook","Cellar unit included"]}},
+    {"key":"building_info","items":{"de":["Baujahr 1982, teilmodernisiert 2014","Gas-Zentralheizung","Isolierverglasung","Verbrauchsausweis, 122 kWh/(m²·a)","Energieeffizienzklasse D"],"en":["Built 1982, partly modernised 2014","Gas central heating","Double glazing","Consumption certificate, 122 kWh/(m²·a)","Efficiency class D"]}},
+    {"key":"surroundings","items":{"de":["Ruhiges Wohngebiet in Riegelsberg","Grundschule und Einkauf fußläufig","Saarbahn-Anschluss nach Saarbrücken","Köllertal in Gehweite"],"en":["Quiet residential area in Riegelsberg","Primary school and shops walkable","Saarbahn connection to Saarbrücken","Köllertal within walking distance"]}}
+  ]'::jsonb
+);
+
+-- ---------------------------------------------------------------------------
+-- 3. Listing images.
+-- NOTE: pass 1 keeps the existing placeholder photography. Pass 2 replaces
+-- this whole block with generated images stored in the listing-images bucket.
+-- ---------------------------------------------------------------------------
+INSERT INTO public.listing_images (
+  listing_id, storage_path, variants, is_primary, sort_order, processing_status, width, height, alt_text
+)
+SELECT
+  l.id::uuid,
+  'seed/' || l.slug || '/' || img.n::text || '.jpg',
+  jsonb_build_object(
+    'large',  jsonb_build_object('url', img.base || '?auto=format&fit=crop&w=1600&q=80'),
+    'medium', jsonb_build_object('url', img.base || '?auto=format&fit=crop&w=900&q=80'),
+    'thumb',  jsonb_build_object('url', img.base || '?auto=format&fit=crop&w=480&q=70'),
+    'og',     jsonb_build_object('url', img.base || '?auto=format&fit=crop&w=1200&h=630&q=80')
+  ),
+  img.n = 1,
+  img.n - 1,
+  'done',
+  1600, 1067,
+  '{}'::jsonb
+FROM public.listings l
+JOIN LATERAL (
+  VALUES
+    -- 1. Einfamilienhaus Püttlingen
+    ('33333333-0000-0000-0000-000000000001'::uuid, 1, 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6'),
+    ('33333333-0000-0000-0000-000000000001'::uuid, 2, 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c'),
+    ('33333333-0000-0000-0000-000000000001'::uuid, 3, 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c8'),
+    ('33333333-0000-0000-0000-000000000001'::uuid, 4, 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c'),
+    ('33333333-0000-0000-0000-000000000001'::uuid, 5, 'https://images.unsplash.com/photo-1505692795793-20f543407193'),
+
+    -- 2. Wohnung Völklingen
+    ('33333333-0000-0000-0000-000000000002'::uuid, 1, 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688'),
+    ('33333333-0000-0000-0000-000000000002'::uuid, 2, 'https://images.unsplash.com/photo-1494526585095-c41746248156'),
+    ('33333333-0000-0000-0000-000000000002'::uuid, 3, 'https://images.unsplash.com/photo-1600585154526-990dced4db0d'),
+    ('33333333-0000-0000-0000-000000000002'::uuid, 4, 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c8'),
+
+    -- 3. Altbau Saarbrücken St. Johann
+    ('33333333-0000-0000-0000-000000000003'::uuid, 1, 'https://images.unsplash.com/photo-1505691938895-1758d7feb511'),
+    ('33333333-0000-0000-0000-000000000003'::uuid, 2, 'https://images.unsplash.com/photo-1494526585095-c41746248156'),
+    ('33333333-0000-0000-0000-000000000003'::uuid, 3, 'https://images.unsplash.com/photo-1524230572899-a752b3835840'),
+    ('33333333-0000-0000-0000-000000000003'::uuid, 4, 'https://images.unsplash.com/photo-1600585154526-990dced4db0d'),
+
+    -- 4. Einfamilienhaus Riegelsberg
+    ('33333333-0000-0000-0000-000000000004'::uuid, 1, 'https://images.unsplash.com/photo-1449844908441-8829872d2607'),
+    ('33333333-0000-0000-0000-000000000004'::uuid, 2, 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0'),
+    ('33333333-0000-0000-0000-000000000004'::uuid, 3, 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914'),
+    ('33333333-0000-0000-0000-000000000004'::uuid, 4, 'https://images.unsplash.com/photo-1613490493576-7fde63acd811'),
+    ('33333333-0000-0000-0000-000000000004'::uuid, 5, 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c'),
+
+    -- 5. Doppelhaushälfte Püttlingen
+    ('33333333-0000-0000-0000-000000000005'::uuid, 1, 'https://images.unsplash.com/photo-1494526585095-c41746248156'),
+    ('33333333-0000-0000-0000-000000000005'::uuid, 2, 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c'),
+    ('33333333-0000-0000-0000-000000000005'::uuid, 3, 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c8'),
+
+    -- 6. Coming soon Saarbrücken
+    ('33333333-0000-0000-0000-000000000006'::uuid, 1, 'https://images.unsplash.com/photo-1524230572899-a752b3835840'),
+    ('33333333-0000-0000-0000-000000000006'::uuid, 2, 'https://images.unsplash.com/photo-1505691938895-1758d7feb511'),
+
+    -- 7. Sold Völklingen
+    ('33333333-0000-0000-0000-000000000007'::uuid, 1, 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750'),
+    ('33333333-0000-0000-0000-000000000007'::uuid, 2, 'https://images.unsplash.com/photo-1600585154526-990dced4db0d'),
+
+    -- 8. Sold Riegelsberg
+    ('33333333-0000-0000-0000-000000000008'::uuid, 1, 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2'),
+    ('33333333-0000-0000-0000-000000000008'::uuid, 2, 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c')
+) AS img(listing_id, n, base) ON img.listing_id = l.id;
