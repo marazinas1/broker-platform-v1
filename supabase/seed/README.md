@@ -12,14 +12,12 @@ Only one seed is active at a time. Swap datasets wholesale.
 
 - `de-rheinberger.sql` — Immobilien Rheinberger, a Saarbrücken agency with
   twelve listings across sale, rent, and sold.
-- `de-berg.sql` — Berg Immobilien, a fully fictional solo broker
-  (Katharina Berg) in Püttlingen with eight sale-only listings between
-  150k and 380k EUR. This is the dataset used for prospect demos: it
-  contains no real person, business, domain or phone number.
+- `de-waltner.sql` — Immobilienberatung Dorothe Waltner, a solo broker in
+  Püttlingen with eight sale-only listings between 140k and 420k EUR.
 
 ## Swap in a new seed
 
-1. Open the SQL file you want to run (for example `de-berg.sql`).
+1. Open the SQL file you want to run (for example `de-waltner.sql`).
 2. Execute it against the project database using whichever tool the current
    Lovable session provides for database migrations or inserts. Nothing in
    the app code needs to change.

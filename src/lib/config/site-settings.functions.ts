@@ -17,7 +17,7 @@ export const getSiteSettings = createServerFn({ method: "GET" }).handler(
     const { createPublicSupabase } = await import("@/lib/supabase/server-public");
     const supabase = createPublicSupabase();
     const { data, error } = await supabase
-      .from("site_settings_public")
+      .from("site_settings")
       .select("*")
       .limit(1)
       .maybeSingle();

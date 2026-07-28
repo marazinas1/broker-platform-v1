@@ -1,46 +1,108 @@
-## What's actually wrong
+## Phase 1, Step 1 — Listings data model (DB only) — revised
 
-The masking view is fine — `listings_public` already NULLs `commission_note` unless `commission_note_public` is true, and masks street/number/coords by `geo_precision`. The leak is that **the view is not the only public door**.
+Database-only. One migration + supporting TypeScript in `/lib/validation/` and `/lib/auth/`.
 
-Confirmed against the live database:
+### 1. Migration: tables
 
-- The `anon` role holds full table privileges (select/insert/update/delete) on **every** table in the public schema.
-- `listings` has an RLS policy `listings anon select public` with `USING (status IN ('active','coming_soon','reserved','sold','rented'))` — no column restriction.
-- So anyone with the public API key can call the Data API against the raw table and read `commission_note`, `sold_price`, exact `address_street`/`address_number`, exact `geo_lat`/`geo_lng` regardless of `geo_precision`, plus `expose_notes`, `created_by`, `updated_by`, `view_count`, `inquiry_count`. The view masking never runs.
-- Same pattern on siblings: `listing_images`, `listing_tours`, `listing_documents` have direct anon SELECT policies; `profiles` has `Public team members are readable USING (show_on_website = true)` over **all columns**, exposing `email`, `phone`, `role`, `is_active`, `last_login_at`; `site_settings` is readable by role `public` with `USING (true)`.
-- All four `*_public` views are `security_invoker=true`, which is why those wide base-table policies exist.
+Create in `public`, each followed by `GRANT`, `ENABLE RLS`, then policies:
 
-This is a template defect: every forked client site inherits it.
+- `listings` — all spec columns, inline `check`s, `agent_id/created_by/updated_by → profiles(id) ON DELETE SET NULL`, `updated_at` via existing `tg_set_updated_at`.
+- `listing_images`, `listing_documents`, `listing_tours` — as specced, `ON DELETE CASCADE`.
 
-## The fix: one public door
+Base-table grants: `SELECT, INSERT, UPDATE, DELETE` to `authenticated`; `ALL` to `service_role`. **No `anon` grant on base tables** — public reads go through views (§4).
 
-### 1. Views become the only anon-readable objects
-- Flip `listings_public`, `listing_images_public`, `listing_tours_public`, `listing_documents_public` to `security_invoker = false` so they execute as owner; row filters and column masking already live in the view bodies.
-- Harden `listing_documents_public`: `storage_path` returns NULL when `requires_lead = true`.
-- Add `profiles_public` (`id, full_name, public_title, public_bio, public_photo_url, languages_spoken, specializations, sort_order`, filtered to `show_on_website AND is_active`) — no email, phone, role, or login timestamps.
-- Add `site_settings_public` (brand/contact/legal/analytics config that the page renders) and `feature_flags_public` (`key, enabled, config`).
+### 2. Indexes
 
-### 2. Remove the raw-table anon surface
-- Drop the anon SELECT policies on `listings`, `listing_images`, `listing_tours`, `listing_documents`, `profiles`, and the `USING (true)` public policies on `site_settings` / `feature_flags`; replace the last ones with authenticated-only staff read policies.
-- `REVOKE ALL … FROM anon` on every public-schema table and view, then `GRANT SELECT` on the seven `*_public` views to `anon`.
-- Keep exactly one anon write path: `GRANT INSERT ON public.inquiries TO anon`, backed by the existing insert policy. Anon currently also holds update/delete grants on `profiles`, `permissions`, `user_invitations` and everything else — blocked by RLS today, one missing policy away from a real hole. Those go away.
-- `authenticated` and `service_role` grants untouched, so admin panel and server functions keep working.
+`listings`: btree on `status`, `deal_type`, `property_type`, `address_city`, `price`, `published_at DESC`, `agent_id`; GIN on `features`. Btree on `listing_images(listing_id, sort_order)`, `listing_documents(listing_id)`, `listing_tours(listing_id, sort_order)`.
 
-### 3. Point app code at the new views
-- `src/lib/team/queries.functions.ts` → `profiles_public`
-- `src/lib/config/site-settings.functions.ts` public read → `site_settings_public` (admin writes unchanged)
-- `src/lib/config/feature-flags.functions.ts` public read → `feature_flags_public`
-- Listing queries already use `listings_public` / `listing_images_public` — unchanged.
+### 3. Functions and triggers
 
-## Audit report delivered with the fix
+- `slugify(text)` — lowercase, translit `äöüß/áé…`, non-alphanum → `-`, collapse.
+- `listings_generate_slug()` BEFORE INSERT — build `{property_type}-{city}-{rooms}-zimmer-{hex4}`, LOOP with unique-violation retry (max 5). Never re-generate on UPDATE.
+- `validate_listing_energy(country, energy, property_type) → text[]`:
+  - `property_type IN ('land','garage')` → `'{}'`.
+  - `AT`: require `hwb` numeric, `eeb` numeric, `efficiency_class` ∈ (A++,A+,A,B,C,D,E,F,G).
+  - `DE`: require `certificate_type` ∈ (Bedarfsausweis|Verbrauchsausweis), `final_energy` numeric, `energy_source` text, `efficiency_class` ∈ (A+..H), `year_built` int.
+  - `CH,IS,US` → `'{}'` (extensible).
+- `listings_validate_energy_on_publish()` BEFORE INSERT/UPDATE — when target status ∈ (`active`,`coming_soon`) and (INSERT or status changed):
+  - Read `country` from `site_settings LIMIT 1`. **If NULL/no row → `RAISE EXCEPTION 'Site country is not configured; set site_settings.country before publishing listings'`** (correction #3).
+  - Run validator; raise with the missing/invalid field names if non-empty.
+- `listings_enforce_status_flow()` BEFORE UPDATE — allowed transitions per spec, else raise. Side-effects: → `active` sets `published_at = COALESCE(published_at, now())`; → `sold`/`rented` sets `sold_at = now()`; → `archived` sets `archived_at = now()`.
+- `listings_enforce_publish_permission()` BEFORE INSERT/UPDATE — if target status ∈ (`active`,`coming_soon`) and (INSERT or status changed), require `listing.publish`; if target ∈ (`sold`,`rented`) and status changed, require `listing.status.change`. Raises readable errors (per approved trigger approach).
+- `listings_set_actor()` BEFORE INSERT/UPDATE — set `created_by`/`updated_by` from `auth.uid()`.
 
-For every anon-reachable column I'll verify and report: `commission_note` (flag-gated), `sold_price` (never public), address/geo fields (`geo_precision`-gated), `expose_notes`, `created_by`/`updated_by`, `view_count`/`inquiry_count`, draft/archived rows, document `is_public`/`requires_lead` gating, image `original_storage_path` and processing internals, profile `email`/`phone`/`role`/`is_active`/`last_login_at`, `inquiries` PII and `photo_paths` (write-only for anon), `permissions` / `role_permissions` / `owner_only_permissions` / `user_invitations` (invite `token`) — no anon access at all, and storage buckets (`listing-images` public; documents/originals/seller-photos private).
+### 4. Public views (correction #1)
 
-## Verification
+Single explicit public surface. Base tables have **no anon read policy**.
 
-1. Re-run the security scan; confirm the `commission_note` finding is cleared and no error-level findings remain.
-2. Anon Data API probe: raw `listings` must return permission denied; `listings_public` must return `commission_note: null` for a flag-off listing and no `sold_price` column at all.
-3. Confirm the site still renders: homepage, listings index, detail page, sold archive, about/team, contact.
-4. Publish, then verify `https://broker-platform-v1.lovable.app/de` — Berg Immobilien identity, bucket-served images — and re-run the anon probe against the live project, showing the raw response.
+- `CREATE VIEW listings_public WITH (security_invoker = true) AS SELECT <all cols except sold_price> FROM listings WHERE status IN ('active','coming_soon','reserved','sold','rented');`
+- `CREATE VIEW listing_images_public WITH (security_invoker = true) AS SELECT i.* FROM listing_images i JOIN listings_public p ON p.id = i.listing_id;`
+- `CREATE VIEW listing_documents_public WITH (security_invoker = true) AS SELECT d.* FROM listing_documents d JOIN listings_public p ON p.id = d.listing_id WHERE d.is_public = true;`
+- `CREATE VIEW listing_tours_public WITH (security_invoker = true) AS SELECT t.* FROM listing_tours t JOIN listings_public p ON p.id = t.listing_id;`
+- `GRANT SELECT` on all four views to `anon` and `authenticated`.
+- Because views are `security_invoker`, they run under the caller's role and need a matching policy on the base table. Add a `TO anon` SELECT policy on each base table with the same predicate as the view (statuses list; `is_public = true` for documents) so the view actually returns rows for anonymous callers. This policy is only reachable via the view (base tables have no anon grant), keeping the public surface one-place-defined.
 
-No images are regenerated or touched.
+### 5. Role matrix — single source of truth in DB (correction #2)
+
+Chosen approach: **runtime load + cache on both server and client.** No codegen file to keep in sync.
+
+- Table `role_permissions(role text, permission_key text, granted boolean, primary key(role, permission_key))`. Grants `SELECT` to `anon, authenticated`; `ALL` to `service_role`. Enable RLS; policy: `TO anon, authenticated USING (true)` (matrix is not sensitive; hiding it would break the client hook and the seed test).
+- Seed all 16 keys × 5 roles in the same migration (this is authoritative going forward; the TS constant is deleted).
+- Helper `current_user_has_permission(_key text) → boolean` SECURITY DEFINER: inactive → false; else `permissions` override wins; else look up `role_permissions` for caller's role.
+- TypeScript changes in `src/lib/auth/permissions.ts`:
+  - Delete the hand-written `PERMISSION_MATRIX` constant.
+  - Keep `Role`, `ROLES`, `PermissionKey` union, `PermissionOverride`, `PermissionProfile` types.
+  - Add `type PermissionMatrix = Record<PermissionKey, Record<Role, boolean>>`.
+  - `hasPermission(profile, overrides, key, matrix)` becomes **pure with matrix as an argument** (stays unit-testable, no I/O).
+- New `src/lib/auth/permission-matrix.functions.ts`: `getPermissionMatrix` server fn that selects from `role_permissions` and returns the shaped matrix. `queryOptions` with generous `staleTime` (matrix rarely changes).
+- Update `src/lib/auth/use-permission.ts` and the server assertions in `require-permission.server.ts` to load the matrix via that query / server fn and pass it to `hasPermission`. Server-side `assertPermission` can also call `current_user_has_permission(_key)` directly instead of re-implementing the check in TS — pick that path where possible (single round-trip, DB is the arbiter). The TS `hasPermission` remains for client-side UI hiding.
+- The route `/$locale/admin` loader preloads `getPermissionMatrix` so the admin shell has it synchronously.
+
+### 6. RLS policies
+
+**listings** (no anon SELECT):
+- `SELECT` authenticated: `current_user_has_permission('listing.edit.any')` OR (`current_user_has_permission('listing.edit.own')` AND (`agent_id = auth.uid()` OR `created_by = auth.uid()`)) OR the row is publicly visible (status list). This lets signed-in staff see drafts they own plus everything public without leaking others' drafts.
+- `INSERT`: `current_user_has_permission('listing.create')`. Publish/status-change permission is enforced by the trigger (readable errors).
+- `UPDATE` USING/WITH CHECK: `listing.edit.any` OR (`listing.edit.own` AND owner match).
+- `DELETE`: `current_user_has_permission('listing.delete')`.
+
+**listing_images / listing_documents / listing_tours** base tables:
+- Anon SELECT policy scoped to public-view predicate (see §4). No anon grant on the table, so only reachable through the view.
+- Authenticated SELECT: parent listing is readable by caller (mirrors listings SELECT).
+- INSERT/UPDATE/DELETE: caller can UPDATE the parent (same predicate).
+
+**Base `listings`** gets no anon SELECT policy or grant; `listings_public` is the only public read path.
+
+### 7. TypeScript
+
+- New `src/lib/validation/energy.ts` (under 200 lines): `EFFICIENCY_CLASS_AT`, `EFFICIENCY_CLASS_DE` tuples; `energySchemas: Record<Country, ZodSchema>` (AT/DE strict, CH/IS/US passthrough); `validateEnergy(country, energy, propertyType) → { missing: string[] }` matching DB output.
+- `src/lib/validation/energy-cert.ts` becomes a thin re-export from `energy.ts`.
+- `src/lib/auth/permissions.ts` — remove `PERMISSION_MATRIX`, refactor `hasPermission` to accept `matrix` argument.
+- `src/lib/auth/permission-matrix.functions.ts` — new server fn + query options.
+- `src/lib/auth/use-permission.ts` and `require-permission.server.ts` — update call sites to use the DB-loaded matrix or `current_user_has_permission` directly on the server.
+
+### 8. Types
+
+Regenerate automatically after migration. No manual edit to `types.ts`.
+
+### 9. Verification (post-migration, before closing the step)
+
+1. AT house draft, empty energy, → `active` → raises naming `hwb, eeb, efficiency_class`.
+2. Land listing → `active` with empty energy → succeeds.
+3. `site_settings` empty → publish attempt → raises "Site country is not configured".
+4. Invalid status transition (`draft → sold`) → raises.
+5. Two agent profiles: B cannot UPDATE A's row.
+6. Assistant cannot publish (trigger error surfaces `listing.publish` requirement).
+7. Anonymous `SELECT sold_price FROM listings_public` → column does not exist; `SELECT * FROM listings` as anon → permission denied.
+8. `SELECT role, permission_key, granted FROM role_permissions ORDER BY 1,2` — captured; used as truth for the client hook.
+
+### Out of scope this step
+
+Admin listing UI, public listing pages, storage buckets, image upload, PDF expose, CI parity test (unnecessary — DB is now sole source of truth).
+
+### Technical notes
+
+- Views are `security_invoker = true` so RLS still applies as the caller — the split "no anon grant on base table; anon policy only reached via view" gives one explicit public surface.
+- Triggers reading `site_settings` / `role_permissions` are `SECURITY DEFINER SET search_path = public`.
+- `check` constraints only on immutable scalars; time-dependent rules live in triggers (per template rules).
+- The `listings.agent_id` FK uses `ON DELETE SET NULL` so deleting a profile does not cascade-delete listings.

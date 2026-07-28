@@ -64,14 +64,12 @@ function ValuationPage() {
           </div>
           <div className="md:col-span-7">
             <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
-              {settings.og_default_image ? (
-                <img
-                  src={settings.og_default_image}
-                  alt=""
-                  className="h-full w-full object-cover"
-                  loading="eager"
-                />
-              ) : null}
+              <img
+                src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80"
+                alt=""
+                className="h-full w-full object-cover"
+                loading="eager"
+              />
             </div>
           </div>
         </div>

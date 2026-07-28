@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
 
-import brokerPlaceholder from "@/assets/katharina-berg.jpg";
+import brokerPlaceholder from "@/assets/broker-placeholder.jpg";
 import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import { pickImageUrl } from "@/lib/listings/image";
