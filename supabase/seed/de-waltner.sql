@@ -6,7 +6,7 @@
 -- Swap wholesale with the other seed files under supabase/seed/ — see README.
 -- =============================================================================
 
-SET session_replication_role = 'replica';
+-- session_replication_role skipped (insufficient privileges)
 
 -- ---------------------------------------------------------------------------
 -- 0. Wipe existing demo data.
