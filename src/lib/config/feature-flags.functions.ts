@@ -10,7 +10,7 @@ export const getFeatureFlags = createServerFn({ method: "GET" }).handler(
     const { createPublicSupabase } = await import("@/lib/supabase/server-public");
     const supabase = createPublicSupabase();
     const { data, error } = await supabase
-      .from("feature_flags")
+      .from("feature_flags_public")
       .select("key, enabled, config");
     if (error) throw new Error(`Failed to load feature_flags: ${error.message}`);
     const flags: FeatureFlags = {};

@@ -16,7 +16,7 @@ export const listPublicTeam = createServerFn({ method: "GET" }).handler(
     const { createPublicSupabase } = await import("@/lib/supabase/server-public");
     const supabase = createPublicSupabase();
     const { data, error } = await supabase
-      .from("profiles")
+      .from("profiles_public")
       .select(
         "id, full_name, public_title, public_photo_url, languages_spoken, specializations, sort_order",
       )
