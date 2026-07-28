@@ -1,108 +1,46 @@
-## Phase 1, Step 1 — Listings data model (DB only) — revised
+## Pass 1 — rebrand, copy, thin spots (images untouched)
 
-Database-only. One migration + supporting TypeScript in `/lib/validation/` and `/lib/auth/`.
+Scope for this pass: steps 1, 3 and 4. Existing Unsplash hotlinks stay exactly as they are; `og_default_image` keeps its current Unsplash URL for now. No image generation, no storage uploads, no changes to the valuation page's hardcoded image. Those all move to pass 2.
 
-### 1. Migration: tables
+### 1. Rebrand to Katharina Berg / Berg Immobilien
 
-Create in `public`, each followed by `GRANT`, `ENABLE RLS`, then policies:
+Rename `supabase/seed/de-waltner.sql` to `supabase/seed/de-berg.sql` and rewrite every identity field:
 
-- `listings` — all spec columns, inline `check`s, `agent_id/created_by/updated_by → profiles(id) ON DELETE SET NULL`, `updated_at` via existing `tg_set_updated_at`.
-- `listing_images`, `listing_documents`, `listing_tours` — as specced, `ON DELETE CASCADE`.
+| Field | New value |
+| --- | --- |
+| site_name | Berg Immobilien |
+| legal_name | Katharina Berg — Berg Immobilien |
+| primary_agent_name | Katharina Berg |
+| primary_agent_role | Immobilienmaklerin, Saarland |
+| contact_email | kontakt@berg-immobilien-saar.de |
+| contact_phone | +49 6898 5512 480 |
+| address | Rathausstraße 24, 66346 Püttlingen |
 
-Base-table grants: `SELECT, INSERT, UPDATE, DELETE` to `authenticated`; `ALL` to `service_role`. **No `anon` grant on base tables** — public reads go through views (§4).
+Also rewritten: `credibility_heading` ("Warum Berg Immobilien"), `about_body`, `legal_impressum`, the seed file's header comment, and `supabase/seed/README.md` (which currently still names her).
 
-### 2. Indexes
+The database currently holds the old identity, so the seed gets applied as part of this pass — the file alone changes nothing.
 
-`listings`: btree on `status`, `deal_type`, `property_type`, `address_city`, `price`, `published_at DESC`, `agent_id`; GIN on `features`. Btree on `listing_images(listing_id, sort_order)`, `listing_documents(listing_id)`, `listing_tours(listing_id, sort_order)`.
+### 3. Listing copy at agency standard
 
-### 3. Functions and triggers
+All eight listings get rewritten German copy: a headline naming the property and its town, then 2–3 paragraphs covering Baujahr and Zustand, the room layout floor by floor, Ausstattung (Heizung, Fenster, Bäder, Bodenbeläge), and Lage/Umgebung — schools, shops, motorway access, walking distance to the Ortsmitte. Target 900–1400 characters each; today they run 119–732.
 
-- `slugify(text)` — lowercase, translit `äöüß/áé…`, non-alphanum → `-`, collapse.
-- `listings_generate_slug()` BEFORE INSERT — build `{property_type}-{city}-{rooms}-zimmer-{hex4}`, LOOP with unique-violation retry (max 5). Never re-generate on UPDATE.
-- `validate_listing_energy(country, energy, property_type) → text[]`:
-  - `property_type IN ('land','garage')` → `'{}'`.
-  - `AT`: require `hwb` numeric, `eeb` numeric, `efficiency_class` ∈ (A++,A+,A,B,C,D,E,F,G).
-  - `DE`: require `certificate_type` ∈ (Bedarfsausweis|Verbrauchsausweis), `final_energy` numeric, `energy_source` text, `efficiency_class` ∈ (A+..H), `year_built` int.
-  - `CH,IS,US` → `'{}'` (extensible).
-- `listings_validate_energy_on_publish()` BEFORE INSERT/UPDATE — when target status ∈ (`active`,`coming_soon`) and (INSERT or status changed):
-  - Read `country` from `site_settings LIMIT 1`. **If NULL/no row → `RAISE EXCEPTION 'Site country is not configured; set site_settings.country before publishing listings'`** (correction #3).
-  - Run validator; raise with the missing/invalid field names if non-empty.
-- `listings_enforce_status_flow()` BEFORE UPDATE — allowed transitions per spec, else raise. Side-effects: → `active` sets `published_at = COALESCE(published_at, now())`; → `sold`/`rented` sets `sold_at = now()`; → `archived` sets `archived_at = now()`.
-- `listings_enforce_publish_permission()` BEFORE INSERT/UPDATE — if target status ∈ (`active`,`coming_soon`) and (INSERT or status changed), require `listing.publish`; if target ∈ (`sold`,`rented`) and status changed, require `listing.status.change`. Raises readable errors (per approved trigger approach).
-- `listings_set_actor()` BEFORE INSERT/UPDATE — set `created_by`/`updated_by` from `auth.uid()`.
+All eight also get four `content_sections` — Lage, Ausstattung, Grundriss, Energie. The two sold listings currently have zero sections and ~130-character descriptions, so they get the largest lift. Meta titles and descriptions rewritten per listing to match.
 
-### 4. Public views (correction #1)
+### 4. Remaining thin spots
 
-Single explicit public surface. Base tables have **no anon read policy**.
+- `about_body` and the Über-mich paragraphs written in the first person for Katharina Berg — her route into the profession, how she works, why she deliberately keeps few listings at a time.
+- `opening_hours` set to a plausible solo-broker schedule, including appointment-only evenings.
+- `geo_lat` / `geo_lng` pointed at the Püttlingen office so the contact-page map lands correctly.
+- Energy blocks carried across intact and completed anywhere a field is thin, so DE validation shows full values on all eight listings.
 
-- `CREATE VIEW listings_public WITH (security_invoker = true) AS SELECT <all cols except sold_price> FROM listings WHERE status IN ('active','coming_soon','reserved','sold','rented');`
-- `CREATE VIEW listing_images_public WITH (security_invoker = true) AS SELECT i.* FROM listing_images i JOIN listings_public p ON p.id = i.listing_id;`
-- `CREATE VIEW listing_documents_public WITH (security_invoker = true) AS SELECT d.* FROM listing_documents d JOIN listings_public p ON p.id = d.listing_id WHERE d.is_public = true;`
-- `CREATE VIEW listing_tours_public WITH (security_invoker = true) AS SELECT t.* FROM listing_tours t JOIN listings_public p ON p.id = t.listing_id;`
-- `GRANT SELECT` on all four views to `anon` and `authenticated`.
-- Because views are `security_invoker`, they run under the caller's role and need a matching policy on the base table. Add a `TO anon` SELECT policy on each base table with the same predicate as the view (statuses list; `is_public = true` for documents) so the view actually returns rows for anonymous callers. This policy is only reachable via the view (base tables have no anon grant), keeping the public surface one-place-defined.
+### Verification before I stop
 
-### 5. Role matrix — single source of truth in DB (correction #2)
+- `rg -i "waltner|dorothe|waltner-immobilien"` across the repo returns nothing.
+- The same check run against every text column in the database — site_settings, listing titles, descriptions, meta fields, content_sections, image alt text — returns nothing.
+- Fetch the rendered HTML of homepage, listings index, a detail page, Über mich and Kontakt and grep the markup and head tags for the old name.
 
-Chosen approach: **runtime load + cache on both server and client.** No codegen file to keep in sync.
+Then I stop and hand it to you for a read-through. No publish in this pass — publishing waits until the imagery lands, unless you want the copy live sooner.
 
-- Table `role_permissions(role text, permission_key text, granted boolean, primary key(role, permission_key))`. Grants `SELECT` to `anon, authenticated`; `ALL` to `service_role`. Enable RLS; policy: `TO anon, authenticated USING (true)` (matrix is not sensitive; hiding it would break the client hook and the seed test).
-- Seed all 16 keys × 5 roles in the same migration (this is authoritative going forward; the TS constant is deleted).
-- Helper `current_user_has_permission(_key text) → boolean` SECURITY DEFINER: inactive → false; else `permissions` override wins; else look up `role_permissions` for caller's role.
-- TypeScript changes in `src/lib/auth/permissions.ts`:
-  - Delete the hand-written `PERMISSION_MATRIX` constant.
-  - Keep `Role`, `ROLES`, `PermissionKey` union, `PermissionOverride`, `PermissionProfile` types.
-  - Add `type PermissionMatrix = Record<PermissionKey, Record<Role, boolean>>`.
-  - `hasPermission(profile, overrides, key, matrix)` becomes **pure with matrix as an argument** (stays unit-testable, no I/O).
-- New `src/lib/auth/permission-matrix.functions.ts`: `getPermissionMatrix` server fn that selects from `role_permissions` and returns the shaped matrix. `queryOptions` with generous `staleTime` (matrix rarely changes).
-- Update `src/lib/auth/use-permission.ts` and the server assertions in `require-permission.server.ts` to load the matrix via that query / server fn and pass it to `hasPermission`. Server-side `assertPermission` can also call `current_user_has_permission(_key)` directly instead of re-implementing the check in TS — pick that path where possible (single round-trip, DB is the arbiter). The TS `hasPermission` remains for client-side UI hiding.
-- The route `/$locale/admin` loader preloads `getPermissionMatrix` so the admin shell has it synchronously.
+## Pass 2 (queued, not started)
 
-### 6. RLS policies
-
-**listings** (no anon SELECT):
-- `SELECT` authenticated: `current_user_has_permission('listing.edit.any')` OR (`current_user_has_permission('listing.edit.own')` AND (`agent_id = auth.uid()` OR `created_by = auth.uid()`)) OR the row is publicly visible (status list). This lets signed-in staff see drafts they own plus everything public without leaking others' drafts.
-- `INSERT`: `current_user_has_permission('listing.create')`. Publish/status-change permission is enforced by the trigger (readable errors).
-- `UPDATE` USING/WITH CHECK: `listing.edit.any` OR (`listing.edit.own` AND owner match).
-- `DELETE`: `current_user_has_permission('listing.delete')`.
-
-**listing_images / listing_documents / listing_tours** base tables:
-- Anon SELECT policy scoped to public-view predicate (see §4). No anon grant on the table, so only reachable through the view.
-- Authenticated SELECT: parent listing is readable by caller (mirrors listings SELECT).
-- INSERT/UPDATE/DELETE: caller can UPDATE the parent (same predicate).
-
-**Base `listings`** gets no anon SELECT policy or grant; `listings_public` is the only public read path.
-
-### 7. TypeScript
-
-- New `src/lib/validation/energy.ts` (under 200 lines): `EFFICIENCY_CLASS_AT`, `EFFICIENCY_CLASS_DE` tuples; `energySchemas: Record<Country, ZodSchema>` (AT/DE strict, CH/IS/US passthrough); `validateEnergy(country, energy, propertyType) → { missing: string[] }` matching DB output.
-- `src/lib/validation/energy-cert.ts` becomes a thin re-export from `energy.ts`.
-- `src/lib/auth/permissions.ts` — remove `PERMISSION_MATRIX`, refactor `hasPermission` to accept `matrix` argument.
-- `src/lib/auth/permission-matrix.functions.ts` — new server fn + query options.
-- `src/lib/auth/use-permission.ts` and `require-permission.server.ts` — update call sites to use the DB-loaded matrix or `current_user_has_permission` directly on the server.
-
-### 8. Types
-
-Regenerate automatically after migration. No manual edit to `types.ts`.
-
-### 9. Verification (post-migration, before closing the step)
-
-1. AT house draft, empty energy, → `active` → raises naming `hwb, eeb, efficiency_class`.
-2. Land listing → `active` with empty energy → succeeds.
-3. `site_settings` empty → publish attempt → raises "Site country is not configured".
-4. Invalid status transition (`draft → sold`) → raises.
-5. Two agent profiles: B cannot UPDATE A's row.
-6. Assistant cannot publish (trigger error surfaces `listing.publish` requirement).
-7. Anonymous `SELECT sold_price FROM listings_public` → column does not exist; `SELECT * FROM listings` as anon → permission denied.
-8. `SELECT role, permission_key, granted FROM role_permissions ORDER BY 1,2` — captured; used as truth for the client hook.
-
-### Out of scope this step
-
-Admin listing UI, public listing pages, storage buckets, image upload, PDF expose, CI parity test (unnecessary — DB is now sole source of truth).
-
-### Technical notes
-
-- Views are `security_invoker = true` so RLS still applies as the caller — the split "no anon grant on base table; anon policy only reached via view" gives one explicit public surface.
-- Triggers reading `site_settings` / `role_permissions` are `SECURITY DEFINER SET search_path = public`.
-- `check` constraints only on immutable scalars; time-dependent rules live in triggers (per template rules).
-- The `listings.agent_id` FK uses `ON DELETE SET NULL` so deleting a profile does not cascade-delete listings.
+~45 property photos at 5–6 per listing, a Katharina Berg portrait, and a homepage hero — generated as one coherent photographic set, uploaded to the `listing-images` bucket through the existing pipeline with variants, German alt text and blurhash. `og_default_image` repointed at the hero, and the valuation route's hardcoded Unsplash URL swapped out. Then the full page-by-page walkthrough and publish.
