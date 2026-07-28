@@ -20,8 +20,7 @@ export const listPublicTeam = createServerFn({ method: "GET" }).handler(
       .select(
         "id, full_name, public_title, public_photo_url, languages_spoken, specializations, sort_order",
       )
-      .eq("show_on_website", true)
-      .eq("is_active", true)
+      // profiles_public already filters to show_on_website AND is_active.
       .order("sort_order", { ascending: true });
     if (error) throw new Error(`Failed to load team: ${error.message}`);
     return (data ?? []) as PublicTeamMember[];
