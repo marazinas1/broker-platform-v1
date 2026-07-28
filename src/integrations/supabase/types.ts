@@ -105,6 +105,7 @@ export type Database = {
           id: string
           is_public: boolean
           listing_id: string
+          public_storage_path: string | null
           requires_lead: boolean
           storage_path: string
           type: string | null
@@ -115,6 +116,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           listing_id: string
+          public_storage_path?: string | null
           requires_lead?: boolean
           storage_path: string
           type?: string | null
@@ -125,6 +127,7 @@ export type Database = {
           id?: string
           is_public?: boolean
           listing_id?: string
+          public_storage_path?: string | null
           requires_lead?: boolean
           storage_path?: string
           type?: string | null
@@ -315,6 +318,11 @@ export type Database = {
           price_on_request: boolean
           price_period: string | null
           property_type: string
+          public_address_number: string | null
+          public_address_street: string | null
+          public_commission_note: string | null
+          public_geo_lat: number | null
+          public_geo_lng: number | null
           published_at: string | null
           reference_code: string | null
           rooms: number | null
@@ -374,6 +382,11 @@ export type Database = {
           price_on_request?: boolean
           price_period?: string | null
           property_type: string
+          public_address_number?: string | null
+          public_address_street?: string | null
+          public_commission_note?: string | null
+          public_geo_lat?: number | null
+          public_geo_lng?: number | null
           published_at?: string | null
           reference_code?: string | null
           rooms?: number | null
@@ -433,6 +446,11 @@ export type Database = {
           price_on_request?: boolean
           price_period?: string | null
           property_type?: string
+          public_address_number?: string | null
+          public_address_street?: string | null
+          public_commission_note?: string | null
+          public_geo_lat?: number | null
+          public_geo_lng?: number | null
           published_at?: string | null
           reference_code?: string | null
           rooms?: number | null
@@ -978,15 +996,15 @@ export type Database = {
           additional_costs?: Json | null
           address_city?: string | null
           address_country?: string | null
-          address_number?: never
+          address_number?: string | null
           address_region?: string | null
-          address_street?: never
+          address_street?: string | null
           address_zip?: string | null
           agent_id?: string | null
           availability_date?: string | null
           bathrooms?: number | null
           bedrooms?: number | null
-          commission_note?: never
+          commission_note?: string | null
           condition?: string | null
           content_sections?: Json | null
           created_at?: string | null
@@ -995,8 +1013,8 @@ export type Database = {
           energy?: Json | null
           features?: string[] | null
           floor?: number | null
-          geo_lat?: never
-          geo_lng?: never
+          geo_lat?: number | null
+          geo_lng?: number | null
           geo_precision?: string | null
           heating_type?: string | null
           highlights?: Json | null
@@ -1029,15 +1047,15 @@ export type Database = {
           additional_costs?: Json | null
           address_city?: string | null
           address_country?: string | null
-          address_number?: never
+          address_number?: string | null
           address_region?: string | null
-          address_street?: never
+          address_street?: string | null
           address_zip?: string | null
           agent_id?: string | null
           availability_date?: string | null
           bathrooms?: number | null
           bedrooms?: number | null
-          commission_note?: never
+          commission_note?: string | null
           condition?: string | null
           content_sections?: Json | null
           created_at?: string | null
@@ -1046,8 +1064,8 @@ export type Database = {
           energy?: Json | null
           features?: string[] | null
           floor?: number | null
-          geo_lat?: never
-          geo_lng?: never
+          geo_lat?: number | null
+          geo_lng?: number | null
           geo_precision?: string | null
           heating_type?: string | null
           highlights?: Json | null
