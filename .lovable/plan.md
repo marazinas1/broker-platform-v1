@@ -1,46 +1,46 @@
-## Pass 1 — rebrand, copy, thin spots (images untouched)
+## What's actually wrong
 
-Scope for this pass: steps 1, 3 and 4. Existing Unsplash hotlinks stay exactly as they are; `og_default_image` keeps its current Unsplash URL for now. No image generation, no storage uploads, no changes to the valuation page's hardcoded image. Those all move to pass 2.
+The masking view is fine — `listings_public` already NULLs `commission_note` unless `commission_note_public` is true, and masks street/number/coords by `geo_precision`. The leak is that **the view is not the only public door**.
 
-### 1. Rebrand to Katharina Berg / Berg Immobilien
+Confirmed against the live database:
 
-Rename `supabase/seed/de-waltner.sql` to `supabase/seed/de-berg.sql` and rewrite every identity field:
+- The `anon` role holds full table privileges (select/insert/update/delete) on **every** table in the public schema.
+- `listings` has an RLS policy `listings anon select public` with `USING (status IN ('active','coming_soon','reserved','sold','rented'))` — no column restriction.
+- So anyone with the public API key can call the Data API against the raw table and read `commission_note`, `sold_price`, exact `address_street`/`address_number`, exact `geo_lat`/`geo_lng` regardless of `geo_precision`, plus `expose_notes`, `created_by`, `updated_by`, `view_count`, `inquiry_count`. The view masking never runs.
+- Same pattern on siblings: `listing_images`, `listing_tours`, `listing_documents` have direct anon SELECT policies; `profiles` has `Public team members are readable USING (show_on_website = true)` over **all columns**, exposing `email`, `phone`, `role`, `is_active`, `last_login_at`; `site_settings` is readable by role `public` with `USING (true)`.
+- All four `*_public` views are `security_invoker=true`, which is why those wide base-table policies exist.
 
-| Field | New value |
-| --- | --- |
-| site_name | Berg Immobilien |
-| legal_name | Katharina Berg — Berg Immobilien |
-| primary_agent_name | Katharina Berg |
-| primary_agent_role | Immobilienmaklerin, Saarland |
-| contact_email | kontakt@berg-immobilien-saar.de |
-| contact_phone | +49 6898 5512 480 |
-| address | Rathausstraße 24, 66346 Püttlingen |
+This is a template defect: every forked client site inherits it.
 
-Also rewritten: `credibility_heading` ("Warum Berg Immobilien"), `about_body`, `legal_impressum`, the seed file's header comment, and `supabase/seed/README.md` (which currently still names her).
+## The fix: one public door
 
-The database currently holds the old identity, so the seed gets applied as part of this pass — the file alone changes nothing.
+### 1. Views become the only anon-readable objects
+- Flip `listings_public`, `listing_images_public`, `listing_tours_public`, `listing_documents_public` to `security_invoker = false` so they execute as owner; row filters and column masking already live in the view bodies.
+- Harden `listing_documents_public`: `storage_path` returns NULL when `requires_lead = true`.
+- Add `profiles_public` (`id, full_name, public_title, public_bio, public_photo_url, languages_spoken, specializations, sort_order`, filtered to `show_on_website AND is_active`) — no email, phone, role, or login timestamps.
+- Add `site_settings_public` (brand/contact/legal/analytics config that the page renders) and `feature_flags_public` (`key, enabled, config`).
 
-### 3. Listing copy at agency standard
+### 2. Remove the raw-table anon surface
+- Drop the anon SELECT policies on `listings`, `listing_images`, `listing_tours`, `listing_documents`, `profiles`, and the `USING (true)` public policies on `site_settings` / `feature_flags`; replace the last ones with authenticated-only staff read policies.
+- `REVOKE ALL … FROM anon` on every public-schema table and view, then `GRANT SELECT` on the seven `*_public` views to `anon`.
+- Keep exactly one anon write path: `GRANT INSERT ON public.inquiries TO anon`, backed by the existing insert policy. Anon currently also holds update/delete grants on `profiles`, `permissions`, `user_invitations` and everything else — blocked by RLS today, one missing policy away from a real hole. Those go away.
+- `authenticated` and `service_role` grants untouched, so admin panel and server functions keep working.
 
-All eight listings get rewritten German copy: a headline naming the property and its town, then 2–3 paragraphs covering Baujahr and Zustand, the room layout floor by floor, Ausstattung (Heizung, Fenster, Bäder, Bodenbeläge), and Lage/Umgebung — schools, shops, motorway access, walking distance to the Ortsmitte. Target 900–1400 characters each; today they run 119–732.
+### 3. Point app code at the new views
+- `src/lib/team/queries.functions.ts` → `profiles_public`
+- `src/lib/config/site-settings.functions.ts` public read → `site_settings_public` (admin writes unchanged)
+- `src/lib/config/feature-flags.functions.ts` public read → `feature_flags_public`
+- Listing queries already use `listings_public` / `listing_images_public` — unchanged.
 
-All eight also get four `content_sections` — Lage, Ausstattung, Grundriss, Energie. The two sold listings currently have zero sections and ~130-character descriptions, so they get the largest lift. Meta titles and descriptions rewritten per listing to match.
+## Audit report delivered with the fix
 
-### 4. Remaining thin spots
+For every anon-reachable column I'll verify and report: `commission_note` (flag-gated), `sold_price` (never public), address/geo fields (`geo_precision`-gated), `expose_notes`, `created_by`/`updated_by`, `view_count`/`inquiry_count`, draft/archived rows, document `is_public`/`requires_lead` gating, image `original_storage_path` and processing internals, profile `email`/`phone`/`role`/`is_active`/`last_login_at`, `inquiries` PII and `photo_paths` (write-only for anon), `permissions` / `role_permissions` / `owner_only_permissions` / `user_invitations` (invite `token`) — no anon access at all, and storage buckets (`listing-images` public; documents/originals/seller-photos private).
 
-- `about_body` and the Über-mich paragraphs written in the first person for Katharina Berg — her route into the profession, how she works, why she deliberately keeps few listings at a time.
-- `opening_hours` set to a plausible solo-broker schedule, including appointment-only evenings.
-- `geo_lat` / `geo_lng` pointed at the Püttlingen office so the contact-page map lands correctly.
-- Energy blocks carried across intact and completed anywhere a field is thin, so DE validation shows full values on all eight listings.
+## Verification
 
-### Verification before I stop
+1. Re-run the security scan; confirm the `commission_note` finding is cleared and no error-level findings remain.
+2. Anon Data API probe: raw `listings` must return permission denied; `listings_public` must return `commission_note: null` for a flag-off listing and no `sold_price` column at all.
+3. Confirm the site still renders: homepage, listings index, detail page, sold archive, about/team, contact.
+4. Publish, then verify `https://broker-platform-v1.lovable.app/de` — Berg Immobilien identity, bucket-served images — and re-run the anon probe against the live project, showing the raw response.
 
-- `rg -i "waltner|dorothe|waltner-immobilien"` across the repo returns nothing.
-- The same check run against every text column in the database — site_settings, listing titles, descriptions, meta fields, content_sections, image alt text — returns nothing.
-- Fetch the rendered HTML of homepage, listings index, a detail page, Über mich and Kontakt and grep the markup and head tags for the old name.
-
-Then I stop and hand it to you for a read-through. No publish in this pass — publishing waits until the imagery lands, unless you want the copy live sooner.
-
-## Pass 2 (queued, not started)
-
-~45 property photos at 5–6 per listing, a Katharina Berg portrait, and a homepage hero — generated as one coherent photographic set, uploaded to the `listing-images` bucket through the existing pipeline with variants, German alt text and blurhash. `og_default_image` repointed at the hero, and the valuation route's hardcoded Unsplash URL swapped out. Then the full page-by-page walkthrough and publish.
+No images are regenerated or touched.
