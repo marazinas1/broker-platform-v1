@@ -185,9 +185,12 @@
   }
   h1, h2, h3, h4, h5, h6, .font-heading {
     font-family: var(--font-heading);
+    font-optical-sizing: none;
+    font-weight: 400;
     letter-spacing: -0.015em;
-    line-height: 1.08;
+    line-height: 1.05;
   }
+
   /* Tabular figures on numeric utility so prices/areas align. */
   .tabular-figures {
     font-variant-numeric: tabular-nums;
