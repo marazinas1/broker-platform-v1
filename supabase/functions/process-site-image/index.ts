@@ -18,7 +18,7 @@ import {
   resizeMax,
   toAvif,
   toWebp,
-} from "../process-listing-image/pipeline.ts";
+} from "./pipeline.ts";
 
 const BUCKET = "site-assets";
 const UPLOADS_PREFIX = "uploads/";
