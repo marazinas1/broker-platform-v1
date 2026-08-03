@@ -2,7 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useState, type ReactNode } from "react";
 
+import { BrandMark } from "@/components/brand/BrandMark";
 import { LocaleSwitcher } from "@/components/shared/LocaleSwitcher";
+
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
