@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next";
 
+import { Reveal } from "@/components/shared/Reveal";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
+
 
 type Props = {
   locale: Locale;
