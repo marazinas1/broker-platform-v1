@@ -5,6 +5,8 @@ import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import type { SiteSettings } from "@/types/site-settings";
 
+import { Reveal } from "@/components/shared/Reveal";
+
 import { ListingCard } from "./ListingCard";
 
 type Props = {
