@@ -1,9 +1,11 @@
 {
-  "setup": { "complete": "Einrichtung abgeschlossen" },
+  "setup": {
+    "complete": "Einrichtung abgeschlossen"
+  },
   "home": {
     "title": "Immobilien im Saarland",
     "description": "Sorgfältig ausgewählte Häuser und Wohnungen in Püttlingen, Völklingen, Saarbrücken und Riegelsberg.",
-    "hero_line": "Immobilien mit Anspruch. Zuhause an der Saar.",
+    "hero_line": "Your home in good hands",
     "featured": "Ausgewählte Objekte",
     "categories": "Objektarten",
     "count_suffix": "Objekte",
@@ -17,7 +19,8 @@
     "contact_headline": "Kaufen oder verkaufen — sagen Sie uns, worum es geht.",
     "contact_headline_solo": "Kaufen oder verkaufen — sagen Sie mir, worum es geht.",
     "view_all": "Alle Objekte ansehen",
-    "view_all_sold": "Zum Verkauft-Archiv"
+    "view_all_sold": "Zum Verkauft-Archiv",
+    "hero_cta": "View properties"
   },
   "nav": {
     "listings": "Angebote",
@@ -49,7 +52,10 @@
       "price_asc": "Preis aufsteigend",
       "price_desc": "Preis absteigend"
     },
-    "view": { "grid": "Raster", "map": "Karte" },
+    "view": {
+      "grid": "Raster",
+      "map": "Karte"
+    },
     "filters": {
       "deal": "Angebotsart",
       "any": "Alle",
@@ -103,7 +109,11 @@
       "unavailable_title": "Objekt nicht verfügbar",
       "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an."
     },
-    "pager": { "prev": "Zurück", "next": "Weiter", "page": "Seite {{n}} von {{total}}" },
+    "pager": {
+      "prev": "Zurück",
+      "next": "Weiter",
+      "page": "Seite {{n}} von {{total}}"
+    },
     "results_count": "{{count}} Objekte"
   },
   "areas": {
@@ -162,7 +172,11 @@
     "privacy": "Datenschutz",
     "contact": "Kontakt"
   },
-  "locale": { "switch": "Sprache wechseln", "de": "Deutsch", "en": "Englisch" },
+  "locale": {
+    "switch": "Sprache wechseln",
+    "de": "Deutsch",
+    "en": "Englisch"
+  },
   "errors": {
     "notFoundTitle": "Nicht gefunden",
     "notFound": "Seite nicht gefunden.",
@@ -174,36 +188,184 @@
     "forbiddenBody": "Sie haben keine Berechtigung für diesen Bereich."
   },
   "admin": {
-    "topbar": { "signOut": "Abmelden", "toggleSidebar": "Navigation umschalten", "unknownUser": "Unbekannter Nutzer" },
-    "role": { "owner": "Inhaber", "admin": "Administrator", "agent": "Makler", "assistant": "Assistenz", "viewer": "Betrachter" },
-    "nav": { "dashboard": "Übersicht", "listings": "Angebote", "inquiries": "Anfragen", "team": "Team", "content": "Inhalte", "analytics": "Auswertung", "settings": "Einstellungen" },
-    "pages": { "dashboard": "Übersicht", "listings": "Angebote", "inquiries": "Anfragen", "team": "Team", "content": "Inhalte", "analytics": "Auswertung" },
+    "topbar": {
+      "signOut": "Abmelden",
+      "toggleSidebar": "Navigation umschalten",
+      "unknownUser": "Unbekannter Nutzer"
+    },
+    "role": {
+      "owner": "Inhaber",
+      "admin": "Administrator",
+      "agent": "Makler",
+      "assistant": "Assistenz",
+      "viewer": "Betrachter"
+    },
+    "nav": {
+      "dashboard": "Übersicht",
+      "listings": "Angebote",
+      "inquiries": "Anfragen",
+      "team": "Team",
+      "content": "Inhalte",
+      "analytics": "Auswertung",
+      "settings": "Einstellungen"
+    },
+    "pages": {
+      "dashboard": "Übersicht",
+      "listings": "Angebote",
+      "inquiries": "Anfragen",
+      "team": "Team",
+      "content": "Inhalte",
+      "analytics": "Auswertung"
+    },
     "auth": {
-      "login": { "title": "Anmelden", "subtitle": "Melden Sie sich mit Ihrer E-Mail-Adresse an.", "email": "E-Mail", "password": "Passwort", "submit": "Anmelden", "submitting": "Anmeldung läuft…", "forgot": "Passwort vergessen?", "invalid": "Anmeldedaten sind ungültig.", "generic": "Anmeldung fehlgeschlagen." },
-      "forgot": { "title": "Passwort zurücksetzen", "subtitle": "Wir senden Ihnen einen Link per E-Mail.", "email": "E-Mail", "submit": "Link anfordern", "submitting": "Wird gesendet…", "success": "Wenn ein Konto existiert, wurde ein Link versendet.", "back": "Zurück zur Anmeldung" },
-      "reset": { "title": "Neues Passwort setzen", "subtitle": "Wählen Sie ein neues Passwort.", "password": "Neues Passwort", "confirm": "Passwort bestätigen", "submit": "Passwort speichern", "submitting": "Wird gespeichert…", "success": "Passwort aktualisiert. Sie werden weitergeleitet…", "mismatch": "Die Passwörter stimmen nicht überein.", "tooShort": "Mindestens 8 Zeichen.", "invalidLink": "Der Link ist ungültig oder abgelaufen." }
+      "login": {
+        "title": "Anmelden",
+        "subtitle": "Melden Sie sich mit Ihrer E-Mail-Adresse an.",
+        "email": "E-Mail",
+        "password": "Passwort",
+        "submit": "Anmelden",
+        "submitting": "Anmeldung läuft…",
+        "forgot": "Passwort vergessen?",
+        "invalid": "Anmeldedaten sind ungültig.",
+        "generic": "Anmeldung fehlgeschlagen."
+      },
+      "forgot": {
+        "title": "Passwort zurücksetzen",
+        "subtitle": "Wir senden Ihnen einen Link per E-Mail.",
+        "email": "E-Mail",
+        "submit": "Link anfordern",
+        "submitting": "Wird gesendet…",
+        "success": "Wenn ein Konto existiert, wurde ein Link versendet.",
+        "back": "Zurück zur Anmeldung"
+      },
+      "reset": {
+        "title": "Neues Passwort setzen",
+        "subtitle": "Wählen Sie ein neues Passwort.",
+        "password": "Neues Passwort",
+        "confirm": "Passwort bestätigen",
+        "submit": "Passwort speichern",
+        "submitting": "Wird gespeichert…",
+        "success": "Passwort aktualisiert. Sie werden weitergeleitet…",
+        "mismatch": "Die Passwörter stimmen nicht überein.",
+        "tooShort": "Mindestens 8 Zeichen.",
+        "invalidLink": "Der Link ist ungültig oder abgelaufen."
+      }
     },
     "settings": {
-      "title": "Einstellungen", "saving": "Wird gespeichert…", "saved": "Gespeichert", "saveError": "Speichern fehlgeschlagen", "save": "Speichern", "denied": "Sie haben keine Berechtigung für die Einstellungen.",
-      "tabs": { "general": "Allgemein", "branding": "Branding", "contact": "Kontakt", "legal": "Rechtliches", "modules": "Module", "analytics": "Analyse" },
-      "general": { "site_name": "Firmenname", "legal_name": "Rechtlicher Name", "country": "Land", "default_locale": "Standardsprache", "enabled_locales": "Aktive Sprachen", "enabled_locales_help": "Komma-getrennte Sprachcodes, z. B. de, en", "currency": "Währung", "area_unit": "Flächeneinheit", "sqm": "Quadratmeter", "sqft": "Quadratfuß" },
-      "branding": { "logo_url": "Logo (URL)", "logo_dark_url": "Logo dunkel (URL)", "favicon_url": "Favicon (URL)", "og_default_image": "Standard-OG-Bild (URL)", "primary_color": "Primärfarbe", "secondary_color": "Sekundärfarbe", "accent_color": "Akzentfarbe", "font_heading": "Überschriftschrift", "font_body": "Fließtextschrift", "preview": "Vorschau", "preview_heading": "Musterüberschrift", "preview_button": "Beispielaktion", "preview_body": "So sehen Ihre Farben und Schriften auf der Seite aus." },
-      "contact": { "contact_email": "E-Mail", "contact_phone": "Telefon", "whatsapp": "WhatsApp", "address_street": "Straße", "address_zip": "PLZ", "address_city": "Stadt", "address_country": "Land", "geo_lat": "Breitengrad", "geo_lng": "Längengrad", "opening_hours": "Öffnungszeiten (JSON)", "social": "Soziale Netzwerke (JSON)", "json_help": "Wird als JSON gespeichert.", "json_invalid": "Ungültiges JSON." },
-      "legal": { "impressum": "Impressum", "privacy": "Datenschutz", "terms": "AGB", "locale_placeholder": "Inhalt für {{locale}}" },
-      "modules": { "title": "Module", "denied": "Nur Inhaber können Module ändern.",
+      "title": "Einstellungen",
+      "saving": "Wird gespeichert…",
+      "saved": "Gespeichert",
+      "saveError": "Speichern fehlgeschlagen",
+      "save": "Speichern",
+      "denied": "Sie haben keine Berechtigung für die Einstellungen.",
+      "tabs": {
+        "general": "Allgemein",
+        "branding": "Branding",
+        "contact": "Kontakt",
+        "legal": "Rechtliches",
+        "modules": "Module",
+        "analytics": "Analyse"
+      },
+      "general": {
+        "site_name": "Firmenname",
+        "legal_name": "Rechtlicher Name",
+        "country": "Land",
+        "default_locale": "Standardsprache",
+        "enabled_locales": "Aktive Sprachen",
+        "enabled_locales_help": "Komma-getrennte Sprachcodes, z. B. de, en",
+        "currency": "Währung",
+        "area_unit": "Flächeneinheit",
+        "sqm": "Quadratmeter",
+        "sqft": "Quadratfuß"
+      },
+      "branding": {
+        "logo_url": "Logo (URL)",
+        "logo_dark_url": "Logo dunkel (URL)",
+        "favicon_url": "Favicon (URL)",
+        "og_default_image": "Standard-OG-Bild (URL)",
+        "primary_color": "Primärfarbe",
+        "secondary_color": "Sekundärfarbe",
+        "accent_color": "Akzentfarbe",
+        "font_heading": "Überschriftschrift",
+        "font_body": "Fließtextschrift",
+        "preview": "Vorschau",
+        "preview_heading": "Musterüberschrift",
+        "preview_button": "Beispielaktion",
+        "preview_body": "So sehen Ihre Farben und Schriften auf der Seite aus."
+      },
+      "contact": {
+        "contact_email": "E-Mail",
+        "contact_phone": "Telefon",
+        "whatsapp": "WhatsApp",
+        "address_street": "Straße",
+        "address_zip": "PLZ",
+        "address_city": "Stadt",
+        "address_country": "Land",
+        "geo_lat": "Breitengrad",
+        "geo_lng": "Längengrad",
+        "opening_hours": "Öffnungszeiten (JSON)",
+        "social": "Soziale Netzwerke (JSON)",
+        "json_help": "Wird als JSON gespeichert.",
+        "json_invalid": "Ungültiges JSON."
+      },
+      "legal": {
+        "impressum": "Impressum",
+        "privacy": "Datenschutz",
+        "terms": "AGB",
+        "locale_placeholder": "Inhalt für {{locale}}"
+      },
+      "modules": {
+        "title": "Module",
+        "denied": "Nur Inhaber können Module ändern.",
         "flags": {
-          "sales": { "title": "Verkauf", "description": "Verkaufsobjekte veröffentlichen." },
-          "rentals": { "title": "Vermietung", "description": "Mietobjekte veröffentlichen." },
-          "valuation": { "title": "Bewertung", "description": "Kostenlose Immobilienbewertung anbieten." },
-          "sold_archive": { "title": "Verkauft-Archiv", "description": "Referenzobjekte öffentlich sichtbar." },
-          "team": { "title": "Team", "description": "Team-Seite anzeigen." },
-          "blog": { "title": "Blog", "description": "Blog aktivieren." },
-          "area_pages": { "title": "Standortseiten", "description": "SEO-Seiten pro Stadt oder Bezirk." },
-          "testimonials": { "title": "Referenzen", "description": "Kundenstimmen anzeigen." },
-          "saved_search": { "title": "Suchagent", "description": "Nutzer können Suchen speichern." },
-          "mortgage_calc": { "title": "Finanzierungsrechner", "description": "Zinsrechner einblenden." },
-          "virtual_tours": { "title": "Virtuelle Touren", "description": "3D-/Video-Touren einbetten." },
-          "crm_sync": { "title": "CRM-Sync", "description": "Anfragen an das CRM übermitteln." }
+          "sales": {
+            "title": "Verkauf",
+            "description": "Verkaufsobjekte veröffentlichen."
+          },
+          "rentals": {
+            "title": "Vermietung",
+            "description": "Mietobjekte veröffentlichen."
+          },
+          "valuation": {
+            "title": "Bewertung",
+            "description": "Kostenlose Immobilienbewertung anbieten."
+          },
+          "sold_archive": {
+            "title": "Verkauft-Archiv",
+            "description": "Referenzobjekte öffentlich sichtbar."
+          },
+          "team": {
+            "title": "Team",
+            "description": "Team-Seite anzeigen."
+          },
+          "blog": {
+            "title": "Blog",
+            "description": "Blog aktivieren."
+          },
+          "area_pages": {
+            "title": "Standortseiten",
+            "description": "SEO-Seiten pro Stadt oder Bezirk."
+          },
+          "testimonials": {
+            "title": "Referenzen",
+            "description": "Kundenstimmen anzeigen."
+          },
+          "saved_search": {
+            "title": "Suchagent",
+            "description": "Nutzer können Suchen speichern."
+          },
+          "mortgage_calc": {
+            "title": "Finanzierungsrechner",
+            "description": "Zinsrechner einblenden."
+          },
+          "virtual_tours": {
+            "title": "Virtuelle Touren",
+            "description": "3D-/Video-Touren einbetten."
+          },
+          "crm_sync": {
+            "title": "CRM-Sync",
+            "description": "Anfragen an das CRM übermitteln."
+          }
         }
       }
     }
@@ -217,10 +379,22 @@
       "intro": "Der Marktwert einer Immobilie hängt von deutlich mehr ab als von Quadratmetern und Baujahr. Lage, Zustand, Ausstattung, Nachfrage im konkreten Ort und der aktuelle Zinsmarkt spielen zusammen. Ich schaue mir Ihre Immobilie persönlich an und ordne sie in die aktuelle Marktlage ein.",
       "steps_title": "So läuft die Bewertung ab",
       "steps": [
-        { "title": "Erste Angaben", "body": "Sie füllen das Formular unten mit den wichtigsten Eckdaten aus — Objektart, Adresse, Fläche, Zimmer, Zustand. Optional gerne mit Fotos." },
-        { "title": "Vor-Ort-Termin", "body": "Wir vereinbaren einen Termin bei Ihnen. Ich sehe die Immobilie mit einem geschulten Blick — nicht nur die Highlights, auch das, was später Käuferfragen auslöst." },
-        { "title": "Marktanalyse", "body": "Vergleichsobjekte, aktuelle Angebote in der Umgebung, tatsächliche Abschlüsse. Daraus entsteht eine belastbare Preisspanne, keine Wunschzahl." },
-        { "title": "Schriftliche Auswertung", "body": "Sie erhalten eine nachvollziehbare Einschätzung als PDF — verständlich formuliert, mit den wichtigsten wertbildenden Faktoren." }
+        {
+          "title": "Erste Angaben",
+          "body": "Sie füllen das Formular unten mit den wichtigsten Eckdaten aus — Objektart, Adresse, Fläche, Zimmer, Zustand. Optional gerne mit Fotos."
+        },
+        {
+          "title": "Vor-Ort-Termin",
+          "body": "Wir vereinbaren einen Termin bei Ihnen. Ich sehe die Immobilie mit einem geschulten Blick — nicht nur die Highlights, auch das, was später Käuferfragen auslöst."
+        },
+        {
+          "title": "Marktanalyse",
+          "body": "Vergleichsobjekte, aktuelle Angebote in der Umgebung, tatsächliche Abschlüsse. Daraus entsteht eine belastbare Preisspanne, keine Wunschzahl."
+        },
+        {
+          "title": "Schriftliche Auswertung",
+          "body": "Sie erhalten eine nachvollziehbare Einschätzung als PDF — verständlich formuliert, mit den wichtigsten wertbildenden Faktoren."
+        }
       ],
       "deliverables_title": "Sie erhalten",
       "deliverables": [
@@ -239,14 +413,38 @@
       "headline": "In acht Schritten zum richtigen Käufer.",
       "intro": "Ein Immobilienverkauf ist selten eine Bauchentscheidung. Meist steht eine familiäre oder berufliche Veränderung dahinter, und dann muss der Prozess verlässlich sein. Ich begleite Sie ruhig und strukturiert — hier sehen Sie, wie das konkret abläuft.",
       "steps": [
-        { "title": "Erstes Gespräch", "body": "Wir treffen uns oder telefonieren in Ruhe. Sie erzählen, warum verkauft werden soll, wie Ihr Zeithorizont aussieht und was Ihnen wichtig ist. Kein Verkaufsdruck, kein Formular." },
-        { "title": "Bewertung", "body": "Ich sehe die Immobilie vor Ort und erstelle eine belastbare Marktwertermittlung. Auf dieser Basis besprechen wir den Angebotspreis — nicht zu niedrig, nicht illusorisch." },
-        { "title": "Vorbereitung & Fotografie", "body": "Wir gehen gemeinsam durch, was vor der Vermarktung sinnvoll ist. Anschließend professionelle Fotos, Grundrisse und — wenn passend — ein kurzer Rundgangsfilm." },
-        { "title": "Vermarktung", "body": "Zielgerichtete Ansprache passender Käufer aus meiner Datei und, wenn gewünscht, sichtbare Vermarktung auf Portalen. Sie entscheiden über den Grad der Öffentlichkeit." },
-        { "title": "Besichtigungen", "body": "Ich führe die Termine persönlich und in kleinem Kreis — nicht als Massenbesichtigung. Interessenten werden vorab qualifiziert, damit Sie nicht Ihre Zeit verlieren." },
-        { "title": "Verhandlung", "body": "Ich verhandle in Ihrem Auftrag mit dem ernsthaftesten Interessenten. Ziel ist ein guter Preis mit einem Käufer, der auch tatsächlich abschließt." },
-        { "title": "Notartermin", "body": "Vorbereitung des Kaufvertrags mit dem Notar, Abstimmung aller Unterlagen, Begleitung zur Beurkundung. Sie müssen keinen Termin allein wahrnehmen." },
-        { "title": "Übergabe", "body": "Übergabeprotokoll, Zählerstände, Schlüssel — sauber dokumentiert. Damit ist der Verkauf abgeschlossen, und Sie haben klare Verhältnisse." }
+        {
+          "title": "Erstes Gespräch",
+          "body": "Wir treffen uns oder telefonieren in Ruhe. Sie erzählen, warum verkauft werden soll, wie Ihr Zeithorizont aussieht und was Ihnen wichtig ist. Kein Verkaufsdruck, kein Formular."
+        },
+        {
+          "title": "Bewertung",
+          "body": "Ich sehe die Immobilie vor Ort und erstelle eine belastbare Marktwertermittlung. Auf dieser Basis besprechen wir den Angebotspreis — nicht zu niedrig, nicht illusorisch."
+        },
+        {
+          "title": "Vorbereitung & Fotografie",
+          "body": "Wir gehen gemeinsam durch, was vor der Vermarktung sinnvoll ist. Anschließend professionelle Fotos, Grundrisse und — wenn passend — ein kurzer Rundgangsfilm."
+        },
+        {
+          "title": "Vermarktung",
+          "body": "Zielgerichtete Ansprache passender Käufer aus meiner Datei und, wenn gewünscht, sichtbare Vermarktung auf Portalen. Sie entscheiden über den Grad der Öffentlichkeit."
+        },
+        {
+          "title": "Besichtigungen",
+          "body": "Ich führe die Termine persönlich und in kleinem Kreis — nicht als Massenbesichtigung. Interessenten werden vorab qualifiziert, damit Sie nicht Ihre Zeit verlieren."
+        },
+        {
+          "title": "Verhandlung",
+          "body": "Ich verhandle in Ihrem Auftrag mit dem ernsthaftesten Interessenten. Ziel ist ein guter Preis mit einem Käufer, der auch tatsächlich abschließt."
+        },
+        {
+          "title": "Notartermin",
+          "body": "Vorbereitung des Kaufvertrags mit dem Notar, Abstimmung aller Unterlagen, Begleitung zur Beurkundung. Sie müssen keinen Termin allein wahrnehmen."
+        },
+        {
+          "title": "Übergabe",
+          "body": "Übergabeprotokoll, Zählerstände, Schlüssel — sauber dokumentiert. Damit ist der Verkauf abgeschlossen, und Sie haben klare Verhältnisse."
+        }
       ],
       "cta_title": "Bereit für den ersten Schritt?",
       "cta_body": "Der Prozess beginnt mit einer ehrlichen Bewertung. Kostenfrei, vertraulich, ohne Verpflichtung.",
@@ -291,9 +489,18 @@
       "address_title": "Büro",
       "hours_title": "Sprechzeiten",
       "hours_default": [
-        { "day": "Montag – Freitag", "time": "09:00 – 18:00" },
-        { "day": "Samstag", "time": "Nach Vereinbarung" },
-        { "day": "Sonntag", "time": "Geschlossen" }
+        {
+          "day": "Montag – Freitag",
+          "time": "09:00 – 18:00"
+        },
+        {
+          "day": "Samstag",
+          "time": "Nach Vereinbarung"
+        },
+        {
+          "day": "Sonntag",
+          "time": "Geschlossen"
+        }
       ],
       "channels_title": "Direkter Draht",
       "form_title": "Nachricht senden",
@@ -310,5 +517,8 @@
       "map_title": "Anfahrt",
       "map_missing": "Kartenansicht wird verfügbar, sobald die Bürokoordinaten hinterlegt sind."
     }
+  },
+  "brand": {
+    "descriptor": "Immobilien"
   }
 }

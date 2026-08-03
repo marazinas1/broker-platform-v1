@@ -1,9 +1,11 @@
 {
-  "setup": { "complete": "Setup complete" },
+  "setup": {
+    "complete": "Setup complete"
+  },
   "home": {
     "title": "Real estate in the Saarland",
     "description": "Carefully selected houses and apartments in Püttlingen, Völklingen, Saarbrücken and Riegelsberg.",
-    "hero_line": "Considered real estate. At home on the Saar.",
+    "hero_line": "Your home in good hands",
     "featured": "Selected properties",
     "categories": "Browse by type",
     "count_suffix": "listings",
@@ -17,7 +19,8 @@
     "contact_headline": "Buying or selling — tell us where to start.",
     "contact_headline_solo": "Buying or selling — tell me where to start.",
     "view_all": "View all properties",
-    "view_all_sold": "Browse sold archive"
+    "view_all_sold": "Browse sold archive",
+    "hero_cta": "View properties"
   },
   "nav": {
     "listings": "Properties",
@@ -49,7 +52,10 @@
       "price_asc": "Price low to high",
       "price_desc": "Price high to low"
     },
-    "view": { "grid": "Grid", "map": "Map" },
+    "view": {
+      "grid": "Grid",
+      "map": "Map"
+    },
     "filters": {
       "deal": "Deal type",
       "any": "Any",
@@ -103,7 +109,11 @@
       "unavailable_title": "Property unavailable",
       "unavailable_body": "This listing is no longer online. Browse our current offerings instead."
     },
-    "pager": { "prev": "Previous", "next": "Next", "page": "Page {{n}} of {{total}}" },
+    "pager": {
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page {{n}} of {{total}}"
+    },
     "results_count": "{{count}} properties"
   },
   "areas": {
@@ -162,7 +172,11 @@
     "privacy": "Privacy",
     "contact": "Contact"
   },
-  "locale": { "switch": "Switch language", "de": "German", "en": "English" },
+  "locale": {
+    "switch": "Switch language",
+    "de": "German",
+    "en": "English"
+  },
   "errors": {
     "notFoundTitle": "Not found",
     "notFound": "Page not found.",
@@ -174,36 +188,184 @@
     "forbiddenBody": "You do not have permission to access this area."
   },
   "admin": {
-    "topbar": { "signOut": "Sign out", "toggleSidebar": "Toggle navigation", "unknownUser": "Unknown user" },
-    "role": { "owner": "Owner", "admin": "Administrator", "agent": "Agent", "assistant": "Assistant", "viewer": "Viewer" },
-    "nav": { "dashboard": "Dashboard", "listings": "Listings", "inquiries": "Inquiries", "team": "Team", "content": "Content", "analytics": "Analytics", "settings": "Settings" },
-    "pages": { "dashboard": "Dashboard", "listings": "Listings", "inquiries": "Inquiries", "team": "Team", "content": "Content", "analytics": "Analytics" },
+    "topbar": {
+      "signOut": "Sign out",
+      "toggleSidebar": "Toggle navigation",
+      "unknownUser": "Unknown user"
+    },
+    "role": {
+      "owner": "Owner",
+      "admin": "Administrator",
+      "agent": "Agent",
+      "assistant": "Assistant",
+      "viewer": "Viewer"
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "listings": "Listings",
+      "inquiries": "Inquiries",
+      "team": "Team",
+      "content": "Content",
+      "analytics": "Analytics",
+      "settings": "Settings"
+    },
+    "pages": {
+      "dashboard": "Dashboard",
+      "listings": "Listings",
+      "inquiries": "Inquiries",
+      "team": "Team",
+      "content": "Content",
+      "analytics": "Analytics"
+    },
     "auth": {
-      "login": { "title": "Sign in", "subtitle": "Sign in with your email address.", "email": "Email", "password": "Password", "submit": "Sign in", "submitting": "Signing in…", "forgot": "Forgot password?", "invalid": "Invalid credentials.", "generic": "Sign-in failed." },
-      "forgot": { "title": "Reset password", "subtitle": "We will email you a link.", "email": "Email", "submit": "Send link", "submitting": "Sending…", "success": "If an account exists, a link has been sent.", "back": "Back to sign-in" },
-      "reset": { "title": "Set new password", "subtitle": "Choose a new password.", "password": "New password", "confirm": "Confirm password", "submit": "Save password", "submitting": "Saving…", "success": "Password updated. Redirecting…", "mismatch": "Passwords do not match.", "tooShort": "At least 8 characters.", "invalidLink": "The link is invalid or has expired." }
+      "login": {
+        "title": "Sign in",
+        "subtitle": "Sign in with your email address.",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Sign in",
+        "submitting": "Signing in…",
+        "forgot": "Forgot password?",
+        "invalid": "Invalid credentials.",
+        "generic": "Sign-in failed."
+      },
+      "forgot": {
+        "title": "Reset password",
+        "subtitle": "We will email you a link.",
+        "email": "Email",
+        "submit": "Send link",
+        "submitting": "Sending…",
+        "success": "If an account exists, a link has been sent.",
+        "back": "Back to sign-in"
+      },
+      "reset": {
+        "title": "Set new password",
+        "subtitle": "Choose a new password.",
+        "password": "New password",
+        "confirm": "Confirm password",
+        "submit": "Save password",
+        "submitting": "Saving…",
+        "success": "Password updated. Redirecting…",
+        "mismatch": "Passwords do not match.",
+        "tooShort": "At least 8 characters.",
+        "invalidLink": "The link is invalid or has expired."
+      }
     },
     "settings": {
-      "title": "Settings", "saving": "Saving…", "saved": "Saved", "saveError": "Save failed", "save": "Save", "denied": "You do not have permission to edit settings.",
-      "tabs": { "general": "General", "branding": "Branding", "contact": "Contact", "legal": "Legal", "modules": "Modules", "analytics": "Analytics" },
-      "general": { "site_name": "Company name", "legal_name": "Legal name", "country": "Country", "default_locale": "Default locale", "enabled_locales": "Enabled locales", "enabled_locales_help": "Comma-separated locale codes, e.g. de, en", "currency": "Currency", "area_unit": "Area unit", "sqm": "Square metres", "sqft": "Square feet" },
-      "branding": { "logo_url": "Logo URL", "logo_dark_url": "Dark logo URL", "favicon_url": "Favicon URL", "og_default_image": "Default OG image URL", "primary_color": "Primary color", "secondary_color": "Secondary color", "accent_color": "Accent color", "font_heading": "Heading font", "font_body": "Body font", "preview": "Preview", "preview_heading": "Sample heading", "preview_button": "Sample action", "preview_body": "This is how your colors and fonts look on the site." },
-      "contact": { "contact_email": "Email", "contact_phone": "Phone", "whatsapp": "WhatsApp", "address_street": "Street", "address_zip": "ZIP", "address_city": "City", "address_country": "Country", "geo_lat": "Latitude", "geo_lng": "Longitude", "opening_hours": "Opening hours (JSON)", "social": "Social links (JSON)", "json_help": "Stored as JSON.", "json_invalid": "Invalid JSON." },
-      "legal": { "impressum": "Imprint", "privacy": "Privacy", "terms": "Terms", "locale_placeholder": "Content for {{locale}}" },
-      "modules": { "title": "Modules", "denied": "Only owners can change modules.",
+      "title": "Settings",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "saveError": "Save failed",
+      "save": "Save",
+      "denied": "You do not have permission to edit settings.",
+      "tabs": {
+        "general": "General",
+        "branding": "Branding",
+        "contact": "Contact",
+        "legal": "Legal",
+        "modules": "Modules",
+        "analytics": "Analytics"
+      },
+      "general": {
+        "site_name": "Company name",
+        "legal_name": "Legal name",
+        "country": "Country",
+        "default_locale": "Default locale",
+        "enabled_locales": "Enabled locales",
+        "enabled_locales_help": "Comma-separated locale codes, e.g. de, en",
+        "currency": "Currency",
+        "area_unit": "Area unit",
+        "sqm": "Square metres",
+        "sqft": "Square feet"
+      },
+      "branding": {
+        "logo_url": "Logo URL",
+        "logo_dark_url": "Dark logo URL",
+        "favicon_url": "Favicon URL",
+        "og_default_image": "Default OG image URL",
+        "primary_color": "Primary color",
+        "secondary_color": "Secondary color",
+        "accent_color": "Accent color",
+        "font_heading": "Heading font",
+        "font_body": "Body font",
+        "preview": "Preview",
+        "preview_heading": "Sample heading",
+        "preview_button": "Sample action",
+        "preview_body": "This is how your colors and fonts look on the site."
+      },
+      "contact": {
+        "contact_email": "Email",
+        "contact_phone": "Phone",
+        "whatsapp": "WhatsApp",
+        "address_street": "Street",
+        "address_zip": "ZIP",
+        "address_city": "City",
+        "address_country": "Country",
+        "geo_lat": "Latitude",
+        "geo_lng": "Longitude",
+        "opening_hours": "Opening hours (JSON)",
+        "social": "Social links (JSON)",
+        "json_help": "Stored as JSON.",
+        "json_invalid": "Invalid JSON."
+      },
+      "legal": {
+        "impressum": "Imprint",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "locale_placeholder": "Content for {{locale}}"
+      },
+      "modules": {
+        "title": "Modules",
+        "denied": "Only owners can change modules.",
         "flags": {
-          "sales": { "title": "Sales", "description": "Publish for-sale listings." },
-          "rentals": { "title": "Rentals", "description": "Publish rental listings." },
-          "valuation": { "title": "Valuation", "description": "Offer free property valuation." },
-          "sold_archive": { "title": "Sold archive", "description": "Show reference deals publicly." },
-          "team": { "title": "Team", "description": "Show the team page." },
-          "blog": { "title": "Blog", "description": "Enable the blog." },
-          "area_pages": { "title": "Area pages", "description": "SEO pages per city or district." },
-          "testimonials": { "title": "Testimonials", "description": "Show customer testimonials." },
-          "saved_search": { "title": "Saved search", "description": "Let users save searches." },
-          "mortgage_calc": { "title": "Mortgage calculator", "description": "Show a mortgage calculator." },
-          "virtual_tours": { "title": "Virtual tours", "description": "Embed 3D/video tours." },
-          "crm_sync": { "title": "CRM sync", "description": "Forward inquiries to the CRM." }
+          "sales": {
+            "title": "Sales",
+            "description": "Publish for-sale listings."
+          },
+          "rentals": {
+            "title": "Rentals",
+            "description": "Publish rental listings."
+          },
+          "valuation": {
+            "title": "Valuation",
+            "description": "Offer free property valuation."
+          },
+          "sold_archive": {
+            "title": "Sold archive",
+            "description": "Show reference deals publicly."
+          },
+          "team": {
+            "title": "Team",
+            "description": "Show the team page."
+          },
+          "blog": {
+            "title": "Blog",
+            "description": "Enable the blog."
+          },
+          "area_pages": {
+            "title": "Area pages",
+            "description": "SEO pages per city or district."
+          },
+          "testimonials": {
+            "title": "Testimonials",
+            "description": "Show customer testimonials."
+          },
+          "saved_search": {
+            "title": "Saved search",
+            "description": "Let users save searches."
+          },
+          "mortgage_calc": {
+            "title": "Mortgage calculator",
+            "description": "Show a mortgage calculator."
+          },
+          "virtual_tours": {
+            "title": "Virtual tours",
+            "description": "Embed 3D/video tours."
+          },
+          "crm_sync": {
+            "title": "CRM sync",
+            "description": "Forward inquiries to the CRM."
+          }
         }
       }
     }
@@ -217,10 +379,22 @@
       "intro": "A property's market value depends on far more than square metres and year built. Location, condition, fit-out, local demand and the current interest environment all interact. I look at your property in person and place it in today's market.",
       "steps_title": "How the valuation works",
       "steps": [
-        { "title": "Initial details", "body": "You fill in the form below with the key facts — property type, address, size, rooms, condition. Photos are welcome but optional." },
-        { "title": "On-site visit", "body": "We arrange a visit at your place. I walk the property with a trained eye — not just the highlights, also the things that later trigger buyer questions." },
-        { "title": "Market analysis", "body": "Comparable properties, current listings nearby, actual sales. From that comes a defensible price range, not a wish figure." },
-        { "title": "Written summary", "body": "You receive a clear valuation as a PDF — plainly written, with the main value-driving factors made visible." }
+        {
+          "title": "Initial details",
+          "body": "You fill in the form below with the key facts — property type, address, size, rooms, condition. Photos are welcome but optional."
+        },
+        {
+          "title": "On-site visit",
+          "body": "We arrange a visit at your place. I walk the property with a trained eye — not just the highlights, also the things that later trigger buyer questions."
+        },
+        {
+          "title": "Market analysis",
+          "body": "Comparable properties, current listings nearby, actual sales. From that comes a defensible price range, not a wish figure."
+        },
+        {
+          "title": "Written summary",
+          "body": "You receive a clear valuation as a PDF — plainly written, with the main value-driving factors made visible."
+        }
       ],
       "deliverables_title": "What you receive",
       "deliverables": [
@@ -239,14 +413,38 @@
       "headline": "Eight steps to the right buyer.",
       "intro": "Selling a property is rarely a snap decision. Usually a family or work change stands behind it, and then the process needs to be dependable. I walk you through it calmly and in a structured way — here is what that actually looks like.",
       "steps": [
-        { "title": "First conversation", "body": "We meet or talk on the phone without pressure. You explain why the property should be sold, what your time frame is and what matters to you. No sales pitch, no forms." },
-        { "title": "Valuation", "body": "I see the property on site and prepare a defensible market valuation. On that basis we agree on the asking price — not too low, not unrealistic." },
-        { "title": "Preparation & photography", "body": "We go through what is worth doing before marketing starts. Then professional photos, floor plans and — where it fits — a short walk-through film." },
-        { "title": "Marketing", "body": "Targeted outreach to matching buyers from my database and, if you wish, visible marketing on portals. You decide how public it should be." },
-        { "title": "Viewings", "body": "I run viewings personally and in small groups — never a mass showing. Interested parties are pre-qualified so your time is not wasted." },
-        { "title": "Negotiation", "body": "I negotiate on your behalf with the most serious candidate. The goal is a strong price with a buyer who actually closes." },
-        { "title": "Notary appointment", "body": "Contract preparation with the notary, coordination of every document, presence at signing. You never have to attend an appointment alone." },
-        { "title": "Handover", "body": "Handover minutes, meter readings, keys — cleanly documented. That closes the sale and leaves you with clear affairs." }
+        {
+          "title": "First conversation",
+          "body": "We meet or talk on the phone without pressure. You explain why the property should be sold, what your time frame is and what matters to you. No sales pitch, no forms."
+        },
+        {
+          "title": "Valuation",
+          "body": "I see the property on site and prepare a defensible market valuation. On that basis we agree on the asking price — not too low, not unrealistic."
+        },
+        {
+          "title": "Preparation & photography",
+          "body": "We go through what is worth doing before marketing starts. Then professional photos, floor plans and — where it fits — a short walk-through film."
+        },
+        {
+          "title": "Marketing",
+          "body": "Targeted outreach to matching buyers from my database and, if you wish, visible marketing on portals. You decide how public it should be."
+        },
+        {
+          "title": "Viewings",
+          "body": "I run viewings personally and in small groups — never a mass showing. Interested parties are pre-qualified so your time is not wasted."
+        },
+        {
+          "title": "Negotiation",
+          "body": "I negotiate on your behalf with the most serious candidate. The goal is a strong price with a buyer who actually closes."
+        },
+        {
+          "title": "Notary appointment",
+          "body": "Contract preparation with the notary, coordination of every document, presence at signing. You never have to attend an appointment alone."
+        },
+        {
+          "title": "Handover",
+          "body": "Handover minutes, meter readings, keys — cleanly documented. That closes the sale and leaves you with clear affairs."
+        }
       ],
       "cta_title": "Ready for the first step?",
       "cta_body": "The process begins with an honest valuation. Free, confidential, no obligation.",
@@ -291,9 +489,18 @@
       "address_title": "Office",
       "hours_title": "Office hours",
       "hours_default": [
-        { "day": "Monday – Friday", "time": "09:00 – 18:00" },
-        { "day": "Saturday", "time": "By appointment" },
-        { "day": "Sunday", "time": "Closed" }
+        {
+          "day": "Monday – Friday",
+          "time": "09:00 – 18:00"
+        },
+        {
+          "day": "Saturday",
+          "time": "By appointment"
+        },
+        {
+          "day": "Sunday",
+          "time": "Closed"
+        }
       ],
       "channels_title": "Direct line",
       "form_title": "Send a message",
@@ -310,5 +517,8 @@
       "map_title": "Directions",
       "map_missing": "The map appears once office coordinates are set."
     }
+  },
+  "brand": {
+    "descriptor": "Real Estate"
   }
 }
