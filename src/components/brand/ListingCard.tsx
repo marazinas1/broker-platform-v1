@@ -30,6 +30,9 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
   const image =
     pickImageUrl(primary?.variants, size === "large" ? "large" : "medium") ??
     pickImageUrl(primary?.variants, "medium");
+  // Second photograph, used for the cross-fade on hover (exterior → interior).
+  const secondary = listing.images.find((i) => i !== primary);
+  const secondaryImage = pickImageUrl(secondary?.variants, "medium");
   const title = pickLocalized(listing.title, locale) || listing.slug;
   const price = formatPrice(listing.price, settings.currency, locale, {
     onRequest: listing.price_on_request,
@@ -55,12 +58,30 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
             src={image}
             alt={pickLocalized(primary?.alt_text, locale) || ""}
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.04]"
+            width={1200}
+            height={800}
+            className={
+              secondaryImage
+                ? "absolute inset-0 h-full w-full object-cover transition-[transform,opacity] duration-[1000ms] ease-out group-hover:scale-[1.03] group-hover:opacity-0"
+                : "absolute inset-0 h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.05]"
+            }
           />
         ) : (
           <div className="h-full w-full bg-muted" />
         )}
+        {secondaryImage ? (
+          <img
+            src={secondaryImage}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            width={1200}
+            height={800}
+            className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[1000ms] ease-out group-hover:opacity-100"
+          />
+        ) : null}
       </div>
+
 
       <div className="px-5 pt-5 pb-6 md:px-6 md:pb-7">
         <div className="flex items-baseline justify-between gap-4">
