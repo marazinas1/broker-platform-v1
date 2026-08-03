@@ -90,6 +90,8 @@
   --font-script: "Tangerine", cursive;
 
   --radius: 0.125rem;
+  --radius-media: 0.875rem;
+
 
   --background: var(--paper);
   --foreground: var(--ink);
