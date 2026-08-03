@@ -16,14 +16,20 @@ Rewire the existing token layer in `src/styles.css` — no hardcoded colours in 
 - Named tokens: paper `#F6F3ED`, ink `#2A2622`, stone `#8A8175`, linen `#E8E3D9`, sage `#6B7259`, clay `#A67C6D`.
 - Map them onto the semantic tokens the app already uses: background = paper, foreground = ink, muted-foreground = stone, muted/card/border = linen, primary = sage, accent = clay (used very sparingly).
 - Sage appears only on links, one button variant, small accents and active states — never as a large filled block.
-- Fonts: install `@fontsource-variable/fraunces`, `@fontsource-variable/inter` and `@fontsource/petit-formal-script`, importing the `latin-ext` subset explicitly in `src/styles.css` (top import block). Remove the Google Fonts `<link>` and the Instrument Serif / Work Sans references from `src/routes/__root.tsx`. No `font-optical-sizing: auto`.
+- Fonts: install `@fontsource-variable/fraunces` and `@fontsource-variable/inter` with the `latin-ext` subset imported explicitly (strict — these carry the German content later), plus one script font loaded with the `latin` subset only. Remove the Google Fonts `<link>` and the Instrument Serif / Work Sans references from `src/routes/__root.tsx`. No `font-optical-sizing: auto`.
 - Tokens: `--font-heading` Fraunces, `--font-body` Inter, plus a new `--font-script` for the signature. Numbers keep the existing `.tabular-figures` utility on Inter.
+
 - Dramatic type scale: hero headline `clamp(2.75rem, 8vw, 6rem)`, section headings a clear step smaller, body calm. Added as heading utilities so components stay thin.
 - Because the seed sets `font_heading`/`font_body` in `site_settings`, those values are updated to the new families so the DB override matches the new defaults.
 
-## 3. Signature motif
+## 3. Signature motif and script font choice
+
+Settled: the signature only ever renders "Dorothe Waltner", which has no umlauts, so the script font is loaded with the `latin` subset only — no latin-ext there. Candidates: Tangerine, Petit Formal Script, Style Script.
+
+First build step: render "Dorothe Waltner" in all three candidates at signature size on the paper background and send a screenshot for you to pick from. Only the chosen one gets installed and wired in.
 
 New `src/components/brand/Signature.tsx` (small): renders `site_settings.primary_agent_name` in the script font at a chosen size, with a `variant` for hero (on photo) and section (on paper). Falls back to nothing when no agent name is set. Used in the hero now; other placements come when those sections are reworked.
+
 
 ## 4. Logo
 
@@ -47,9 +53,12 @@ Rewrite `src/components/brand/ListingCard.tsx`:
 
 ## 7. Verification
 
+- Script-font sample screenshot sent for your approval before the font is wired in.
+- Repository-wide grep confirming zero references to Instrument Serif (and Work Sans) remain in styles, root route, seed SQL or site settings — the swap is a full replacement, not an addition.
 - Playwright screenshot of `/en` hero and the featured card grid at desktop and mobile widths.
-- Temporarily render "Häuser" and "Königstraße" in Fraunces and the script font, screenshot to confirm ä ö ü ß, then remove the test markup.
+- Temporarily render "Häuser" and "Königstraße" in Fraunces and Inter, screenshot to confirm ä ö ü ß, then remove the test markup.
 - Confirm `/` lands on English, the toggle reaches `/de`, and changing `primary_color` in site settings still re-tints the theme.
+
 
 ## Technical notes
 
