@@ -22,9 +22,14 @@ Rewire the existing token layer in `src/styles.css` — no hardcoded colours in 
 - Dramatic type scale: hero headline `clamp(2.75rem, 8vw, 6rem)`, section headings a clear step smaller, body calm. Added as heading utilities so components stay thin.
 - Because the seed sets `font_heading`/`font_body` in `site_settings`, those values are updated to the new families so the DB override matches the new defaults.
 
-## 3. Signature motif
+## 3. Signature motif and script font choice
+
+Settled: the signature only ever renders "Dorothe Waltner", which has no umlauts, so the script font is loaded with the `latin` subset only — no latin-ext there. Candidates: Tangerine, Petit Formal Script, Style Script.
+
+First build step: render "Dorothe Waltner" in all three candidates at signature size on the paper background and send a screenshot for you to pick from. Only the chosen one gets installed and wired in.
 
 New `src/components/brand/Signature.tsx` (small): renders `site_settings.primary_agent_name` in the script font at a chosen size, with a `variant` for hero (on photo) and section (on paper). Falls back to nothing when no agent name is set. Used in the hero now; other placements come when those sections are reworked.
+
 
 ## 4. Logo
 
