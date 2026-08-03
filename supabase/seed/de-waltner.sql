@@ -20,7 +20,9 @@ DELETE FROM public.listings;
 -- ---------------------------------------------------------------------------
 -- 1. Site settings — one row per install, updated in place.
 -- ---------------------------------------------------------------------------
--- primary_agent_photo_url stays NULL: the app falls back to a neutral
+-- primary_agent_photo_url points at the processed (EXIF-free, AVIF) portrait
+-- in the public site-assets bucket. Clones overwrite it; when NULL the app
+-- falls back to a neutral
 -- silhouette placeholder shipped in src/assets so the hero never renders a
 -- stranger's face on a demo that goes to a real named person.
 UPDATE public.site_settings SET
@@ -47,7 +49,7 @@ UPDATE public.site_settings SET
   geo_lng          = 6.8862,
   primary_agent_name      = 'Dorothe Waltner',
   primary_agent_role      = 'Inhaberin & Immobilienmaklerin',
-  primary_agent_photo_url = NULL,
+  primary_agent_photo_url = 'https://pyuhysyizzmfvzdvbdnw.supabase.co/storage/v1/object/public/site-assets/agent/dorothe-waltner-portrait.avif',
   og_default_image        = 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=1200&h=630&q=80',
   homepage_sections = '[
     {"key":"hero","enabled":true,"variant":"region","image":"https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2400&q=80"},

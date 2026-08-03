@@ -232,3 +232,45 @@
   text-transform: uppercase;
 }
 
+
+/*
+ * Motion — pure CSS, no animation library.
+ *
+ * Scroll reveal: the hidden state is scoped to `.js`, a class added by the
+ * inline bootstrap script in __root. With JavaScript off the rules never
+ * match, so the SSR HTML stays fully visible. Reveal.tsx flips
+ * data-reveal="shown" through IntersectionObserver, once per element.
+ */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 700ms ease-out,
+    transform 700ms ease-out;
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.js [data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Reduced motion: content simply appears, nothing moves or fades. */
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal],
+  .js [data-reveal="shown"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

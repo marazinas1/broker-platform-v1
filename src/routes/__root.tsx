@@ -136,7 +136,14 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         {settings ? <ThemeStyleTag settings={settings} /> : null}
+        {/* Flags JS support so CSS-only scroll-reveal never hides SSR content. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "document.documentElement.classList.add('js')",
+          }}
+        />
       </head>
+
       <body>
         {children}
         <Scripts />

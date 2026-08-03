@@ -5,6 +5,8 @@ import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import type { SiteSettings } from "@/types/site-settings";
 
+import { Reveal } from "@/components/shared/Reveal";
+
 import { ListingCard } from "./ListingCard";
 
 type Props = {
@@ -28,14 +30,15 @@ export function SoldStrip({ locale, items, settings }: Props) {
       </div>
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
-        {items.slice(0, 3).map((l) => (
-          <ListingCard
-            key={l.id}
-            listing={l}
-            locale={locale}
-            settings={settings}
-            size="compact"
-          />
+        {items.slice(0, 3).map((l, i) => (
+          <Reveal key={l.id} delay={i * 90}>
+            <ListingCard
+              listing={l}
+              locale={locale}
+              settings={settings}
+              size="compact"
+            />
+          </Reveal>
         ))}
       </div>
 

@@ -5,6 +5,8 @@ import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import type { SiteSettings } from "@/types/site-settings";
 
+import { Reveal } from "@/components/shared/Reveal";
+
 import { ListingCard } from "./ListingCard";
 
 type Props = {
@@ -33,10 +35,13 @@ export function FeaturedListings({ locale, items, settings }: Props) {
       </div>
 
       <div className="grid grid-cols-1 gap-x-10 gap-y-24 md:grid-cols-2">
-        {items.map((l) => (
-          <ListingCard key={l.id} listing={l} locale={locale} settings={settings} />
+        {items.map((l, i) => (
+          <Reveal key={l.id} delay={i * 90}>
+            <ListingCard listing={l} locale={locale} settings={settings} />
+          </Reveal>
         ))}
       </div>
+
 
       <div className="mt-14 md:hidden">
         <Link
