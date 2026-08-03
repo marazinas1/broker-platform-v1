@@ -57,7 +57,7 @@ export function SiteNav({ locale, settings }: Props) {
         <Link
           to="/$locale"
           params={{ locale }}
-          className="min-w-0 justify-self-start transition-opacity duration-300 hover:opacity-70"
+          className="min-w-0 justify-self-start whitespace-nowrap transition-opacity duration-300 hover:opacity-70"
         >
           <BrandMark settings={settings} />
         </Link>
