@@ -2,7 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { useState, type ReactNode } from "react";
 
+import { BrandMark } from "@/components/brand/BrandMark";
 import { LocaleSwitcher } from "@/components/shared/LocaleSwitcher";
+
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
@@ -51,10 +53,11 @@ function Header({ locale, settings }: { locale: Locale; settings: SiteSettings }
         <Link
           to="/$locale"
           params={{ locale }}
-          className="font-heading text-xl tracking-tight text-foreground hover:opacity-80"
+          className="transition-opacity duration-300 hover:opacity-80"
         >
-          {settings.site_name}
+          <BrandMark settings={settings} descriptor={t("brand.descriptor")} />
         </Link>
+
 
         <nav className="hidden items-center gap-8 lg:flex">
           {nav.map((n) => (

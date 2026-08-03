@@ -83,6 +83,7 @@ function HomePage() {
         featured={featured.items}
         settings={settings}
         variant={section.variant ?? "region"}
+        image={section.image}
       />
     ),
     categories: () => <CategoryGrid locale={l} counts={counts} />,
