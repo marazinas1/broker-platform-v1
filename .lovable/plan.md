@@ -16,8 +16,9 @@ Rewire the existing token layer in `src/styles.css` — no hardcoded colours in 
 - Named tokens: paper `#F6F3ED`, ink `#2A2622`, stone `#8A8175`, linen `#E8E3D9`, sage `#6B7259`, clay `#A67C6D`.
 - Map them onto the semantic tokens the app already uses: background = paper, foreground = ink, muted-foreground = stone, muted/card/border = linen, primary = sage, accent = clay (used very sparingly).
 - Sage appears only on links, one button variant, small accents and active states — never as a large filled block.
-- Fonts: install `@fontsource-variable/fraunces`, `@fontsource-variable/inter` and `@fontsource/petit-formal-script`, importing the `latin-ext` subset explicitly in `src/styles.css` (top import block). Remove the Google Fonts `<link>` and the Instrument Serif / Work Sans references from `src/routes/__root.tsx`. No `font-optical-sizing: auto`.
+- Fonts: install `@fontsource-variable/fraunces` and `@fontsource-variable/inter` with the `latin-ext` subset imported explicitly (strict — these carry the German content later), plus one script font loaded with the `latin` subset only. Remove the Google Fonts `<link>` and the Instrument Serif / Work Sans references from `src/routes/__root.tsx`. No `font-optical-sizing: auto`.
 - Tokens: `--font-heading` Fraunces, `--font-body` Inter, plus a new `--font-script` for the signature. Numbers keep the existing `.tabular-figures` utility on Inter.
+
 - Dramatic type scale: hero headline `clamp(2.75rem, 8vw, 6rem)`, section headings a clear step smaller, body calm. Added as heading utilities so components stay thin.
 - Because the seed sets `font_heading`/`font_body` in `site_settings`, those values are updated to the new families so the DB override matches the new defaults.
 
