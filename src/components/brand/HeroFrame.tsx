@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
  * luxury villa. Any `og_default_image` set in site_settings wins over this.
  */
 export const HERO_FALLBACK_IMAGE =
-  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2400&q=80";
+  "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2400&q=80";
 
 /**
  * Full-bleed hero shell. Photography fills the frame; a gradient appears only
