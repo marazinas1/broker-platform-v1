@@ -1,24 +1,35 @@
 import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
 
+import { supabase } from "@/integrations/supabase/client";
 import { verifyAdminAccess } from "@/lib/auth/admin-gate.functions";
 import { permissionMatrixQueryOptions } from "@/lib/auth/permission-matrix.functions";
 import { AdminShell } from "@/components/admin/AdminShell";
 
 export const Route = createFileRoute("/$locale/admin")({
-  // SSR-safe gate: verifies the Supabase access token server-side and
-  // confirms the caller's profile is active. Unauthenticated or deactivated
-  // requests receive a 3xx redirect in the SSR response — no admin HTML is
-  // rendered for fabricated cookies, and expired sessions never see an
-  // empty shell.
+  // Client-only gate: the Supabase session lives in localStorage, which the
+  // server cannot read, so gating during SSR would loop back to login on every
+  // hard refresh. The gate confirms a real session, then verifies the profile
+  // server-side (bearer token validated by requireSupabaseAuth).
+  ssr: false,
   beforeLoad: async ({ params, location }) => {
-    const profile = await verifyAdminAccess();
-    if (!profile) {
-      throw redirect({
+    const toLogin = (reason?: string) =>
+      redirect({
         to: "/$locale/auth/login",
         params: { locale: params.locale },
-        search: { redirect: location.href },
+        search: { redirect: location.href, ...(reason ? { error: reason } : {}) },
       });
+
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) throw toLogin();
+
+    let profile: Awaited<ReturnType<typeof verifyAdminAccess>> = null;
+    try {
+      profile = await verifyAdminAccess();
+    } catch {
+      throw toLogin("gate");
     }
+    if (!profile) throw toLogin("noaccess");
+
     return { adminProfile: profile };
   },
   loader: async ({ context }) => {
