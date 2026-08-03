@@ -1,15 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
+import { ListingFactPills } from "@/components/brand/ListingFactPills";
 import type { Locale } from "@/i18n/config";
 import type { PublicListing } from "@/lib/listings/queries.functions";
 import { pickImageUrl } from "@/lib/listings/image";
-import {
-  formatArea,
-  formatDate,
-  formatPrice,
-  pickLocalized,
-} from "@/lib/listings/format";
+import { formatDate, formatPrice, pickLocalized } from "@/lib/listings/format";
 import type { SiteSettings } from "@/types/site-settings";
 
 type Props = {
@@ -20,9 +16,8 @@ type Props = {
 };
 
 /**
- * Brand-owned listing card. Photography dominates; hairline linen border, no
- * shadow, near-square corners. Status is small uppercase type — never a badge.
- * Hover scales the image slowly and moves nothing else.
+ * Brand-owned listing card: photograph, fact pills, headline, two lines of
+ * description, price. Hairline border, uniform media radius, no shadow.
  */
 export function ListingCard({ listing, locale, settings, size = "large" }: Props) {
   const { t } = useTranslation();
@@ -30,29 +25,25 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
   const image =
     pickImageUrl(primary?.variants, size === "large" ? "large" : "medium") ??
     pickImageUrl(primary?.variants, "medium");
-  // Second photograph, used for the cross-fade on hover (exterior → interior).
+  // Second photograph drives the exterior → interior cross-fade on hover.
   const secondary = listing.images.find((i) => i !== primary);
   const secondaryImage = pickImageUrl(secondary?.variants, "medium");
   const title = pickLocalized(listing.title, locale) || listing.slug;
+  const description = pickLocalized(listing.description, locale);
   const price = formatPrice(listing.price, settings.currency, locale, {
     onRequest: listing.price_on_request,
     period: listing.price_period,
     onRequestLabel: t("listings.on_request"),
   });
-  const area =
-    listing.property_type === "land"
-      ? formatArea(listing.plot_area, settings.area_unit, locale)
-      : formatArea(listing.living_area, settings.area_unit, locale);
-
   const status = statusLabel(listing, t);
 
   return (
     <Link
       to="/$locale/immobilien/$slug"
       params={{ locale, slug: listing.slug }}
-      className="group block rounded-sm border border-border/70 bg-card"
+      className="group block rounded-media border border-border/70 bg-card p-3 md:p-4"
     >
-      <div className="relative aspect-[3/2] w-full overflow-hidden bg-muted">
+      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-media bg-muted">
         {image ? (
           <img
             src={image}
@@ -82,29 +73,40 @@ export function ListingCard({ listing, locale, settings, size = "large" }: Props
         ) : null}
       </div>
 
-
-      <div className="px-5 pt-5 pb-6 md:px-6 md:pb-7">
+      <div className="px-2 pt-5 pb-2 md:px-3">
         <div className="flex items-baseline justify-between gap-4">
-          <span className={status.accent ? "eyebrow text-primary" : "eyebrow text-muted-foreground"}>
+          <span
+            className={
+              status.accent ? "eyebrow text-primary" : "eyebrow text-muted-foreground"
+            }
+          >
             {status.label}
           </span>
           <span className="eyebrow text-muted-foreground">{listing.address_city}</span>
+        </div>
+
+        <div className="mt-4">
+          <ListingFactPills listing={listing} locale={locale} settings={settings} />
         </div>
 
         <h3 className="mt-4 font-heading text-2xl leading-tight text-foreground md:text-[1.75rem]">
           {title}
         </h3>
 
+        {description ? (
+          <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+            {description}
+          </p>
+        ) : null}
+
         <div className="mt-5 flex items-baseline justify-between gap-6 border-t border-border/70 pt-4 text-sm">
           <span className="font-body tabular-figures text-foreground">{price}</span>
-          <span className="font-body tabular-figures text-muted-foreground">{area}</span>
+          {listing.status === "sold" && listing.sold_at ? (
+            <span className="text-xs text-muted-foreground">
+              {t("listings.sold_on").replace("{{date}}", formatDate(listing.sold_at, locale))}
+            </span>
+          ) : null}
         </div>
-
-        {listing.status === "sold" && listing.sold_at ? (
-          <div className="mt-2 text-xs text-muted-foreground">
-            {t("listings.sold_on").replace("{{date}}", formatDate(listing.sold_at, locale))}
-          </div>
-        ) : null}
       </div>
     </Link>
   );
@@ -116,6 +118,7 @@ function statusLabel(
   t: (key: string) => string,
 ): { label: string; accent: boolean } {
   if (listing.status === "coming_soon") return { label: t("listings.coming_soon"), accent: true };
+  if (listing.status === "reserved") return { label: t("listings.reserved"), accent: false };
   if (listing.status === "sold") return { label: t("listings.sold"), accent: false };
   if (listing.status === "rented") return { label: t("listings.rented"), accent: false };
   return {
