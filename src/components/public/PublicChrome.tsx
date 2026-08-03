@@ -1,11 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
-import { BrandMark } from "@/components/brand/BrandMark";
-import { LocaleSwitcher } from "@/components/shared/LocaleSwitcher";
-
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
+import { SiteNav } from "@/components/brand/SiteNav";
 import type { Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
 
@@ -19,95 +16,10 @@ type Props = {
 export function PublicChrome({ locale, settings, children }: Props) {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <Header locale={locale} settings={settings} />
+      <SiteNav locale={locale} settings={settings} />
       <main className="flex-1">{children}</main>
       <Footer locale={locale} settings={settings} />
     </div>
-  );
-}
-
-function useNavItems() {
-  const { t } = useTranslation();
-  const teamEnabled = useFeatureFlag("team");
-  return [
-    { to: "/$locale/immobilien" as const, label: t("nav.listings") },
-    { to: "/$locale/verkauft" as const, label: t("nav.sold") },
-    { to: "/$locale/immobilienbewertung" as const, label: t("nav.valuation") },
-    { to: "/$locale/verkaufen" as const, label: t("nav.selling") },
-    {
-      to: "/$locale/ueber-mich" as const,
-      label: t(teamEnabled ? "nav.about_team" : "nav.about_solo"),
-    },
-    { to: "/$locale/kontakt" as const, label: t("nav.contact") },
-  ];
-}
-
-function Header({ locale, settings }: { locale: Locale; settings: SiteSettings }) {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
-  const nav = useNavItems();
-
-  return (
-    <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 lg:px-10">
-        <Link
-          to="/$locale"
-          params={{ locale }}
-          className="transition-opacity duration-300 hover:opacity-80"
-        >
-          <BrandMark settings={settings} descriptor={t("brand.descriptor")} />
-        </Link>
-
-
-        <nav className="hidden items-center gap-8 lg:flex">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              params={{ locale }}
-              className="text-sm text-muted-foreground transition-opacity duration-300 hover:text-foreground"
-              activeProps={{ className: "text-foreground" }}
-            >
-              {n.label}
-            </Link>
-          ))}
-          <LocaleSwitcher currentLocale={locale} enabledLocales={settings.enabled_locales} />
-        </nav>
-
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-9 items-center rounded-sm border border-border px-3 text-sm lg:hidden"
-          aria-label={t("nav.menu")}
-        >
-          {t("nav.menu")}
-        </button>
-      </div>
-
-      {open ? (
-        <div className="border-t border-border lg:hidden">
-          <div className="mx-auto flex max-w-[1400px] flex-col gap-4 px-6 py-6">
-            {nav.map((n) => (
-              <Link
-                key={n.to}
-                to={n.to}
-                params={{ locale }}
-                onClick={() => setOpen(false)}
-                className="text-base text-foreground"
-              >
-                {n.label}
-              </Link>
-            ))}
-            <div className="pt-2">
-              <LocaleSwitcher
-                currentLocale={locale}
-                enabledLocales={settings.enabled_locales}
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
-    </header>
   );
 }
 
