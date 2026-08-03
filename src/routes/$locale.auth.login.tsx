@@ -12,7 +12,10 @@ import { updateLastLogin } from "@/lib/auth/last-login.functions";
 import { currentUserQueryOptions } from "@/lib/auth/current-user.functions";
 import type { Locale } from "@/i18n/config";
 
-const searchSchema = z.object({ redirect: z.string().optional() });
+const searchSchema = z.object({
+  redirect: z.string().optional(),
+  error: z.string().optional(),
+});
 
 export const Route = createFileRoute("/$locale/auth/login")({
   validateSearch: (s) => searchSchema.parse(s),
@@ -28,31 +31,40 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(
+    search.error ? t("admin.auth.login.generic") : null,
+  );
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError(null);
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (signInError) {
+    try {
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (signInError || !data.session) {
+        setError(
+          signInError?.message.toLowerCase().includes("invalid")
+            ? t("admin.auth.login.invalid")
+            : t("admin.auth.login.generic"),
+        );
+        return;
+      }
+      // Best-effort last-login update; never blocks navigation.
+      void updateLastLogin().catch(() => undefined);
+      await qc.invalidateQueries({ queryKey: currentUserQueryOptions.queryKey });
+      const target = search.redirect ?? `/${locale}/admin`;
+      await navigate({ to: target, replace: true });
+    } catch {
+      setError(t("admin.auth.login.generic"));
+    } finally {
+      // Always release the button so it can never hang on "Signing in...".
       setBusy(false);
-      setError(
-        signInError.message.toLowerCase().includes("invalid")
-          ? t("admin.auth.login.invalid")
-          : t("admin.auth.login.generic"),
-      );
-      return;
     }
-    // Best-effort last-login update; never blocks navigation.
-    void updateLastLogin().catch(() => undefined);
-    await qc.invalidateQueries({ queryKey: currentUserQueryOptions.queryKey });
-    const target = search.redirect ?? `/${locale}/admin`;
-    navigate({ to: target, replace: true });
   }
+
 
   return (
     <div className="space-y-6">
