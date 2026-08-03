@@ -31,7 +31,8 @@
     "about_team": "About us",
     "contact": "Contact",
     "admin": "Admin",
-    "menu": "Menu"
+    "menu": "Menu",
+    "close": "Close menu"
   },
   "listings": {
     "title": "Properties",
@@ -114,7 +115,14 @@
       "next": "Next",
       "page": "Page {{n}} of {{total}}"
     },
-    "results_count": "{{count}} properties"
+    "results_count": "{{count}} properties",
+    "reserved": "Reserved",
+    "facts": {
+      "rooms": "rooms",
+      "bedrooms": "bed",
+      "bathrooms": "bath",
+      "energy_class": "Energy class"
+    }
   },
   "areas": {
     "fohnsdorf": "Fohnsdorf",

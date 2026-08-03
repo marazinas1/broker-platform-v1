@@ -31,7 +31,8 @@
     "about_team": "Über uns",
     "contact": "Kontakt",
     "admin": "Verwaltung",
-    "menu": "Menü"
+    "menu": "Menü",
+    "close": "Menü schließen"
   },
   "listings": {
     "title": "Immobilien",
@@ -114,7 +115,14 @@
       "next": "Weiter",
       "page": "Seite {{n}} von {{total}}"
     },
-    "results_count": "{{count}} Objekte"
+    "results_count": "{{count}} Objekte",
+    "reserved": "Reserviert",
+    "facts": {
+      "rooms": "Zimmer",
+      "bedrooms": "Schlafzimmer",
+      "bathrooms": "Bäder",
+      "energy_class": "Energieklasse"
+    }
   },
   "areas": {
     "fohnsdorf": "Fohnsdorf",

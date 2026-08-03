@@ -35,9 +35,11 @@ export function formatPrice(
 ): string {
   if (opts.onRequest) return opts.onRequestLabel;
   if (price == null) return opts.onRequestLabel;
-  const nf = new Intl.NumberFormat(locale === "en" ? "en-US" : "de-AT", {
+  // German convention places the symbol after the amount: "489.000 €".
+  const nf = new Intl.NumberFormat(locale === "en" ? "en-US" : "de-DE", {
     style: "currency",
     currency,
+    currencyDisplay: "symbol",
     maximumFractionDigits: 0,
   });
   const base = nf.format(price);
@@ -51,7 +53,7 @@ export function formatArea(
   locale: Locale,
 ): string {
   if (area == null) return "—";
-  const nf = new Intl.NumberFormat(locale === "en" ? "en-US" : "de-AT", {
+  const nf = new Intl.NumberFormat(locale === "en" ? "en-US" : "de-DE", {
     maximumFractionDigits: 0,
   });
   const suffix = unit === "sqft" ? "ft²" : "m²";
