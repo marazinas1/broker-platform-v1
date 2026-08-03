@@ -2,6 +2,19 @@
 @source "../src";
 @import "tw-animate-css";
 
+/*
+ * Fonts are self-hosted through @fontsource — never the Google Fonts CDN.
+ * Fraunces (headings) and Inter (body/UI) ship the `latin-ext` subset in the
+ * imports below, which is what makes ä ö ü ß render once German content lands.
+ * The script font only ever renders the broker's own name, so its `latin`
+ * subset file is imported directly.
+ */
+@import "@fontsource-variable/fraunces/index.css"; /* latin + latin-ext */
+@import "@fontsource-variable/inter/index.css"; /* latin + latin-ext */
+@import "@fontsource/tangerine/latin-400.css";
+@import "@fontsource/tangerine/latin-700.css";
+
+
 @custom-variant dark (&:is(.dark *));
 
 /*
