@@ -197,3 +197,38 @@
     font-feature-settings: "tnum" 1;
   }
 }
+
+/*
+ * Type scale. Deliberately dramatic: the hero sits several steps above
+ * section headings so photography and one line of type carry the page.
+ */
+@utility text-hero {
+  font-family: var(--font-heading);
+  font-size: clamp(2.75rem, 7.5vw, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+@utility text-section {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+
+/* Handwritten signature motif — the broker's name only. */
+@utility font-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+/* Small uppercase label used instead of coloured badges. */
+@utility eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
