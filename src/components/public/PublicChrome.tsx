@@ -51,10 +51,11 @@ function Header({ locale, settings }: { locale: Locale; settings: SiteSettings }
         <Link
           to="/$locale"
           params={{ locale }}
-          className="font-heading text-xl tracking-tight text-foreground hover:opacity-80"
+          className="transition-opacity duration-300 hover:opacity-80"
         >
-          {settings.site_name}
+          <BrandMark settings={settings} />
         </Link>
+
 
         <nav className="hidden items-center gap-8 lg:flex">
           {nav.map((n) => (
