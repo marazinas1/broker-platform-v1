@@ -29,7 +29,9 @@
 @theme inline {
   --font-heading: var(--font-heading);
   --font-body: var(--font-body);
+  --font-script: var(--font-script);
   --font-sans: var(--font-body);
+
   --radius-sm: calc(var(--radius) - 1px);
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 2px);
