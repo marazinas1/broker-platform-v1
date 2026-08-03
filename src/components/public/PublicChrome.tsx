@@ -55,7 +55,7 @@ function Header({ locale, settings }: { locale: Locale; settings: SiteSettings }
           params={{ locale }}
           className="transition-opacity duration-300 hover:opacity-80"
         >
-          <BrandMark settings={settings} />
+          <BrandMark settings={settings} descriptor={t("brand.descriptor")} />
         </Link>
 
 
