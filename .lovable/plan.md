@@ -53,9 +53,12 @@ Rewrite `src/components/brand/ListingCard.tsx`:
 
 ## 7. Verification
 
+- Script-font sample screenshot sent for your approval before the font is wired in.
+- Repository-wide grep confirming zero references to Instrument Serif (and Work Sans) remain in styles, root route, seed SQL or site settings — the swap is a full replacement, not an addition.
 - Playwright screenshot of `/en` hero and the featured card grid at desktop and mobile widths.
-- Temporarily render "Häuser" and "Königstraße" in Fraunces and the script font, screenshot to confirm ä ö ü ß, then remove the test markup.
+- Temporarily render "Häuser" and "Königstraße" in Fraunces and Inter, screenshot to confirm ä ö ü ß, then remove the test markup.
 - Confirm `/` lands on English, the toggle reaches `/de`, and changing `primary_color` in site settings still re-tints the theme.
+
 
 ## Technical notes
 
