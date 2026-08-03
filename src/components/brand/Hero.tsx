@@ -16,6 +16,8 @@ type Props = {
   featured: PublicListing[];
   settings: SiteSettings;
   variant?: HeroVariant;
+  /** Section photograph configured in site_settings.homepage_sections. */
+  image?: string | null;
 };
 
 /**
@@ -25,11 +27,11 @@ type Props = {
  *  - broker:   portrait alongside the positioning line.
  * All copy and imagery come from site_settings + listings — no hardcoded strings.
  */
-export function Hero({ locale, featured, settings, variant = "region" }: Props) {
+export function Hero({ locale, featured, settings, variant = "region", image }: Props) {
   if (variant === "property")
     return <PropertyHero locale={locale} featured={featured} settings={settings} />;
   if (variant === "broker") return <BrokerHero settings={settings} />;
-  return <RegionHero settings={settings} featured={featured} locale={locale} />;
+  return <RegionHero settings={settings} featured={featured} locale={locale} image={image} />;
 }
 
 /** Sage call to action — the single filled button style on the site. */
@@ -49,19 +51,21 @@ function RegionHero({
   settings,
   featured,
   locale,
+  image,
 }: {
   settings: SiteSettings;
   featured: PublicListing[];
   locale: Locale;
+  image?: string | null;
 }) {
   const { t } = useTranslation();
   const fallback = featured[0]
     ? pickImageUrl(featured[0].images[0]?.variants, "large")
     : null;
-  const image = settings.og_default_image ?? fallback ?? HERO_FALLBACK_IMAGE;
+  const src = image?.trim() || fallback || HERO_FALLBACK_IMAGE;
 
   return (
-    <HeroFrame image={image} alt="">
+    <HeroFrame image={src} alt="">
       <h1 className="text-hero max-w-4xl text-white">{t("home.hero_line")}</h1>
       <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-6">
         <HeroCta locale={locale} label={t("home.hero_cta")} />
@@ -83,7 +87,7 @@ function PropertyHero({
   const { t } = useTranslation();
   const first = featured[0];
   if (!first) {
-    return <RegionHero settings={settings} featured={featured} locale={locale} />;
+    return <RegionHero settings={settings} featured={featured} locale={locale} image={image} />;
   }
   const image = pickImageUrl(first.images[0]?.variants, "large") ?? HERO_FALLBACK_IMAGE;
   const title = pickLocalized(first.title, locale) || first.slug;

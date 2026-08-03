@@ -62,6 +62,8 @@ export interface HomepageSection {
   key: HomepageSectionKey;
   enabled: boolean;
   variant?: HeroVariant;
+  /** Optional section background/lead photograph URL (used by the hero). */
+  image?: string;
 }
 
 export interface CredibilityStat {
