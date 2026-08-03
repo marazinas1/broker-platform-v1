@@ -87,7 +87,7 @@ function PropertyHero({
   const { t } = useTranslation();
   const first = featured[0];
   if (!first) {
-    return <RegionHero settings={settings} featured={featured} locale={locale} image={image} />;
+    return <RegionHero settings={settings} featured={featured} locale={locale} />;
   }
   const image = pickImageUrl(first.images[0]?.variants, "large") ?? HERO_FALLBACK_IMAGE;
   const title = pickLocalized(first.title, locale) || first.slug;
