@@ -50,7 +50,7 @@ UPDATE public.site_settings SET
   primary_agent_photo_url = NULL,
   og_default_image        = 'https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=1200&h=630&q=80',
   homepage_sections = '[
-    {"key":"hero","enabled":true,"variant":"region"},
+    {"key":"hero","enabled":true,"variant":"region","image":"https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=2400&q=80"},
     {"key":"categories","enabled":true},
     {"key":"featured","enabled":true},
     {"key":"credibility","enabled":true},
