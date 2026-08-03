@@ -12,7 +12,10 @@ import { updateLastLogin } from "@/lib/auth/last-login.functions";
 import { currentUserQueryOptions } from "@/lib/auth/current-user.functions";
 import type { Locale } from "@/i18n/config";
 
-const searchSchema = z.object({ redirect: z.string().optional() });
+const searchSchema = z.object({
+  redirect: z.string().optional(),
+  error: z.string().optional(),
+});
 
 export const Route = createFileRoute("/$locale/auth/login")({
   validateSearch: (s) => searchSchema.parse(s),
