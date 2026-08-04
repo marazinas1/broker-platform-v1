@@ -487,7 +487,12 @@
         ]
       },
       "contact_title_solo": "How to reach me",
-      "contact_title_team": "How to reach us"
+      "contact_title_team": "How to reach us",
+      "all_properties": "All properties",
+      "my_properties": "My properties",
+      "our_properties": "Our properties",
+      "sold_heading": "Recently sold",
+      "contact_cta": "Ready to talk about your property?"
     },
     "contact": {
       "title": "Contact",
