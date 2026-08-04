@@ -487,7 +487,12 @@
         ]
       },
       "contact_title_solo": "So erreichen Sie mich",
-      "contact_title_team": "So erreichen Sie uns"
+      "contact_title_team": "So erreichen Sie uns",
+      "all_properties": "Alle Objekte",
+      "my_properties": "Meine Objekte",
+      "our_properties": "Unsere Objekte",
+      "email_label": "E-Mail",
+      "phone_label": "Telefon"
     },
     "contact": {
       "title": "Kontakt",
