@@ -3,9 +3,9 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
 import { PublicChrome } from "@/components/public/PublicChrome";
-import { MapView } from "@/components/public/MapView";
 import { ShareButtons } from "@/components/public/ShareButtons";
 import { ListingGallery } from "@/components/brand/ListingGallery";
+import { ListingHeroOverlay } from "@/components/brand/ListingHeroOverlay";
 import { ListingFactsBar } from "@/components/brand/ListingFactsBar";
 import { ListingHeadline } from "@/components/brand/ListingHeadline";
 import { ListingContentSections } from "@/components/brand/ListingContentSections";

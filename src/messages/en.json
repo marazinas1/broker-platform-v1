@@ -108,7 +108,8 @@
         "surroundings": "Location & surroundings"
       },
       "unavailable_title": "Property unavailable",
-      "unavailable_body": "This listing is no longer online. Browse our current offerings instead."
+      "unavailable_body": "This listing is no longer online. Browse our current offerings instead.",
+      "contact_agent": "Contact agent"
     },
     "pager": {
       "prev": "Previous",
