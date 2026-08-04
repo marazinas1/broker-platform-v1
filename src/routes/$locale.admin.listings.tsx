@@ -1,11 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useTranslation } from "react-i18next";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/$locale/admin/listings")({
-  component: Stub,
+  component: () => <Outlet />,
 });
-
-function Stub() {
-  const { t } = useTranslation();
-  return <h1 className="text-2xl font-semibold">{t("admin.pages.listings")}</h1>;
-}

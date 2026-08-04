@@ -128,6 +128,29 @@
     "map": {
       "show": "Show map",
       "hide": "Hide map"
+    },
+    "status": {
+      "draft": "Draft",
+      "coming_soon": "Coming soon",
+      "active": "Active",
+      "reserved": "Reserved",
+      "sold": "Sold",
+      "rented": "Rented",
+      "archived": "Archived"
+    },
+    "propertyType": {
+      "apartment": "Apartment",
+      "house": "House",
+      "villa": "Villa",
+      "townhouse": "Townhouse",
+      "penthouse": "Penthouse",
+      "land": "Land",
+      "commercial": "Commercial",
+      "garage": "Garage"
+    },
+    "dealType": {
+      "sale": "For sale",
+      "rent": "For rent"
     }
   },
   "areas": {
@@ -384,6 +407,122 @@
             "title": "CRM sync",
             "description": "Forward inquiries to the CRM."
           }
+        }
+      }
+    },
+    "listings": {
+      "new": "New listing",
+      "save": "Save",
+      "saveDraft": "Save draft",
+      "saved": "Listing saved.",
+      "unsaved": "Unsaved changes",
+      "untitled": "Untitled listing",
+      "empty": "No listings yet.",
+      "viewPublic": "View public page",
+      "statusChanged": "Status updated.",
+      "saveBeforeStatus": "Save your changes first.",
+      "sections": {
+        "basics": "Basics",
+        "figures": "Figures & price",
+        "location": "Location",
+        "energy": "Energy certificate",
+        "content": "Content sections",
+        "images": "Photos"
+      },
+      "fields": {
+        "title": "Title",
+        "description": "Description",
+        "meta_title": "SEO title",
+        "meta_description": "SEO description",
+        "deal_type": "Deal type",
+        "property_type": "Property type",
+        "status": "Status",
+        "price": "Price",
+        "price_on_request": "Price on request",
+        "price_period": "Price period",
+        "living_area": "Living area (m²)",
+        "plot_area": "Plot (m²)",
+        "usable_area": "Usable area (m²)",
+        "rooms": "Rooms",
+        "bedrooms": "Bedrooms",
+        "bathrooms": "Bathrooms",
+        "floor": "Floor",
+        "total_floors": "Floors in building",
+        "year_built": "Year built",
+        "year_renovated": "Year renovated",
+        "address_street": "Street",
+        "address_number": "Number",
+        "address_zip": "Postcode",
+        "address_city": "Town",
+        "address_region": "Region",
+        "address_country": "Country",
+        "geo_lat": "Latitude",
+        "geo_lng": "Longitude",
+        "geo_precision": "Address visibility"
+      },
+      "energyFields": {
+        "hwb": "HWB (kWh/m²a)",
+        "eeb": "EEB (kWh/m²a)",
+        "fgee": "fGEE",
+        "efficiency_class": "Efficiency class",
+        "certificate_type": "Certificate type",
+        "final_energy": "Final energy (kWh/m²a)",
+        "energy_source": "Energy source",
+        "year_built": "Year built (certificate)"
+      },
+      "help": {
+        "price_on_request": "Hide the price and show “Price on request” instead.",
+        "price_period": "Rental period, e.g. month.",
+        "content": "One bullet point per line, per language."
+      },
+      "energy": {
+        "intro": "Required fields for {{country}}. Publishing is blocked until they are complete.",
+        "required": "Required before publishing",
+        "notRequired": "No country-specific energy fields are required for {{country}}.",
+        "exempt": "Land and garages are exempt from energy certificate requirements."
+      },
+      "geo": {
+        "exact": {
+          "label": "Exact",
+          "help": "Full address and precise pin are public."
+        },
+        "approximate": {
+          "label": "Approximate",
+          "help": "Street is hidden, the pin is rounded to the neighbourhood."
+        },
+        "hidden": {
+          "label": "Hidden",
+          "help": "No address and no map pin are published."
+        }
+      },
+      "statusAction": {
+        "draft": "Back to draft",
+        "coming_soon": "Mark coming soon",
+        "active": "Publish",
+        "reserved": "Mark reserved",
+        "sold": "Mark sold",
+        "rented": "Mark rented",
+        "archived": "Archive"
+      },
+      "images": {
+        "help": "The first photo is the hero image. Drag or use the arrows to reorder.",
+        "dropHint": "Drop photos here or select them from your device.",
+        "select": "Select photos",
+        "uploaded": "Photos uploaded. Processing runs in the background.",
+        "primary": "Hero",
+        "moveLeft": "Move earlier",
+        "moveRight": "Move later",
+        "delete": "Delete photo",
+        "retry": "Retry",
+        "retryQueued": "Processing restarted.",
+        "retryImpossible": "The original file is missing — please upload the photo again.",
+        "saveFirstTitle": "Save the draft first",
+        "saveFirstHelp": "Photos are attached to a listing, so save this draft once and the upload area appears here.",
+        "status": {
+          "pending": "Queued",
+          "processing": "Processing…",
+          "done": "Ready",
+          "failed": "Failed"
         }
       }
     }

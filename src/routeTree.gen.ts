@@ -32,7 +32,10 @@ import { Route as LocaleAdminInquiriesRouteImport } from './routes/$locale.admin
 import { Route as LocaleAdminContentRouteImport } from './routes/$locale.admin.content'
 import { Route as LocaleAdminAnalyticsRouteImport } from './routes/$locale.admin.analytics'
 import { Route as LocaleAdminSettingsIndexRouteImport } from './routes/$locale.admin.settings.index'
+import { Route as LocaleAdminListingsIndexRouteImport } from './routes/$locale.admin.listings.index'
 import { Route as LocaleAdminSettingsTabRouteImport } from './routes/$locale.admin.settings.$tab'
+import { Route as LocaleAdminListingsNewRouteImport } from './routes/$locale.admin.listings.new'
+import { Route as LocaleAdminListingsIdRouteImport } from './routes/$locale.admin.listings.$id'
 
 const LocaleRoute = LocaleRouteImport.update({
   id: '/$locale',
@@ -152,10 +155,26 @@ const LocaleAdminSettingsIndexRoute =
     path: '/',
     getParentRoute: () => LocaleAdminSettingsRoute,
   } as any)
+const LocaleAdminListingsIndexRoute =
+  LocaleAdminListingsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => LocaleAdminListingsRoute,
+  } as any)
 const LocaleAdminSettingsTabRoute = LocaleAdminSettingsTabRouteImport.update({
   id: '/$tab',
   path: '/$tab',
   getParentRoute: () => LocaleAdminSettingsRoute,
+} as any)
+const LocaleAdminListingsNewRoute = LocaleAdminListingsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => LocaleAdminListingsRoute,
+} as any)
+const LocaleAdminListingsIdRoute = LocaleAdminListingsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => LocaleAdminListingsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -172,7 +191,7 @@ export interface FileRoutesByFullPath {
   '/$locale/admin/analytics': typeof LocaleAdminAnalyticsRoute
   '/$locale/admin/content': typeof LocaleAdminContentRoute
   '/$locale/admin/inquiries': typeof LocaleAdminInquiriesRoute
-  '/$locale/admin/listings': typeof LocaleAdminListingsRoute
+  '/$locale/admin/listings': typeof LocaleAdminListingsRouteWithChildren
   '/$locale/admin/settings': typeof LocaleAdminSettingsRouteWithChildren
   '/$locale/admin/team': typeof LocaleAdminTeamRoute
   '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
@@ -181,7 +200,10 @@ export interface FileRoutesByFullPath {
   '/$locale/immobilien/$slug': typeof LocaleImmobilienSlugRoute
   '/$locale/admin/': typeof LocaleAdminIndexRoute
   '/$locale/immobilien/': typeof LocaleImmobilienIndexRoute
+  '/$locale/admin/listings/$id': typeof LocaleAdminListingsIdRoute
+  '/$locale/admin/listings/new': typeof LocaleAdminListingsNewRoute
   '/$locale/admin/settings/$tab': typeof LocaleAdminSettingsTabRoute
+  '/$locale/admin/listings/': typeof LocaleAdminListingsIndexRoute
   '/$locale/admin/settings/': typeof LocaleAdminSettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -196,7 +218,6 @@ export interface FileRoutesByTo {
   '/$locale/admin/analytics': typeof LocaleAdminAnalyticsRoute
   '/$locale/admin/content': typeof LocaleAdminContentRoute
   '/$locale/admin/inquiries': typeof LocaleAdminInquiriesRoute
-  '/$locale/admin/listings': typeof LocaleAdminListingsRoute
   '/$locale/admin/team': typeof LocaleAdminTeamRoute
   '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
   '/$locale/auth/login': typeof LocaleAuthLoginRoute
@@ -204,7 +225,10 @@ export interface FileRoutesByTo {
   '/$locale/immobilien/$slug': typeof LocaleImmobilienSlugRoute
   '/$locale/admin': typeof LocaleAdminIndexRoute
   '/$locale/immobilien': typeof LocaleImmobilienIndexRoute
+  '/$locale/admin/listings/$id': typeof LocaleAdminListingsIdRoute
+  '/$locale/admin/listings/new': typeof LocaleAdminListingsNewRoute
   '/$locale/admin/settings/$tab': typeof LocaleAdminSettingsTabRoute
+  '/$locale/admin/listings': typeof LocaleAdminListingsIndexRoute
   '/$locale/admin/settings': typeof LocaleAdminSettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -222,7 +246,7 @@ export interface FileRoutesById {
   '/$locale/admin/analytics': typeof LocaleAdminAnalyticsRoute
   '/$locale/admin/content': typeof LocaleAdminContentRoute
   '/$locale/admin/inquiries': typeof LocaleAdminInquiriesRoute
-  '/$locale/admin/listings': typeof LocaleAdminListingsRoute
+  '/$locale/admin/listings': typeof LocaleAdminListingsRouteWithChildren
   '/$locale/admin/settings': typeof LocaleAdminSettingsRouteWithChildren
   '/$locale/admin/team': typeof LocaleAdminTeamRoute
   '/$locale/auth/forgot-password': typeof LocaleAuthForgotPasswordRoute
@@ -231,7 +255,10 @@ export interface FileRoutesById {
   '/$locale/immobilien/$slug': typeof LocaleImmobilienSlugRoute
   '/$locale/admin/': typeof LocaleAdminIndexRoute
   '/$locale/immobilien/': typeof LocaleImmobilienIndexRoute
+  '/$locale/admin/listings/$id': typeof LocaleAdminListingsIdRoute
+  '/$locale/admin/listings/new': typeof LocaleAdminListingsNewRoute
   '/$locale/admin/settings/$tab': typeof LocaleAdminSettingsTabRoute
+  '/$locale/admin/listings/': typeof LocaleAdminListingsIndexRoute
   '/$locale/admin/settings/': typeof LocaleAdminSettingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -259,7 +286,10 @@ export interface FileRouteTypes {
     | '/$locale/immobilien/$slug'
     | '/$locale/admin/'
     | '/$locale/immobilien/'
+    | '/$locale/admin/listings/$id'
+    | '/$locale/admin/listings/new'
     | '/$locale/admin/settings/$tab'
+    | '/$locale/admin/listings/'
     | '/$locale/admin/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -274,7 +304,6 @@ export interface FileRouteTypes {
     | '/$locale/admin/analytics'
     | '/$locale/admin/content'
     | '/$locale/admin/inquiries'
-    | '/$locale/admin/listings'
     | '/$locale/admin/team'
     | '/$locale/auth/forgot-password'
     | '/$locale/auth/login'
@@ -282,7 +311,10 @@ export interface FileRouteTypes {
     | '/$locale/immobilien/$slug'
     | '/$locale/admin'
     | '/$locale/immobilien'
+    | '/$locale/admin/listings/$id'
+    | '/$locale/admin/listings/new'
     | '/$locale/admin/settings/$tab'
+    | '/$locale/admin/listings'
     | '/$locale/admin/settings'
   id:
     | '__root__'
@@ -308,7 +340,10 @@ export interface FileRouteTypes {
     | '/$locale/immobilien/$slug'
     | '/$locale/admin/'
     | '/$locale/immobilien/'
+    | '/$locale/admin/listings/$id'
+    | '/$locale/admin/listings/new'
     | '/$locale/admin/settings/$tab'
+    | '/$locale/admin/listings/'
     | '/$locale/admin/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -480,6 +515,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleAdminSettingsIndexRouteImport
       parentRoute: typeof LocaleAdminSettingsRoute
     }
+    '/$locale/admin/listings/': {
+      id: '/$locale/admin/listings/'
+      path: '/'
+      fullPath: '/$locale/admin/listings/'
+      preLoaderRoute: typeof LocaleAdminListingsIndexRouteImport
+      parentRoute: typeof LocaleAdminListingsRoute
+    }
     '/$locale/admin/settings/$tab': {
       id: '/$locale/admin/settings/$tab'
       path: '/$tab'
@@ -487,8 +529,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocaleAdminSettingsTabRouteImport
       parentRoute: typeof LocaleAdminSettingsRoute
     }
+    '/$locale/admin/listings/new': {
+      id: '/$locale/admin/listings/new'
+      path: '/new'
+      fullPath: '/$locale/admin/listings/new'
+      preLoaderRoute: typeof LocaleAdminListingsNewRouteImport
+      parentRoute: typeof LocaleAdminListingsRoute
+    }
+    '/$locale/admin/listings/$id': {
+      id: '/$locale/admin/listings/$id'
+      path: '/$id'
+      fullPath: '/$locale/admin/listings/$id'
+      preLoaderRoute: typeof LocaleAdminListingsIdRouteImport
+      parentRoute: typeof LocaleAdminListingsRoute
+    }
   }
 }
+
+interface LocaleAdminListingsRouteChildren {
+  LocaleAdminListingsIdRoute: typeof LocaleAdminListingsIdRoute
+  LocaleAdminListingsNewRoute: typeof LocaleAdminListingsNewRoute
+  LocaleAdminListingsIndexRoute: typeof LocaleAdminListingsIndexRoute
+}
+
+const LocaleAdminListingsRouteChildren: LocaleAdminListingsRouteChildren = {
+  LocaleAdminListingsIdRoute: LocaleAdminListingsIdRoute,
+  LocaleAdminListingsNewRoute: LocaleAdminListingsNewRoute,
+  LocaleAdminListingsIndexRoute: LocaleAdminListingsIndexRoute,
+}
+
+const LocaleAdminListingsRouteWithChildren =
+  LocaleAdminListingsRoute._addFileChildren(LocaleAdminListingsRouteChildren)
 
 interface LocaleAdminSettingsRouteChildren {
   LocaleAdminSettingsTabRoute: typeof LocaleAdminSettingsTabRoute
@@ -507,7 +578,7 @@ interface LocaleAdminRouteChildren {
   LocaleAdminAnalyticsRoute: typeof LocaleAdminAnalyticsRoute
   LocaleAdminContentRoute: typeof LocaleAdminContentRoute
   LocaleAdminInquiriesRoute: typeof LocaleAdminInquiriesRoute
-  LocaleAdminListingsRoute: typeof LocaleAdminListingsRoute
+  LocaleAdminListingsRoute: typeof LocaleAdminListingsRouteWithChildren
   LocaleAdminSettingsRoute: typeof LocaleAdminSettingsRouteWithChildren
   LocaleAdminTeamRoute: typeof LocaleAdminTeamRoute
   LocaleAdminIndexRoute: typeof LocaleAdminIndexRoute
@@ -517,7 +588,7 @@ const LocaleAdminRouteChildren: LocaleAdminRouteChildren = {
   LocaleAdminAnalyticsRoute: LocaleAdminAnalyticsRoute,
   LocaleAdminContentRoute: LocaleAdminContentRoute,
   LocaleAdminInquiriesRoute: LocaleAdminInquiriesRoute,
-  LocaleAdminListingsRoute: LocaleAdminListingsRoute,
+  LocaleAdminListingsRoute: LocaleAdminListingsRouteWithChildren,
   LocaleAdminSettingsRoute: LocaleAdminSettingsRouteWithChildren,
   LocaleAdminTeamRoute: LocaleAdminTeamRoute,
   LocaleAdminIndexRoute: LocaleAdminIndexRoute,
@@ -579,13 +650,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
