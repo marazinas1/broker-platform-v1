@@ -14,9 +14,9 @@ type Props = {
 type Fact = { label: string; value: string };
 
 /**
- * The single-row headline strip that sits directly under the gallery.
- * Big sans figures with tabular numerals, small uppercase labels. Wraps
- * to two rows on narrow screens. Price honours price_on_request.
+ * Key figures as a calm label/value table: hairline dividers, tabular
+ * figures, no boxes or shadows. Price sits above as the prominent line
+ * and honours price_on_request.
  */
 export function ListingFactsBar({ listing, locale, settings }: Props) {
   const { t } = useTranslation();
@@ -28,10 +28,22 @@ export function ListingFactsBar({ listing, locale, settings }: Props) {
       value: formatArea(listing.living_area, settings.area_unit, locale),
     });
   }
-  if (listing.property_type === "land" && listing.plot_area != null) {
+  if (listing.plot_area != null) {
     facts.push({
       label: t("listings.detail.plot_area"),
       value: formatArea(listing.plot_area, settings.area_unit, locale),
+    });
+  }
+  if (listing.rooms != null) {
+    facts.push({ label: t("listings.detail.rooms"), value: String(listing.rooms) });
+  }
+  if (listing.bedrooms != null) {
+    facts.push({ label: t("listings.detail.bedrooms"), value: String(listing.bedrooms) });
+  }
+  if (listing.bathrooms != null) {
+    facts.push({
+      label: t("listings.detail.bathrooms"),
+      value: String(listing.bathrooms),
     });
   }
   if (listing.floor != null) {
@@ -42,56 +54,43 @@ export function ListingFactsBar({ listing, locale, settings }: Props) {
         : String(listing.floor),
     });
   }
-  if (listing.bedrooms != null) {
+  if (listing.year_built != null) {
     facts.push({
-      label: t("listings.detail.bedrooms"),
-      value: String(listing.bedrooms),
-    });
-  } else if (listing.rooms != null) {
-    facts.push({
-      label: t("listings.detail.rooms"),
-      value: String(listing.rooms),
-    });
-  }
-  if (listing.bathrooms != null) {
-    facts.push({
-      label: t("listings.detail.bathrooms"),
-      value: String(listing.bathrooms),
-    });
-  }
-  if (listing.plot_area != null && listing.property_type !== "land") {
-    facts.push({
-      label: t("listings.detail.plot_area"),
-      value: formatArea(listing.plot_area, settings.area_unit, locale),
+      label: t("listings.detail.year_built"),
+      value: String(listing.year_built),
     });
   }
 
-  facts.push({
-    label: t(listing.deal_type === "rent" ? "listings.for_rent" : "listings.for_sale"),
-    value: formatPrice(listing.price, settings.currency, locale, {
-      onRequest: listing.price_on_request,
-      period: listing.price_period,
-      onRequestLabel: t("listings.on_request"),
-    }),
+  const price = formatPrice(listing.price, settings.currency, locale, {
+    onRequest: listing.price_on_request,
+    period: listing.price_period,
+    onRequestLabel: t("listings.on_request"),
   });
 
-  const cols = Math.min(facts.length, 6);
-
   return (
-    <dl
-      className="grid grid-cols-2 gap-x-6 gap-y-10 border-y border-border py-10 sm:grid-cols-3 md:gap-x-12"
-      style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` } as never}
-    >
-      {facts.map((f) => (
-        <div key={f.label} className="min-w-0">
-          <dd className="font-sans text-3xl leading-none tabular-figures text-foreground md:text-4xl">
-            {f.value}
-          </dd>
-          <dt className="mt-3 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-            {f.label}
-          </dt>
+    <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-20">
+      <div className="border-t border-border pt-6">
+        <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+          {t(listing.deal_type === "rent" ? "listings.for_rent" : "listings.for_sale")}
         </div>
-      ))}
-    </dl>
+        <div className="mt-4 font-heading text-4xl leading-none tabular-figures md:text-5xl">
+          {price}
+        </div>
+      </div>
+
+      <dl className="border-t border-border">
+        {facts.map((f) => (
+          <div
+            key={f.label}
+            className="flex items-baseline justify-between gap-6 border-b border-border py-4"
+          >
+            <dt className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              {f.label}
+            </dt>
+            <dd className="tabular-figures text-base text-foreground">{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   );
 }

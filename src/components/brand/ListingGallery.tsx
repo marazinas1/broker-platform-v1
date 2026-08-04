@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import type { Locale } from "@/i18n/config";
 import { pickImageUrl } from "@/lib/listings/image";
@@ -16,10 +16,15 @@ type Props = {
   images: ImageInput[];
   locale: Locale;
   title: string;
+  /** Optional content laid over the lower part of the hero image. */
+  overlay?: ReactNode;
 };
 
-/** Detail-page gallery. Hero + up to four secondary shots. Keyboard-driven lightbox. */
-export function ListingGallery({ images, locale, title }: Props) {
+/**
+ * Detail-page gallery. Full-width hero with uniform media radius, then a
+ * row of secondary shots. Everything opens a keyboard-driven lightbox.
+ */
+export function ListingGallery({ images, locale, title, overlay }: Props) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const list = images.filter((i) => pickImageUrl(i.variants, "large"));
 
@@ -36,7 +41,7 @@ export function ListingGallery({ images, locale, title }: Props) {
   }, [openIdx, list.length]);
 
   if (list.length === 0) {
-    return <div className="aspect-[16/9] w-full bg-muted" />;
+    return <div className="aspect-[16/9] w-full rounded-media bg-muted" />;
   }
 
   const hero = list[0]!;
@@ -44,36 +49,41 @@ export function ListingGallery({ images, locale, title }: Props) {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-1 md:grid-cols-4">
+      <div className="relative overflow-hidden rounded-media bg-muted">
         <button
           type="button"
           onClick={() => setOpenIdx(0)}
-          className="group relative aspect-[4/3] w-full overflow-hidden bg-muted md:col-span-3 md:aspect-[16/10]"
+          aria-label={title}
+          className="group block aspect-[4/3] w-full md:aspect-[21/9]"
         >
           <img
             src={pickImageUrl(hero.variants, "large") ?? ""}
             alt={pickLocalized(hero.alt_text, locale) || title}
-            className="h-full w-full object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.02]"
+            className="h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.02]"
           />
         </button>
-        <div className="grid grid-cols-2 gap-1 md:grid-cols-1">
+        {overlay}
+      </div>
+
+      {rest.length > 0 ? (
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
           {rest.map((img, i) => (
             <button
               key={img.id ?? i}
               type="button"
               onClick={() => setOpenIdx(i + 1)}
-              className="group relative aspect-[4/3] w-full overflow-hidden bg-muted"
+              className="group aspect-[4/3] w-full overflow-hidden rounded-media bg-muted"
             >
               <img
                 src={pickImageUrl(img.variants, "medium") ?? ""}
                 alt={pickLocalized(img.alt_text, locale) || title}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.03]"
+                className="h-full w-full object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-[1.03]"
               />
             </button>
           ))}
         </div>
-      </div>
+      ) : null}
 
       {openIdx != null ? (
         <div
@@ -83,7 +93,7 @@ export function ListingGallery({ images, locale, title }: Props) {
           <img
             src={pickImageUrl(list[openIdx]!.variants, "large") ?? ""}
             alt={pickLocalized(list[openIdx]!.alt_text, locale) || title}
-            className="max-h-full max-w-full object-contain"
+            className="max-h-full max-w-full rounded-media object-contain"
           />
           <button
             type="button"
@@ -91,7 +101,7 @@ export function ListingGallery({ images, locale, title }: Props) {
               e.stopPropagation();
               setOpenIdx(null);
             }}
-            className="absolute right-4 top-4 bg-background/10 px-3 py-1 text-sm text-white hover:bg-background/20"
+            className="absolute right-4 top-4 rounded-full bg-white/10 px-3 py-1 text-sm text-white transition-colors duration-500 hover:bg-white/20"
           >
             ×
           </button>

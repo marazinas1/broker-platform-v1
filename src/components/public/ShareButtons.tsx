@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next";
 
 type Props = { url: string; title: string };
 
+const pill =
+  "inline-flex items-center rounded-full border border-border px-4 py-2 text-xs tracking-[0.06em] text-muted-foreground transition-colors duration-500 ease-out hover:border-primary/50 hover:text-primary";
+
 export function ShareButtons({ url, title }: Props) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
@@ -27,26 +30,33 @@ export function ShareButtons({ url, title }: Props) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch {
-      /* ignore */
+      /* clipboard unavailable — still give feedback */
     }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+    <div className="flex flex-wrap items-center gap-2">
       {links.map((l) => (
         <a
           key={l.key}
           href={l.href}
           target="_blank"
           rel="noreferrer noopener"
-          className="hover:text-foreground"
+          className={pill}
         >
           {l.label}
         </a>
       ))}
-      <button type="button" onClick={copy} className="hover:text-foreground">
+      <button
+        type="button"
+        onClick={copy}
+        aria-live="polite"
+        className={
+          copied ? `${pill} border-primary/50 text-primary` : pill
+        }
+      >
         {copied ? t("share.copied") : t("share.copy")}
       </button>
     </div>

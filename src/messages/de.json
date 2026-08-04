@@ -108,7 +108,8 @@
         "surroundings": "Lage und Umgebung"
       },
       "unavailable_title": "Objekt nicht verfügbar",
-      "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an."
+      "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an.",
+      "contact_agent": "Kontakt aufnehmen"
     },
     "pager": {
       "prev": "Zurück",
