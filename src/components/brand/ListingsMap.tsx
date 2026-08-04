@@ -32,13 +32,16 @@ export function ListingsMap({ items, locale, settings }: Props) {
   const points = listingsToPoints(items, locale, {
     metaFor: (l: PublicListing) =>
       [
-        l.price_on_request || l.price == null
-          ? t("listings.card.price_on_request")
-          : formatPrice(l.price, settings, locale),
-        l.living_area != null ? formatArea(l.living_area, settings, locale) : null,
+        formatPrice(l.price, settings.currency, locale, {
+          onRequest: l.price_on_request,
+          period: l.price_period,
+          onRequestLabel: t("listings.on_request"),
+        }),
+        l.living_area != null ? formatArea(l.living_area, settings.area_unit, locale) : null,
       ]
         .filter(Boolean)
         .join(" · "),
+
   });
 
   if (points.length === 0) return null;
