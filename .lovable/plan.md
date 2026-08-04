@@ -59,7 +59,9 @@ No new pipeline. Per dropped/selected file the client:
 2. Calls the existing `enqueueImageProcessing({ listingId, imageId, originalStoragePath, contentType, originalSizeBytes, filename })`, which inserts the `listing_images` row as `pending` and invokes `process-listing-image` with `EDGE_FUNCTION_SECRET`.
 3. The edge function does the work already built — orientation fix, EXIF/GPS stripped by re-encoding, thumb/medium/large/og in AVIF + WebP into the public `listing-images` bucket, blurhash, then flips the row to `done`.
 
-The UI shows a per-image status chip (pending → processing → done → failed with its error), polling the rows while any are unfinished. Drag to reorder (first image = primary/hero), delete removes every variant plus the original through the existing delete function. Because uploads need a listing id, the upload area is enabled only after the draft has been saved once — a new listing shows a short hint until then.
+The UI shows a per-image status chip (pending → processing → done → failed), polling the rows while any are unfinished. Drag to reorder (first image = primary/hero), delete removes every variant plus the original through the existing delete function.
+
+A failed image is recoverable, never a dead row: the card shows the stored failure reason in plain text and a "Retry" button that re-invokes `enqueueImageProcessing` for that same image id and original path, resetting the row to `pending` so the existing edge function runs again. Delete stays available as the fallback.
 
 ## 5. Round-trip check
 
