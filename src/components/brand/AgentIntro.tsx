@@ -71,7 +71,7 @@ export function AgentIntro({
           <dl className="mt-10 grid grid-cols-1 gap-6 border-t border-border pt-8 sm:grid-cols-2">
             {settings.contact_email ? (
               <div>
-                <dt className="eyebrow text-muted-foreground">{t("contact.email")}</dt>
+                <dt className="eyebrow text-muted-foreground">{t("pages.about.email_label")}</dt>
                 <dd className="mt-2 text-base">
                   <a
                     href={`mailto:${settings.contact_email}`}
@@ -84,7 +84,7 @@ export function AgentIntro({
             ) : null}
             {settings.contact_phone ? (
               <div>
-                <dt className="eyebrow text-muted-foreground">{t("contact.phone")}</dt>
+                <dt className="eyebrow text-muted-foreground">{t("pages.about.phone_label")}</dt>
                 <dd className="mt-2 text-base tabular-figures">
                   <a
                     href={`tel:${settings.contact_phone.replace(/\s+/g, "")}`}
