@@ -241,7 +241,11 @@
         "submitting": "Anmeldung läuft…",
         "forgot": "Passwort vergessen?",
         "invalid": "Anmeldedaten sind ungültig.",
-        "generic": "Anmeldung fehlgeschlagen."
+        "generic": "Anmeldung fehlgeschlagen.",
+        "or": "oder",
+        "google": "Mit Google anmelden",
+        "google_soon": "Die Google-Anmeldung folgt in Kürze.",
+        "image_alt": "Ein einladendes Zuhause aus dem aktuellen Portfolio"
       },
       "forgot": {
         "title": "Passwort zurücksetzen",

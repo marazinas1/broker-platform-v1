@@ -241,7 +241,11 @@
         "submitting": "Signing in…",
         "forgot": "Forgot password?",
         "invalid": "Invalid credentials.",
-        "generic": "Sign-in failed."
+        "generic": "Sign-in failed.",
+        "or": "or",
+        "google": "Sign in with Google",
+        "google_soon": "Google sign-in is coming soon.",
+        "image_alt": "A welcoming home from the current portfolio"
       },
       "forgot": {
         "title": "Reset password",
