@@ -142,17 +142,33 @@ function ListingDetail() {
   const title = pickLocalized(l.title, locale) || l.slug;
   const shareUrl = `${origin}/${locale}/immobilien/${l.slug}`;
 
+  const locationLine =
+    l.geo_precision === "hidden"
+      ? [l.address_zip, l.address_city].filter(Boolean).join(" ")
+      : [l.address_street, l.address_zip, l.address_city].filter(Boolean).join(" · ");
+
   return (
     <PublicChrome locale={locale as Locale} settings={settings}>
       <article className="pb-40">
-        {/* 1. Gallery */}
-        <section className="mx-auto max-w-[1600px] px-2 pt-6 sm:px-4 lg:px-6">
-          <ListingGallery images={l.images} locale={locale as Locale} title={title} />
+        {/* 1. Hero gallery + overlaid headline */}
+        <section className="mx-auto max-w-[1600px] px-3 pt-6 sm:px-6 lg:px-8">
+          <ListingGallery
+            images={l.images}
+            locale={locale as Locale}
+            title={title}
+            overlay={
+              <ListingHeroOverlay
+                title={title}
+                locationLine={locationLine}
+                contactHref="#kontakt"
+              />
+            }
+          />
         </section>
 
         <div className="mx-auto max-w-[1200px] px-6 lg:px-10">
-          {/* 2. Facts bar */}
-          <section className="mt-16">
+          {/* 2. Facts */}
+          <section className="mt-20">
             <ListingFactsBar
               listing={l}
               locale={locale as Locale}
@@ -160,8 +176,8 @@ function ListingDetail() {
             />
           </section>
 
-          {/* 3. Headline + description */}
-          <section className="mt-24">
+          {/* 3. Description */}
+          <section className="mt-28">
             <ListingHeadline listing={l} locale={locale as Locale} />
           </section>
 
@@ -178,22 +194,10 @@ function ListingDetail() {
             <EnergyPanel energy={l.energy} propertyType={l.property_type} />
           </section>
 
-          {/* 6. Map */}
-          <section className="mt-32">
-            <h2 className="font-heading text-3xl md:text-4xl">
-              {t("listings.detail.location")}
-            </h2>
-            <div className="mt-8">
-              <MapView
-                lat={l.geo_lat}
-                lng={l.geo_lng}
-                precision={l.geo_precision}
-              />
-            </div>
-          </section>
+          {/* 6. Map slot — intentionally empty until the map phase lands. */}
 
           {/* 7. Agent + inquiry */}
-          <section className="mt-32">
+          <section id="kontakt" className="mt-32 scroll-mt-32">
             <ListingAgent listingId={l.id} settings={settings} />
           </section>
 
