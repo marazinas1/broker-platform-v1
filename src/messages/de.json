@@ -525,6 +525,53 @@
           "failed": "Fehlgeschlagen"
         }
       }
+    },
+    "inquiries": {
+      "summary": "{{total}} insgesamt · {{unread}} neu",
+      "empty": "Noch keine Anfragen.",
+      "about": "Zu",
+      "photos_count": "{{n}} Foto(s)",
+      "types": {
+        "listing": "Objektanfrage",
+        "buyer": "Kaufinteresse",
+        "seller": "Verkauf / Bewertung",
+        "other": "Anfrage"
+      },
+      "status": {
+        "new": "Neu",
+        "read": "Gelesen",
+        "handled": "Erledigt"
+      },
+      "detail": {
+        "back": "Zurück zu den Anfragen",
+        "message": "Nachricht",
+        "details": "Übermittelte Angaben",
+        "listing": "Objekt",
+        "photos": "Fotos",
+        "photo_alt": "Übermitteltes Foto {{n}}",
+        "photos_private": "Private Übermittlung – Links laufen nach 10 Minuten ab.",
+        "whatsapp": "WhatsApp",
+        "mark_handled": "Als erledigt markieren",
+        "mark_open": "Wieder öffnen",
+        "status_saved": "Status aktualisiert.",
+        "status_error": "Status konnte nicht aktualisiert werden.",
+        "locale": "Sprache",
+        "source": "Quelle"
+      },
+      "fields": {
+        "property_type": "Objektart",
+        "city": "Wunschlage",
+        "rooms_min": "Zimmer ab",
+        "area_min": "Fläche ab (m²)",
+        "price_max": "Budget bis",
+        "address_street": "Straße & Nr.",
+        "address_zip": "PLZ",
+        "address_city": "Ort",
+        "living_area": "Wohnfläche (m²)",
+        "rooms": "Zimmer",
+        "year_built": "Baujahr",
+        "condition": "Zustand"
+      }
     }
   },
   "pages": {
