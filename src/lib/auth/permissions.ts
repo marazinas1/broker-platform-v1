@@ -56,10 +56,16 @@ export function hasPermission(
   matrix: PermissionMatrix | null | undefined,
 ): boolean {
   if (!profile || !profile.is_active) return false;
+  const role = (
+    typeof profile.role === "string" ? profile.role.trim().toLowerCase() : ""
+  ) as Role;
+  // Safeguard: the owner is never locked out of their own admin UI, even if a
+  // matrix row is missing. Server-side assertPermission still governs actions.
+  if (role === "owner") return true;
   const override = overrides.find((o) => o.permission_key === key);
   if (override) return override.granted;
   if (!matrix) return false;
-  return matrix[key]?.[profile.role] ?? false;
+  return matrix[key]?.[role] ?? false;
 }
 
 export function isRole(value: unknown): value is Role {

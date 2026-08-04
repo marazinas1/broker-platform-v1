@@ -81,8 +81,30 @@ export const getCurrentUserIfSignedIn = createServerFn({ method: "GET" }).handle
   },
 );
 
+/**
+ * In the browser the Supabase session lives in localStorage, so the
+ * cookie-based short-circuit above always reports "anonymous". Client-side we
+ * therefore check the real session and call the authenticated fn directly
+ * (the bearer token is attached by the registered function middleware).
+ */
+async function loadCurrentUser(): Promise<CurrentUser | null> {
+  if (typeof window === "undefined") return getCurrentUserIfSignedIn();
+  const { supabase } = await import("@/integrations/supabase/client");
+  const { data } = await supabase.auth.getSession();
+  if (!data.session) return null;
+  try {
+    return await getCurrentUserWithPermissions();
+  } catch (err) {
+    console.warn(
+      "[current-user] authenticated load failed:",
+      err instanceof Error ? err.message : err,
+    );
+    return null;
+  }
+}
+
 export const currentUserQueryOptions = queryOptions({
   queryKey: ["current-user"] as const,
-  queryFn: () => getCurrentUserIfSignedIn(),
+  queryFn: () => loadCurrentUser(),
   staleTime: 60_000,
 });
