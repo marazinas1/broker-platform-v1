@@ -109,7 +109,8 @@
       },
       "unavailable_title": "Objekt nicht verfügbar",
       "unavailable_body": "Dieses Objekt ist nicht mehr online. Sehen Sie sich unsere aktuellen Angebote an.",
-      "contact_agent": "Kontakt aufnehmen"
+      "contact_agent": "Kontakt aufnehmen",
+      "location_approximate": "Ungefähre Lage — die genaue Adresse teilen wir auf Anfrage mit."
     },
     "pager": {
       "prev": "Zurück",
@@ -123,6 +124,10 @@
       "bedrooms": "Schlafzimmer",
       "bathrooms": "Bäder",
       "energy_class": "Energieklasse"
+    },
+    "map": {
+      "show": "Karte anzeigen",
+      "hide": "Karte ausblenden"
     }
   },
   "areas": {
