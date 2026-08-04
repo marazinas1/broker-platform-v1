@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,6 +13,8 @@ import {
 } from "@/components/ui/table";
 import { pickLocalized, formatPrice } from "@/lib/listings/format";
 import type { AdminListingRow } from "@/lib/listings/admin.functions";
+import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
+import type { Locale } from "@/i18n/config";
 import { variantUrl } from "./listing-image-url";
 
 function primaryThumb(row: AdminListingRow): string | null {
@@ -30,6 +33,7 @@ export function ListingsTable({
   locale: string;
 }) {
   const { t } = useTranslation();
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
 
   return (
     <div className="overflow-hidden rounded-lg border border-border">
@@ -80,9 +84,10 @@ export function ListingsTable({
                   {row.address_city ?? "—"}
                 </TableCell>
                 <TableCell className="hidden md:table-cell text-sm">
-                  {row.price_on_request
-                    ? t("listings.priceOnRequest")
-                    : formatPrice(row.price, locale)}
+                  {formatPrice(row.price, settings.currency, locale as Locale, {
+                    onRequest: row.price_on_request,
+                    onRequestLabel: t("listings.priceOnRequest"),
+                  })}
                 </TableCell>
                 <TableCell>
                   <Badge
