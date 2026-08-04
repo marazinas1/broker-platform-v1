@@ -1,0 +1,136 @@
+import { useTranslation } from "react-i18next";
+import { ArrowLeft, ArrowRight, RotateCcw, Trash2 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { variantUrl } from "./listing-image-url";
+
+export type ImageRecord = {
+  id: string;
+  variants: unknown;
+  processing_status: string;
+  processing_error: string | null;
+  is_primary: boolean;
+  original_storage_path: string | null;
+  content_type: string | null;
+};
+
+const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+  pending: "outline",
+  processing: "secondary",
+  done: "default",
+  failed: "destructive",
+};
+
+export function ImageCard({
+  image,
+  index,
+  total,
+  busy,
+  onMove,
+  onRetry,
+  onDelete,
+}: {
+  image: ImageRecord;
+  index: number;
+  total: number;
+  busy: boolean;
+  onMove: (index: number, direction: -1 | 1) => void;
+  onRetry: (image: ImageRecord) => void;
+  onDelete: (image: ImageRecord) => void;
+}) {
+  const { t } = useTranslation();
+  const url = variantUrl(image.variants, "thumb");
+  const failed = image.processing_status === "failed";
+
+  return (
+    <div
+      className="flex flex-col overflow-hidden rounded-lg border border-border bg-card"
+      draggable
+      onDragStart={(e) => e.dataTransfer.setData("text/plain", String(index))}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => {
+        e.preventDefault();
+        const from = Number(e.dataTransfer.getData("text/plain"));
+        if (Number.isNaN(from) || from === index) return;
+        onMove(from, from < index ? 1 : -1);
+      }}
+    >
+      <div className="relative aspect-[4/3] bg-muted">
+        {url ? (
+          <img
+            src={url}
+            alt=""
+            className="h-full w-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex h-full items-center justify-center px-3 text-center text-xs text-muted-foreground">
+            {t(`admin.listings.images.status.${image.processing_status}`)}
+          </div>
+        )}
+        {index === 0 ? (
+          <span className="absolute left-2 top-2 rounded bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground">
+            {t("admin.listings.images.primary")}
+          </span>
+        ) : null}
+      </div>
+
+      <div className="flex flex-1 flex-col gap-2 p-3">
+        <Badge variant={STATUS_VARIANT[image.processing_status] ?? "outline"}>
+          {t(`admin.listings.images.status.${image.processing_status}`)}
+        </Badge>
+        {failed && image.processing_error ? (
+          <p className="text-xs leading-snug text-destructive">
+            {image.processing_error}
+          </p>
+        ) : null}
+        <div className="mt-auto flex items-center gap-1">
+          <Button
+            type="button"
+            size="icon"
+            variant="outline"
+            disabled={busy || index === 0}
+            onClick={() => onMove(index, -1)}
+            aria-label={t("admin.listings.images.moveLeft")}
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            type="button"
+            size="icon"
+            variant="outline"
+            disabled={busy || index === total - 1}
+            onClick={() => onMove(index, 1)}
+            aria-label={t("admin.listings.images.moveRight")}
+          >
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+          {failed ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={busy}
+              onClick={() => onRetry(image)}
+            >
+              <RotateCcw className="mr-1 h-3.5 w-3.5" />
+              {t("admin.listings.images.retry")}
+            </Button>
+          ) : null}
+          <Button
+            type="button"
+            size="icon"
+            variant="outline"
+            className="ml-auto text-destructive"
+            disabled={busy}
+            onClick={() => onDelete(image)}
+            aria-label={t("admin.listings.images.delete")}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
