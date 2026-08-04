@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AuthSplit } from "@/components/brand/AuthSplit";
+import { AuthProviderSlot } from "@/components/brand/AuthProviderSlot";
+import { BrandMark } from "@/components/brand/BrandMark";
 import { supabase } from "@/integrations/supabase/client";
 import { updateLastLogin } from "@/lib/auth/last-login.functions";
 import { currentUserQueryOptions } from "@/lib/auth/current-user.functions";
+import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import type { Locale } from "@/i18n/config";
 
 const searchSchema = z.object({
@@ -19,8 +23,18 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/$locale/auth/login")({
   validateSearch: (s) => searchSchema.parse(s),
+  loader: ({ context }) => context.queryClient.ensureQueryData(siteSettingsQueryOptions),
   component: LoginPage,
 });
+
+/** Photography for the right column, taken from client configuration. */
+function pickAuthImage(settings: {
+  homepage_sections: { key: string; image?: string }[];
+  primary_agent_photo_url: string | null;
+}) {
+  const hero = settings.homepage_sections.find((s) => s.key === "hero")?.image;
+  return hero ?? settings.primary_agent_photo_url ?? null;
+}
 
 function LoginPage() {
   const { t } = useTranslation();
@@ -28,6 +42,7 @@ function LoginPage() {
   const search = useSearch({ from: "/$locale/auth/login" });
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -65,16 +80,22 @@ function LoginPage() {
     }
   }
 
-
   return (
-    <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-xl font-semibold">{t("admin.auth.login.title")}</h1>
-        <p className="text-sm text-muted-foreground">{t("admin.auth.login.subtitle")}</p>
-      </div>
-      <form className="space-y-4" onSubmit={onSubmit}>
-        <div className="space-y-1.5">
-          <Label htmlFor="email">{t("admin.auth.login.email")}</Label>
+    <AuthSplit
+      imageUrl={pickAuthImage(settings)}
+      imageAlt={t("admin.auth.login.image_alt")}
+      brand={<BrandMark settings={settings} locale={locale} />}
+    >
+      <h1 className="font-heading text-4xl md:text-5xl">{t("admin.auth.login.title")}</h1>
+      <p className="mt-3 text-sm text-muted-foreground">
+        {t("admin.auth.login.subtitle")}
+      </p>
+
+      <form className="mt-10 space-y-5" onSubmit={onSubmit}>
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-[11px] uppercase tracking-[0.16em]">
+            {t("admin.auth.login.email")}
+          </Label>
           <Input
             id="email"
             type="email"
@@ -82,10 +103,13 @@ function LoginPage() {
             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="h-11 rounded-md border-border bg-card"
           />
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="password">{t("admin.auth.login.password")}</Label>
+        <div className="space-y-2">
+          <Label htmlFor="password" className="text-[11px] uppercase tracking-[0.16em]">
+            {t("admin.auth.login.password")}
+          </Label>
           <Input
             id="password"
             type="password"
@@ -93,22 +117,25 @@ function LoginPage() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="h-11 rounded-md border-border bg-card"
           />
         </div>
-        {error && <p className="text-sm text-destructive">{error}</p>}
-        <Button type="submit" disabled={busy} className="w-full">
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
+        <Button type="submit" disabled={busy} className="h-11 w-full rounded-md">
           {busy ? t("admin.auth.login.submitting") : t("admin.auth.login.submit")}
         </Button>
+        <div className="pt-1">
+          <Link
+            to="/$locale/auth/forgot-password"
+            params={{ locale }}
+            className="text-sm text-muted-foreground underline-offset-4 transition-colors duration-300 hover:text-foreground hover:underline"
+          >
+            {t("admin.auth.login.forgot")}
+          </Link>
+        </div>
       </form>
-      <div className="text-sm">
-        <Link
-          to="/$locale/auth/forgot-password"
-          params={{ locale }}
-          className="text-primary underline-offset-4 hover:underline"
-        >
-          {t("admin.auth.login.forgot")}
-        </Link>
-      </div>
-    </div>
+
+      <AuthProviderSlot />
+    </AuthSplit>
   );
 }
