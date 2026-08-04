@@ -86,7 +86,7 @@ export function ListingsTable({
                 <TableCell className="hidden md:table-cell text-sm">
                   {formatPrice(row.price, settings.currency, locale as Locale, {
                     onRequest: row.price_on_request,
-                    onRequestLabel: t("listings.priceOnRequest"),
+                    onRequestLabel: t("listings.on_request"),
                   })}
                 </TableCell>
                 <TableCell>

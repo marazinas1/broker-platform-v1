@@ -128,6 +128,29 @@
     "map": {
       "show": "Karte anzeigen",
       "hide": "Karte ausblenden"
+    },
+    "status": {
+      "draft": "Entwurf",
+      "coming_soon": "Demnächst",
+      "active": "Aktiv",
+      "reserved": "Reserviert",
+      "sold": "Verkauft",
+      "rented": "Vermietet",
+      "archived": "Archiviert"
+    },
+    "propertyType": {
+      "apartment": "Wohnung",
+      "house": "Haus",
+      "villa": "Villa",
+      "townhouse": "Reihenhaus",
+      "penthouse": "Penthouse",
+      "land": "Grundstück",
+      "commercial": "Gewerbe",
+      "garage": "Garage"
+    },
+    "dealType": {
+      "sale": "Kauf",
+      "rent": "Miete"
     }
   },
   "areas": {
@@ -384,6 +407,122 @@
             "title": "CRM-Sync",
             "description": "Anfragen an das CRM übermitteln."
           }
+        }
+      }
+    },
+    "listings": {
+      "new": "Neues Objekt",
+      "save": "Speichern",
+      "saveDraft": "Entwurf speichern",
+      "saved": "Objekt gespeichert.",
+      "unsaved": "Nicht gespeicherte Änderungen",
+      "untitled": "Objekt ohne Titel",
+      "empty": "Noch keine Objekte.",
+      "viewPublic": "Öffentliche Seite ansehen",
+      "statusChanged": "Status aktualisiert.",
+      "saveBeforeStatus": "Bitte zuerst speichern.",
+      "sections": {
+        "basics": "Grunddaten",
+        "figures": "Zahlen & Preis",
+        "location": "Lage",
+        "energy": "Energieausweis",
+        "content": "Inhaltsabschnitte",
+        "images": "Fotos"
+      },
+      "fields": {
+        "title": "Titel",
+        "description": "Beschreibung",
+        "meta_title": "SEO-Titel",
+        "meta_description": "SEO-Beschreibung",
+        "deal_type": "Angebotsart",
+        "property_type": "Objektart",
+        "status": "Status",
+        "price": "Preis",
+        "price_on_request": "Preis auf Anfrage",
+        "price_period": "Preiszeitraum",
+        "living_area": "Wohnfläche (m²)",
+        "plot_area": "Grundstück (m²)",
+        "usable_area": "Nutzfläche (m²)",
+        "rooms": "Zimmer",
+        "bedrooms": "Schlafzimmer",
+        "bathrooms": "Badezimmer",
+        "floor": "Etage",
+        "total_floors": "Etagen im Haus",
+        "year_built": "Baujahr",
+        "year_renovated": "Sanierung",
+        "address_street": "Straße",
+        "address_number": "Nummer",
+        "address_zip": "PLZ",
+        "address_city": "Ort",
+        "address_region": "Region",
+        "address_country": "Land",
+        "geo_lat": "Breitengrad",
+        "geo_lng": "Längengrad",
+        "geo_precision": "Adress-Sichtbarkeit"
+      },
+      "energyFields": {
+        "hwb": "HWB (kWh/m²a)",
+        "eeb": "EEB (kWh/m²a)",
+        "fgee": "fGEE",
+        "efficiency_class": "Effizienzklasse",
+        "certificate_type": "Ausweisart",
+        "final_energy": "Endenergie (kWh/m²a)",
+        "energy_source": "Energieträger",
+        "year_built": "Baujahr (Ausweis)"
+      },
+      "help": {
+        "price_on_request": "Preis ausblenden und „Preis auf Anfrage“ zeigen.",
+        "price_period": "Mietzeitraum, z. B. Monat.",
+        "content": "Ein Stichpunkt pro Zeile, je Sprache."
+      },
+      "energy": {
+        "intro": "Pflichtfelder für {{country}}. Ohne sie ist eine Veröffentlichung nicht möglich.",
+        "required": "Vor Veröffentlichung erforderlich",
+        "notRequired": "Für {{country}} sind keine landesspezifischen Energiefelder erforderlich.",
+        "exempt": "Grundstücke und Garagen benötigen keinen Energieausweis."
+      },
+      "geo": {
+        "exact": {
+          "label": "Exakt",
+          "help": "Vollständige Adresse und genauer Kartenpunkt sind öffentlich."
+        },
+        "approximate": {
+          "label": "Ungefähr",
+          "help": "Straße wird verborgen, der Kartenpunkt auf die Umgebung gerundet."
+        },
+        "hidden": {
+          "label": "Verborgen",
+          "help": "Keine Adresse und kein Kartenpunkt werden veröffentlicht."
+        }
+      },
+      "statusAction": {
+        "draft": "Zurück zum Entwurf",
+        "coming_soon": "Als „demnächst“ markieren",
+        "active": "Veröffentlichen",
+        "reserved": "Als reserviert markieren",
+        "sold": "Als verkauft markieren",
+        "rented": "Als vermietet markieren",
+        "archived": "Archivieren"
+      },
+      "images": {
+        "help": "Das erste Foto ist das Titelbild. Zum Sortieren ziehen oder die Pfeile nutzen.",
+        "dropHint": "Fotos hier ablegen oder vom Gerät auswählen.",
+        "select": "Fotos auswählen",
+        "uploaded": "Fotos hochgeladen. Die Verarbeitung läuft im Hintergrund.",
+        "primary": "Titelbild",
+        "moveLeft": "Nach vorne",
+        "moveRight": "Nach hinten",
+        "delete": "Foto löschen",
+        "retry": "Erneut versuchen",
+        "retryQueued": "Verarbeitung neu gestartet.",
+        "retryImpossible": "Die Originaldatei fehlt – bitte das Foto erneut hochladen.",
+        "saveFirstTitle": "Zuerst Entwurf speichern",
+        "saveFirstHelp": "Fotos gehören zu einem Objekt. Speichere diesen Entwurf einmal, dann erscheint hier der Upload-Bereich.",
+        "status": {
+          "pending": "In Warteschlange",
+          "processing": "Wird verarbeitet…",
+          "done": "Fertig",
+          "failed": "Fehlgeschlagen"
         }
       }
     }
