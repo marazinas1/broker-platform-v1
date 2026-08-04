@@ -2,9 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
-import brokerPlaceholder from "@/assets/broker-placeholder.jpg";
 import { PublicChrome } from "@/components/public/PublicChrome";
+import { AgentIntro } from "@/components/brand/AgentIntro";
+import { AgentListings } from "@/components/brand/AgentListings";
 import { CredibilityBar } from "@/components/brand/CredibilityBar";
+import { ContactSection } from "@/components/brand/ContactSection";
+import { SoldStrip } from "@/components/brand/SoldStrip";
 import { TeamSection } from "@/components/brand/TeamSection";
 import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import type { Locale } from "@/i18n/config";
@@ -12,6 +15,11 @@ import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { featureFlagsQueryOptions } from "@/lib/config/feature-flags.functions";
 import { publicTeamQueryOptions } from "@/lib/team/queries.functions";
+import {
+  activeListingsQueryOptions,
+  recentSoldQueryOptions,
+} from "@/lib/listings/queries.functions";
+import { pickLocalized } from "@/lib/listings/format";
 import { getRequestOrigin } from "@/lib/seo/origin.functions";
 import { buildHead } from "@/lib/seo/build-head";
 
@@ -22,6 +30,8 @@ export const Route = createFileRoute("/$locale/ueber-mich")({
       getRequestOrigin(),
       context.queryClient.ensureQueryData(featureFlagsQueryOptions),
       context.queryClient.ensureQueryData(publicTeamQueryOptions),
+      context.queryClient.ensureQueryData(activeListingsQueryOptions),
+      context.queryClient.ensureQueryData(recentSoldQueryOptions),
     ]);
     return { settings, origin, flags, locale: params.locale as Locale };
   },
@@ -43,7 +53,7 @@ export const Route = createFileRoute("/$locale/ueber-mich")({
       title,
       description: translate(locale, descKey),
       siteName: settings.site_name,
-      ogDefaultImage: settings.og_default_image,
+      ogDefaultImage: settings.primary_agent_photo_url ?? settings.og_default_image,
     });
   },
   component: AboutPage,
@@ -54,6 +64,8 @@ function AboutPage() {
   const { t } = useTranslation();
   const { data: settings } = useSuspenseQuery(siteSettingsQueryOptions);
   const { data: team } = useSuspenseQuery(publicTeamQueryOptions);
+  const { data: active } = useSuspenseQuery(activeListingsQueryOptions);
+  const { data: sold } = useSuspenseQuery(recentSoldQueryOptions);
   const teamEnabled = useFeatureFlag("team");
   const l = locale as Locale;
 
@@ -63,48 +75,22 @@ function AboutPage() {
     ? []
     : (t("pages.about.solo.qualifications", { returnObjects: true }) as string[]);
 
-  const portrait = settings.primary_agent_photo_url ?? brokerPlaceholder;
+  const name =
+    settings.primary_agent_name ?? settings.legal_name ?? settings.site_name;
+  const bio = pickLocalized(settings.about_body, l);
   const showTeamGrid = teamEnabled && team.length > 0;
 
   return (
     <PublicChrome locale={l} settings={settings}>
-      <section className="mx-auto max-w-[1400px] px-6 pt-24 lg:px-10">
-        <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
-          <div className="md:col-span-5">
-            <div className="aspect-[4/5] w-full overflow-hidden bg-muted">
-              <img
-                src={portrait}
-                alt={settings.primary_agent_name ?? settings.site_name}
-                className="h-full w-full object-cover"
-                loading="eager"
-              />
-            </div>
-          </div>
-          <div className="md:col-span-7">
-            <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              {t("pages.about.kicker")}
-            </div>
-            <h1 className="mt-6 font-heading text-4xl leading-[1.05] md:text-6xl">
-              {t(`${scope}.headline`)}
-            </h1>
-            <div className="mt-10 space-y-6 text-base leading-relaxed text-foreground">
-              {paragraphs.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-            {settings.primary_agent_name ? (
-              <div className="mt-12 border-t border-border pt-6">
-                <div className="font-heading text-xl">{settings.primary_agent_name}</div>
-                {settings.primary_agent_role ? (
-                  <div className="mt-1 text-sm text-muted-foreground">
-                    {settings.primary_agent_role}
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
-          </div>
-        </div>
-      </section>
+      <AgentIntro
+        locale={l}
+        settings={settings}
+        name={name}
+        bio={bio}
+        paragraphs={paragraphs}
+        eyebrow={settings.primary_agent_role ?? undefined}
+        showSignature={!teamEnabled}
+      />
 
       {qualifications.length > 0 ? (
         <section className="mx-auto mt-32 max-w-[1400px] px-6 lg:px-10">
@@ -130,41 +116,18 @@ function AboutPage() {
 
       {showTeamGrid ? <TeamSection members={team} /> : null}
 
+      <AgentListings
+        locale={l}
+        items={active.items}
+        settings={settings}
+        heading={t(teamEnabled ? "pages.about.our_properties" : "pages.about.my_properties")}
+      />
+
+      <SoldStrip locale={l} items={sold.items} settings={settings} />
+
       <CredibilityBar locale={l} stats={settings.credibility_stats ?? []} settings={settings} />
 
-      <section className="mx-auto mt-40 max-w-[1400px] px-6 pb-32 lg:px-10">
-        <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
-          <div className="md:col-span-4">
-            <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              {t("home.contact")}
-            </div>
-            <h2 className="mt-6 font-heading text-3xl leading-[1.05] md:text-4xl">
-              {t(teamEnabled ? "pages.about.contact_title_team" : "pages.about.contact_title_solo")}
-            </h2>
-          </div>
-          <div className="md:col-span-8 space-y-3 text-base text-foreground">
-            {settings.contact_email ? (
-              <div>
-                <a className="hover:opacity-70" href={`mailto:${settings.contact_email}`}>
-                  {settings.contact_email}
-                </a>
-              </div>
-            ) : null}
-            {settings.contact_phone ? (
-              <div className="tabular-figures">{settings.contact_phone}</div>
-            ) : null}
-            {settings.address_street ? (
-              <div className="pt-4 text-sm text-muted-foreground">
-                {settings.address_street}
-                <br />
-                {settings.address_zip} {settings.address_city}
-                <br />
-                {settings.address_country ?? ""}
-              </div>
-            ) : null}
-          </div>
-        </div>
-      </section>
+      <ContactSection settings={settings} />
     </PublicChrome>
   );
 }
