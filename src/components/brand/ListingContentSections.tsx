@@ -38,13 +38,13 @@ export function ListingContentSections({ sections, locale }: Props) {
   if (rendered.length === 0) return null;
 
   return (
-    <div className="space-y-24">
+    <div className="space-y-28 md:space-y-36">
       {rendered.map((s) => (
         <section key={s.key}>
           <h2 className="font-heading text-3xl md:text-4xl">
             {t(`listings.detail.sections.${s.key}`)}
           </h2>
-          <ul className="mt-8 max-w-3xl divide-y divide-border border-y border-border">
+          <ul className="mt-8 max-w-3xl divide-y divide-border border-t border-border">
             {s.items.map((item, i) => (
               <li key={`${s.key}-${i}`} className="py-3 text-sm leading-relaxed text-foreground">
                 {item}

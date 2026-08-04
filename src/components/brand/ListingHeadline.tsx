@@ -10,12 +10,12 @@ type Props = {
 };
 
 /**
- * Headline sentence and body prose for the detail page. Headline is a full
- * sentence in the serif at large size; description flows as paragraphs.
+ * Body prose for the detail page. The headline itself lives on the hero,
+ * so this block carries the reference kicker, the location line and the
+ * description paragraphs.
  */
 export function ListingHeadline({ listing, locale }: Props) {
   const { t } = useTranslation();
-  const title = pickLocalized(listing.title, locale) || listing.slug;
   const description = pickLocalized(listing.description, locale);
 
   const locationLine =
@@ -37,17 +37,17 @@ export function ListingHeadline({ listing, locale }: Props) {
           ? `${t("listings.detail.reference")} · ${listing.reference_code}`
           : t(listing.deal_type === "rent" ? "listings.for_rent" : "listings.for_sale")}
       </div>
-      <h1 className="mt-4 max-w-4xl font-heading text-4xl leading-[1.05] md:text-6xl lg:text-7xl">
-        {title}
-      </h1>
-      <div className="mt-6 text-sm text-muted-foreground">
+      <h2 className="mt-6 font-heading text-3xl md:text-4xl">
+        {t("listings.detail.description")}
+      </h2>
+      <div className="mt-4 text-sm text-muted-foreground">
         {listing.geo_precision === "hidden"
           ? t("listings.detail.location_hidden")
           : locationLine}
       </div>
 
       {paragraphs.length > 0 ? (
-        <div className="mt-14 max-w-2xl space-y-7 text-base leading-[1.75] text-foreground/90">
+        <div className="mt-10 max-w-2xl space-y-7 text-base leading-[1.75] text-foreground/90">
           {paragraphs.map((p, i) => (
             <p key={i}>{p}</p>
           ))}
