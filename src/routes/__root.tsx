@@ -16,6 +16,8 @@ import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
 import { featureFlagsQueryOptions } from "@/lib/config/feature-flags.functions";
 import { currentUserQueryOptions } from "@/lib/auth/current-user.functions";
 import { ThemeStyleTag } from "@/components/shared/ThemeStyleTag";
+import { Toaster } from "@/components/ui/sonner";
+
 import { extractLocale } from "@/lib/seo/hreflang";
 import { translate, DEFAULT_LOCALE, isLocale, type Locale } from "@/i18n/config";
 import type { SiteSettings } from "@/types/site-settings";
