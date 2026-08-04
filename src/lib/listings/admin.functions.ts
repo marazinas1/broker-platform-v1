@@ -9,6 +9,9 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { ListingFormSchema, LISTING_STATUSES } from "./admin-schema";
 import { assertCanEditListing, toListingRow } from "./admin.server";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Json = any;
+
 export type AdminListingRow = {
   id: string;
   slug: string;
@@ -18,9 +21,9 @@ export type AdminListingRow = {
   price: number | null;
   price_on_request: boolean | null;
   address_city: string | null;
-  title: unknown;
+  title: Json;
   updated_at: string;
-  images: { variants: unknown; is_primary: boolean | null; sort_order: number | null }[];
+  images: { variants: Json; is_primary: boolean | null; sort_order: number | null }[];
 };
 
 export const listAdminListings = createServerFn({ method: "GET" })
@@ -33,7 +36,7 @@ export const listAdminListings = createServerFn({ method: "GET" })
       )
       .order("updated_at", { ascending: false });
     if (error) throw new Response(error.message, { status: 400 });
-    return (data ?? []).map((row: Record<string, unknown>) => ({
+    return (data ?? []).map((row: Json) => ({
       ...(row as unknown as AdminListingRow),
       images: (row.listing_images ?? []) as AdminListingRow["images"],
     }));
@@ -65,7 +68,7 @@ export const getAdminListing = createServerFn({ method: "GET" })
       .order("sort_order", { ascending: true });
     if (imgError) throw new Response(imgError.message, { status: 400 });
 
-    return { listing: row as Record<string, unknown>, images: images ?? [] };
+    return { listing: row as Json, images: (images ?? []) as Json[] };
   });
 
 export function adminListingQueryOptions(id: string) {
