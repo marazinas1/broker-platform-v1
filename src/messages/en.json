@@ -109,7 +109,8 @@
       },
       "unavailable_title": "Property unavailable",
       "unavailable_body": "This listing is no longer online. Browse our current offerings instead.",
-      "contact_agent": "Contact agent"
+      "contact_agent": "Contact agent",
+      "location_approximate": "Approximate location — the exact address is shared on request."
     },
     "pager": {
       "prev": "Previous",
@@ -123,6 +124,10 @@
       "bedrooms": "bed",
       "bathrooms": "bath",
       "energy_class": "Energy class"
+    },
+    "map": {
+      "show": "Show map",
+      "hide": "Hide map"
     }
   },
   "areas": {

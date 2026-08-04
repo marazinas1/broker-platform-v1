@@ -6,6 +6,8 @@ import { zodValidator } from "@tanstack/zod-adapter";
 
 import { PublicChrome } from "@/components/public/PublicChrome";
 import { ListingCard } from "@/components/brand/ListingCard";
+import { ListingsMap } from "@/components/brand/ListingsMap";
+
 import { FiltersBar } from "@/components/public/FiltersBar";
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
@@ -109,6 +111,15 @@ function ListingsIndex() {
         <div className="mt-14">
           <FiltersBar locale={locale as Locale} search={search} total={data.total} />
         </div>
+
+        <div className="mt-8">
+          <ListingsMap
+            items={data.items}
+            locale={locale as Locale}
+            settings={settings}
+          />
+        </div>
+
 
         {data.items.length === 0 ? (
           <div className="py-24 text-center text-sm text-muted-foreground">

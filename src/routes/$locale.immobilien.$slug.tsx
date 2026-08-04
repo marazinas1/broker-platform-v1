@@ -11,6 +11,8 @@ import { ListingHeadline } from "@/components/brand/ListingHeadline";
 import { ListingContentSections } from "@/components/brand/ListingContentSections";
 import { EnergyPanel } from "@/components/brand/EnergyPanel";
 import { ListingAgent } from "@/components/brand/ListingAgent";
+import { ListingLocationMap } from "@/components/brand/ListingLocationMap";
+
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
@@ -194,7 +196,11 @@ function ListingDetail() {
             <EnergyPanel energy={l.energy} propertyType={l.property_type} />
           </section>
 
-          {/* 6. Map slot — intentionally empty until the map phase lands. */}
+          {/* 6. Location map — precision-aware, hydrates on the client */}
+          <section className="mt-32">
+            <ListingLocationMap listing={l} locale={locale as Locale} />
+          </section>
+
 
           {/* 7. Agent + inquiry */}
           <section id="kontakt" className="mt-32 scroll-mt-32">
