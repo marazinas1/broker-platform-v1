@@ -492,7 +492,9 @@
       "my_properties": "My properties",
       "our_properties": "Our properties",
       "sold_heading": "Recently sold",
-      "contact_cta": "Ready to talk about your property?"
+      "contact_cta": "Ready to talk about your property?",
+      "email_label": "Email",
+      "phone_label": "Phone"
     },
     "contact": {
       "title": "Contact",

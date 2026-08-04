@@ -492,7 +492,9 @@
       "my_properties": "Meine Objekte",
       "our_properties": "Unsere Objekte",
       "sold_heading": "Verkaufte Objekte",
-      "contact_cta": "Sprechen wir über Ihre Immobilie?"
+      "contact_cta": "Sprechen wir über Ihre Immobilie?",
+      "email_label": "E-Mail",
+      "phone_label": "Telefon"
     },
     "contact": {
       "title": "Kontakt",
