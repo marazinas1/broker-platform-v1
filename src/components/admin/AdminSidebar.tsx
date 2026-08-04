@@ -1,5 +1,8 @@
 import { Link, useParams, useRouterState } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+
+import { newInquiryCountQueryOptions } from "@/lib/inquiries/admin.functions";
 import {
   LayoutDashboard,
   Building2,
@@ -47,6 +50,10 @@ function NavRow({ item, locale }: { item: NavItem; locale: Locale }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const allowed = usePermission(item.permission);
   const flagOn = useFeatureFlag(item.flag ?? "__always__");
+  const { data: newInquiries } = useQuery({
+    ...newInquiryCountQueryOptions,
+    enabled: item.key === "inquiries" && allowed,
+  });
   if (!allowed) return null;
   if (item.flag && !flagOn) return null;
 
@@ -55,6 +62,7 @@ function NavRow({ item, locale }: { item: NavItem; locale: Locale }) {
     item.to === "/$locale/admin"
       ? pathname === resolved
       : pathname === resolved || pathname.startsWith(`${resolved}/`);
+  const badge = item.key === "inquiries" ? (newInquiries ?? 0) : 0;
 
   return (
     <SidebarMenuItem>
@@ -62,6 +70,11 @@ function NavRow({ item, locale }: { item: NavItem; locale: Locale }) {
         <Link to={item.to} params={{ locale }} className="flex items-center gap-2">
           <item.icon className="h-4 w-4" />
           <span>{t(`admin.nav.${item.key}`)}</span>
+          {badge > 0 ? (
+            <span className="ml-auto rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-medium leading-none text-primary-foreground">
+              {badge}
+            </span>
+          ) : null}
         </Link>
       </SidebarMenuButton>
     </SidebarMenuItem>

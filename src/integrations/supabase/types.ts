@@ -42,6 +42,7 @@ export type Database = {
         Row: {
           created_at: string
           email: string
+          handled_at: string | null
           id: string
           listing_id: string | null
           locale: string | null
@@ -50,12 +51,15 @@ export type Database = {
           payload: Json
           phone: string | null
           photo_paths: string[]
+          read_at: string | null
           source: string | null
+          status: string
           type: string
         }
         Insert: {
           created_at?: string
           email: string
+          handled_at?: string | null
           id?: string
           listing_id?: string | null
           locale?: string | null
@@ -64,12 +68,15 @@ export type Database = {
           payload?: Json
           phone?: string | null
           photo_paths?: string[]
+          read_at?: string | null
           source?: string | null
+          status?: string
           type?: string
         }
         Update: {
           created_at?: string
           email?: string
+          handled_at?: string | null
           id?: string
           listing_id?: string | null
           locale?: string | null
@@ -78,7 +85,9 @@ export type Database = {
           payload?: Json
           phone?: string | null
           photo_paths?: string[]
+          read_at?: string | null
           source?: string | null
+          status?: string
           type?: string
         }
         Relationships: [

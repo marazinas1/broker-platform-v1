@@ -525,6 +525,53 @@
           "failed": "Failed"
         }
       }
+    },
+    "inquiries": {
+      "summary": "{{total}} total · {{unread}} new",
+      "empty": "No enquiries yet.",
+      "about": "About",
+      "photos_count": "{{n}} photo(s)",
+      "types": {
+        "listing": "Property enquiry",
+        "buyer": "Buyer enquiry",
+        "seller": "Seller / valuation request",
+        "other": "Enquiry"
+      },
+      "status": {
+        "new": "New",
+        "read": "Read",
+        "handled": "Handled"
+      },
+      "detail": {
+        "back": "Back to enquiries",
+        "message": "Message",
+        "details": "Submitted details",
+        "listing": "Property",
+        "photos": "Photos",
+        "photo_alt": "Submitted photo {{n}}",
+        "photos_private": "Private submission — links expire after 10 minutes.",
+        "whatsapp": "WhatsApp",
+        "mark_handled": "Mark as handled",
+        "mark_open": "Reopen",
+        "status_saved": "Status updated.",
+        "status_error": "Could not update the status.",
+        "locale": "Language",
+        "source": "Source"
+      },
+      "fields": {
+        "property_type": "Property type",
+        "city": "Preferred location",
+        "rooms_min": "Rooms from",
+        "area_min": "Area from (m²)",
+        "price_max": "Budget up to",
+        "address_street": "Street & number",
+        "address_zip": "Postal code",
+        "address_city": "Town",
+        "living_area": "Living area (m²)",
+        "rooms": "Rooms",
+        "year_built": "Year built",
+        "condition": "Condition"
+      }
     }
   },
   "pages": {
