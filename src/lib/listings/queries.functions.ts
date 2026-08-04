@@ -234,3 +234,25 @@ export const recentSoldQueryOptions = queryOptions({
     } as any),
   staleTime: 60_000,
 });
+
+/** All currently available listings — used by the about page ("my properties"). */
+export const activeListingsQueryOptions = queryOptions({
+  queryKey: ["listings", "active", "about"],
+  queryFn: () =>
+    listPublicListings({
+      data: {
+        deal: "",
+        type: "",
+        city: "",
+        rooms_min: 0,
+        price_min: 0,
+        price_max: 0,
+        area_min: 0,
+        sort: "newest",
+        page: 1,
+        onlyStatus: [...PublicSaleStatuses],
+        limit: 6,
+      },
+    } as any),
+  staleTime: 60_000,
+});
