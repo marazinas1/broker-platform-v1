@@ -4,12 +4,10 @@ export const Route = createFileRoute("/$locale/auth")({
   component: AuthLayout,
 });
 
+/**
+ * The auth subtree owns its own full-bleed layout: the sign-in screen is a
+ * two-column split, the password screens centre a paper card.
+ */
 function AuthLayout() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md rounded-lg border border-border bg-card p-6 shadow-sm">
-        <Outlet />
-      </div>
-    </div>
-  );
+  return <Outlet />;
 }
