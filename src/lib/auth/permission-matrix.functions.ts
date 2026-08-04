@@ -14,11 +14,10 @@ import {
 
 export const getPermissionMatrix = createServerFn({ method: "GET" }).handler(
   async (): Promise<PermissionMatrix> => {
-    const supabase = createClient<Database>(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PUBLISHABLE_KEY!,
-      { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
-    );
+    // Uses the shared publishable-key client (apikey header shim) — the raw
+    // createClient path fails with opaque sb_publishable_ keys.
+    const { createPublicSupabase } = await import("@/lib/supabase/server-public");
+    const supabase = createPublicSupabase();
 
     const { data, error } = await supabase
       .from("role_permissions")
@@ -26,7 +25,11 @@ export const getPermissionMatrix = createServerFn({ method: "GET" }).handler(
     if (error) throw error;
 
     const matrix = {} as PermissionMatrix;
-    for (const row of data ?? []) {
+    for (const row of (data ?? []) as {
+      role: string;
+      permission_key: string;
+      granted: boolean;
+    }[]) {
       if (!isRole(row.role)) continue;
       const key = row.permission_key as PermissionKey;
       if (!matrix[key]) {
