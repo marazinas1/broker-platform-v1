@@ -11,6 +11,8 @@ import { ListingHeadline } from "@/components/brand/ListingHeadline";
 import { ListingContentSections } from "@/components/brand/ListingContentSections";
 import { EnergyPanel } from "@/components/brand/EnergyPanel";
 import { ListingAgent } from "@/components/brand/ListingAgent";
+import { ListingLocationMap } from "@/components/brand/ListingLocationMap";
+
 import type { Locale } from "@/i18n/config";
 import { translate } from "@/i18n/config";
 import { siteSettingsQueryOptions } from "@/lib/config/site-settings.functions";
