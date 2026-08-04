@@ -110,6 +110,15 @@ function ListingsIndex() {
           <FiltersBar locale={locale as Locale} search={search} total={data.total} />
         </div>
 
+        <div className="mt-8">
+          <ListingsMap
+            items={data.items}
+            locale={locale as Locale}
+            settings={settings}
+          />
+        </div>
+
+
         {data.items.length === 0 ? (
           <div className="py-24 text-center text-sm text-muted-foreground">
             {t("listings.empty")}
