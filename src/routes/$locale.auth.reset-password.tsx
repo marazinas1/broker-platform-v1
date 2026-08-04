@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AuthCard } from "@/components/brand/AuthCard";
 import { supabase } from "@/integrations/supabase/client";
 import type { Locale } from "@/i18n/config";
 
@@ -67,33 +68,45 @@ function ResetPasswordPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-xl font-semibold">{t("admin.auth.reset.title")}</h1>
-        <p className="text-sm text-muted-foreground">{t("admin.auth.reset.subtitle")}</p>
+    <AuthCard>
+      <div className="space-y-6">
+        <div className="space-y-1">
+          <h1 className="text-xl font-semibold">{t("admin.auth.reset.title")}</h1>
+          <p className="text-sm text-muted-foreground">{t("admin.auth.reset.subtitle")}</p>
+        </div>
+        {invalid ? (
+          <p className="text-sm text-destructive">{t("admin.auth.reset.invalidLink")}</p>
+        ) : done ? (
+          <p className="text-sm">{t("admin.auth.reset.success")}</p>
+        ) : (
+          <form className="space-y-4" onSubmit={onSubmit}>
+            <div className="space-y-1.5">
+              <Label htmlFor="pw">{t("admin.auth.reset.password")}</Label>
+              <Input
+                id="pw"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="pw2">{t("admin.auth.reset.confirm")}</Label>
+              <Input
+                id="pw2"
+                type="password"
+                required
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+              />
+            </div>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <Button type="submit" disabled={busy || !ready} className="w-full">
+              {busy ? t("admin.auth.reset.submitting") : t("admin.auth.reset.submit")}
+            </Button>
+          </form>
+        )}
       </div>
-      {invalid ? (
-        <p className="text-sm text-destructive">{t("admin.auth.reset.invalidLink")}</p>
-      ) : done ? (
-        <p className="text-sm">{t("admin.auth.reset.success")}</p>
-      ) : (
-        <form className="space-y-4" onSubmit={onSubmit}>
-          <div className="space-y-1.5">
-            <Label htmlFor="pw">{t("admin.auth.reset.password")}</Label>
-            <Input id="pw" type="password" required value={password}
-              onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="pw2">{t("admin.auth.reset.confirm")}</Label>
-            <Input id="pw2" type="password" required value={confirm}
-              onChange={(e) => setConfirm(e.target.value)} />
-          </div>
-          {error && <p className="text-sm text-destructive">{error}</p>}
-          <Button type="submit" disabled={busy || !ready} className="w-full">
-            {busy ? t("admin.auth.reset.submitting") : t("admin.auth.reset.submit")}
-          </Button>
-        </form>
-      )}
-    </div>
+    </AuthCard>
   );
 }
