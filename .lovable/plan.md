@@ -25,6 +25,9 @@ One form shell, sections split into separate components (each well under 200 lin
 
 Create saves a draft first (so the listing has an id for image uploads), then keeps editing in place. Publishing is a status change, which triggers the database's energy validation and publish-permission checks; errors come back inline.
 
+### Draft-first flow, made obvious
+On a new listing the images section is not an empty or greyed-out box. It renders a friendly panel in the place the uploader will occupy: "Save this listing first, then you can add photos", with a prominent "Save draft" button right inside that panel (the same action as the form's save). Only title and deal/property type are required for that first save, so it is a two-second step. Saving keeps the user on the same screen — no reload, no navigation flash: the form switches to edit mode in place, the panel is replaced by the live upload area, and a toast confirms the draft was saved.
+
 ### Bilingual fields
 `title`, `description`, `meta_title`, `meta_description` and content-section items are already JSONB keyed by locale. The form renders a language tab strip (EN / DE, driven by `site_settings.enabled_locales`, English first) above the translatable fields; switching tabs swaps which key of the same JSON object you edit. Non-translatable fields (price, areas, address) sit outside the tabs and are edited once. On save the whole JSON object is written, so an untouched language is preserved. Empty strings are stripped so the public page's existing fallback logic keeps working.
 
