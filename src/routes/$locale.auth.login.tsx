@@ -84,7 +84,7 @@ function LoginPage() {
     <AuthSplit
       imageUrl={pickAuthImage(settings)}
       imageAlt={t("admin.auth.login.image_alt")}
-      brand={<BrandMark settings={settings} locale={locale} />}
+      brand={<BrandMark settings={settings} />}
     >
       <h1 className="font-heading text-4xl md:text-5xl">{t("admin.auth.login.title")}</h1>
       <p className="mt-3 text-sm text-muted-foreground">
