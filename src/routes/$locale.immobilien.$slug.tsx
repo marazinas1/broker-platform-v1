@@ -194,7 +194,11 @@ function ListingDetail() {
             <EnergyPanel energy={l.energy} propertyType={l.property_type} />
           </section>
 
-          {/* 6. Map slot — intentionally empty until the map phase lands. */}
+          {/* 6. Location map — precision-aware, hydrates on the client */}
+          <section className="mt-32">
+            <ListingLocationMap listing={l} locale={locale as Locale} />
+          </section>
+
 
           {/* 7. Agent + inquiry */}
           <section id="kontakt" className="mt-32 scroll-mt-32">
