@@ -25,6 +25,9 @@ One form shell, sections split into separate components (each well under 200 lin
 
 Create saves a draft first (so the listing has an id for image uploads), then keeps editing in place. Publishing is a status change, which triggers the database's energy validation and publish-permission checks; errors come back inline.
 
+### Draft-first flow, made obvious
+On a new listing the images section is not an empty or greyed-out box. It renders a friendly panel in the place the uploader will occupy: "Save this listing first, then you can add photos", with a prominent "Save draft" button right inside that panel (the same action as the form's save). Only title and deal/property type are required for that first save, so it is a two-second step. Saving keeps the user on the same screen — no reload, no navigation flash: the form switches to edit mode in place, the panel is replaced by the live upload area, and a toast confirms the draft was saved.
+
 ### Bilingual fields
 `title`, `description`, `meta_title`, `meta_description` and content-section items are already JSONB keyed by locale. The form renders a language tab strip (EN / DE, driven by `site_settings.enabled_locales`, English first) above the translatable fields; switching tabs swaps which key of the same JSON object you edit. Non-translatable fields (price, areas, address) sit outside the tabs and are edited once. On save the whole JSON object is written, so an untouched language is preserved. Empty strings are stripped so the public page's existing fallback logic keeps working.
 
@@ -56,7 +59,9 @@ No new pipeline. Per dropped/selected file the client:
 2. Calls the existing `enqueueImageProcessing({ listingId, imageId, originalStoragePath, contentType, originalSizeBytes, filename })`, which inserts the `listing_images` row as `pending` and invokes `process-listing-image` with `EDGE_FUNCTION_SECRET`.
 3. The edge function does the work already built — orientation fix, EXIF/GPS stripped by re-encoding, thumb/medium/large/og in AVIF + WebP into the public `listing-images` bucket, blurhash, then flips the row to `done`.
 
-The UI shows a per-image status chip (pending → processing → done → failed with its error), polling the rows while any are unfinished. Drag to reorder (first image = primary/hero), delete removes every variant plus the original through the existing delete function. Because uploads need a listing id, the upload area is enabled only after the draft has been saved once — a new listing shows a short hint until then.
+The UI shows a per-image status chip (pending → processing → done → failed), polling the rows while any are unfinished. Drag to reorder (first image = primary/hero), delete removes every variant plus the original through the existing delete function.
+
+A failed image is recoverable, never a dead row: the card shows the stored failure reason in plain text and a "Retry" button that re-invokes `enqueueImageProcessing` for that same image id and original path, resetting the row to `pending` so the existing edge function runs again. Delete stays available as the fallback.
 
 ## 5. Round-trip check
 
